@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define OLED_RST_GPIO_Port GPIOB
 #define OLED_SDIN_Pin GPIO_PIN_15
 #define OLED_SDIN_GPIO_Port GPIOB
+#define CTRL_MOS_Pin GPIO_PIN_11
+#define CTRL_MOS_GPIO_Port GPIOD
 #define BR1_Pin GPIO_PIN_13
 #define BR1_GPIO_Port GPIOD
 #define BR2_Pin GPIO_PIN_15

@@ -34,7 +34,7 @@ chip_1\usercode.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 chip_1\usercode.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 chip_1\usercode.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 chip_1\usercode.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
-chip_1\usercode.o: ..\DSP\Include\arm_math.h
+chip_1\usercode.o: ../DSP/Include/arm_math.h
 chip_1\usercode.o: ../Drivers/CMSIS/Include/core_cm4.h
 chip_1\usercode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 chip_1\usercode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
@@ -45,4 +45,5 @@ chip_1\usercode.o: ../Core/Inc/adc.h
 chip_1\usercode.o: ../Core/Inc/tim.h
 chip_1\usercode.o: ../BUTTON/button.h
 chip_1\usercode.o: ../BUTTON/button_display.h
-chip_1\usercode.o: ..\CONTROL\current_votage.h
+chip_1\usercode.o: ../CONTROL/current_votage.h
+chip_1\usercode.o: ../PROTECT/protect.h

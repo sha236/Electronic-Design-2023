@@ -59,8 +59,8 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, OLED_CS_Pin|OLED_SCLK_Pin|OLED_RST_Pin|OLED_SDIN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, BR1_Pin|BR2_Pin|AR1_Pin|AR2_Pin
-                          |AR3_Pin|AR4_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOD, CTRL_MOS_Pin|BR1_Pin|BR2_Pin|AR1_Pin
+                          |AR2_Pin|AR3_Pin|AR4_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, BR3_Pin|BR4_Pin, GPIO_PIN_SET);
@@ -80,9 +80,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PDPin PDPin PDPin PDPin
-                           PDPin PDPin */
-  GPIO_InitStruct.Pin = BR1_Pin|BR2_Pin|AR1_Pin|AR2_Pin
-                          |AR3_Pin|AR4_Pin;
+                           PDPin PDPin PDPin */
+  GPIO_InitStruct.Pin = CTRL_MOS_Pin|BR1_Pin|BR2_Pin|AR1_Pin
+                          |AR2_Pin|AR3_Pin|AR4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;

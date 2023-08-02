@@ -1,6 +1,6 @@
 chip_1\current_votage.o: ..\CONTROL\current_votage.c
 chip_1\current_votage.o: ..\CONTROL\current_votage.h
-chip_1\current_votage.o: ..\DSP\Include\arm_math.h
+chip_1\current_votage.o: ../DSP/Include/arm_math.h
 chip_1\current_votage.o: ../Drivers/CMSIS/Include/core_cm4.h
 chip_1\current_votage.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 chip_1\current_votage.o: ../Drivers/CMSIS/Include/cmsis_version.h

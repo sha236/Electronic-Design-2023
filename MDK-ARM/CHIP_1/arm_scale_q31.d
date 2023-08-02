@@ -1,5 +1,5 @@
 chip_1\arm_scale_q31.o: ..\DSP\Source\BasicMathFunctions\arm_scale_q31.c
-chip_1\arm_scale_q31.o: ..\DSP\Include\arm_math.h
+chip_1\arm_scale_q31.o: ../DSP/Include/arm_math.h
 chip_1\arm_scale_q31.o: ../Drivers/CMSIS/Include/core_cm4.h
 chip_1\arm_scale_q31.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 chip_1\arm_scale_q31.o: ../Drivers/CMSIS/Include/cmsis_version.h

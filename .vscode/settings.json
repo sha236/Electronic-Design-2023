@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "current_votage.h": "c"
+        "current_votage.h": "c",
+        "protect.h": "c"
     }
 }

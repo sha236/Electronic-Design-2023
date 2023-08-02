@@ -317,6 +317,7 @@
 "..\DSP\Lib\arm_cortexM4lf_math.lib"
 "chip_1\current_votage.o"
 "chip_1\sogi.o"
+"chip_1\protect.o"
 --strict --scatter "CHIP_1\CHIP_1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
