@@ -1,0 +1,9 @@
+#pragma once
+
+void CURRENT_VOTAGE_PID_INIT(void);
+
+void UPDATE_CURRENT_VOTAGE_NUM(void);
+
+void UPDATE_CURRENT_VOOTAGE_PID(void);
+
+void COUNT_CURRENT_VOTAGE_PID(void);
