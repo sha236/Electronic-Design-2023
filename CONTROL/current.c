@@ -84,15 +84,15 @@ void UPDATE_IREF_RATO_NUM(void)
 //将按键的存储值赋给计算用的值
 void UPDATE_IREF_RATO_PID(void)
 {
-    rato = rato_num[0]+rato_num[1]*0.1+rato_num[2]*0.01;
-    I_ref = current_num[0] + current_num[1]*0.1 + current_num[2]*0.01 + current_num[3]*0.001 + current_num[4]*0.0001;
+    rato = (float32_t)(rato_num[0]) + (float32_t)(rato_num[1])*0.1 + (float32_t)(rato_num[2])*0.01;
+    I_ref = (float32_t)(current_num[0]) + (float32_t)(current_num[1])*0.1 + (float32_t)(current_num[2])*0.01 + (float32_t)(current_num[3])*0.001 + (float32_t)current_num[4]*0.0001;
 }
 
 void UPDATE_CURRENT_PID(void)
 {
-    S_3.Kp = pid_3[0][0]*100+pid_3[0][1]*10+pid_3[0][2]+pid_3[0][3]*0.1+pid_3[0][4]*0.01;
-    S_3.Ki = pid_3[1][0]*10+pid_3[1][1]+pid_3[1][2]*0.1+pid_3[1][3]*0.01+pid_3[1][4]*0.001;
-    S_3.Kd = pid_3[2][0]+pid_3[2][1]*0.1+pid_3[2][2]*0.01+pid_3[2][3]*0.001+pid_3[2][4]*0.0001;
+    S_3.Kp = (float32_t)(pid_3[0][0])*100 + (float32_t)(pid_3[0][1])*10 + (float32_t)(pid_3[0][2]) + (float32_t)(pid_3[0][3])*0.1 + (float32_t)(pid_3[0][4])*0.01;
+    S_3.Ki = (float32_t)(pid_3[1][0])*10 + (float32_t)(pid_3[1][1]) + (float32_t)(pid_3[1][2])*0.1 + (float32_t)(pid_3[1][3])*0.01 + (float32_t)(pid_3[1][4])*0.001;
+    S_3.Kd = (float32_t)(pid_3[2][0]) + (float32_t)(pid_3[2][1])*0.1 + (float32_t)(pid_3[2][2])*0.01 + (float32_t)(pid_3[2][3])*0.001 + (float32_t)(pid_3[2][4])*0.0001;
     arm_pid_init_f32(&S_3, 0);
 }
 

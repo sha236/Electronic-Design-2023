@@ -39,3 +39,6 @@ chip_1\current_votage.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 chip_1\current_votage.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 chip_1\current_votage.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 chip_1\current_votage.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+chip_1\current_votage.o: ../OLED/oled.h
+chip_1\current_votage.o: ../OLED/sys.h
+chip_1\current_votage.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
