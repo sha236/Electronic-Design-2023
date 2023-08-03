@@ -51,6 +51,7 @@ u32 pid_1[3][5] = {0}; //kp:pid_1[0]999.99~0.01, ki:pid_1[1]99.999~0.001, kd:pid
 u32 pid_2[3][5] = {0};
 u32 pid_3[3][5] = {0};
 u32 pid_4[3][5] = {0};
+u32 pid_5[3][5] = {0};
 
 u8 ctrl_pid[4] = {0};
 u8 ctrl_num[4] = {0};
@@ -118,13 +119,16 @@ void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
         case 3:
             if(pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]++;        
             break;
+        case 4:
+            if(pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]++;        
+            break;
         }
         
     }
 
     void AR1_AC4(void)
     {
-        if(ctrl_display!=3) ctrl_display++;         
+        if(ctrl_display!=4) ctrl_display++;         
     }
 
     //AR2
@@ -153,6 +157,9 @@ void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
             break;
         case 3:
             if(pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]--;        
+            break;
+        case 4:
+            if(pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]--;        
             break;
         }    
     }

@@ -10,6 +10,7 @@ extern u32 pid_1[3][5];
 extern u32 pid_2[3][5];
 extern u32 pid_3[3][5];
 extern u32 pid_4[3][5];
+extern u32 pid_5[3][5];
 extern u32 ctrl_display;
 extern u32 mode_select;
 
@@ -118,6 +119,10 @@ void DISPLAY_PID(void)
     OLED_ShowChar(25,0,'4',16,1);
         PID_TO_OLED(pid_4);
         break;
+    case 4:
+    OLED_ShowChar(25,0,'5',16,1);
+        PID_TO_OLED(pid_5);
+        break;       
     }
     //Display Current
     CURRENT_TO_OLED(current_num);
