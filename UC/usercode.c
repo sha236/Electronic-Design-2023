@@ -9,6 +9,7 @@
 #include "arm_math.h"
 #include "protect.h"
 #include "current.h"
+#include "votage.h"
 
 #define u8 uint8_t
 #define u16 uint16_t
@@ -34,10 +35,15 @@ void StartDefaultTask(void *argument)
     {
         READ_BUTTON_A();
         READ_BUTTON_B();
+
         UPDATE_CURRENT_VOOTAGE_PID();
         UPDATE_CURRENT_PID();
         UPDATE_IREF_RATO_PID();
+        UPDATE_VOTAGE_PID();
+        
+        //Display
         DISPLAY_PID();
+
         OLED_Refresh_Gram();
         HAL_Delay(50-1);
     }
@@ -46,13 +52,21 @@ void StartDefaultTask(void *argument)
 void USER_INIT(void)
 {
     OLED_Init();
+
+    //Display
     DISPLAY_PID_SYMBLE();
+
     CURRENT_VOTAGE_PID_INIT();
     CURRENT_PID_INIT();
+    VOTAGE_PID_INIT();
+
     UPDATE_CURRENT_VOTAGE_NUM();
     UPDATE_CURRENT_NUM();
     UPDATE_IREF_RATO_NUM();
+    UPDATE_VOTAGE_NUM();
+
     HOLD_MOS();
+
     HAL_TIM_Base_Start(&htim1);
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
     HAL_ADC_Start_DMA(&hadc1,(uint32_t *)ADC1_Buf,4);
@@ -60,6 +74,7 @@ void USER_INIT(void)
     HAL_TIM_Base_Start(&htim1);
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+
     ENABLE_MOS();
     
 }
@@ -90,6 +105,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
         case 1:
             COUNT_CURRENT_PID();
             break;
+        case 2:
+            COUNT_VOTAGE_PID();
+            break;
+        case 3:
+            break;
         }
     }
 }
@@ -111,8 +131,16 @@ void ADC_BUF_TO_F32_1(void)
 //采集电流
 void ADC_BUF_TO_F32_2(void)
 {
+    /* 采集输出电流, 张嘉骞*/
     ADC3_Buf_f32[0] = (float32_t)(ADC3_Buf[0]);
-    ADC3_Buf_f32[0] *= 0.00293;
+    ADC3_Buf_f32[0] *= 0.0007326; //4095->3V
+    ADC3_Buf_f32[0] -= 1.5; //-1.5V 输出电压偏置
+    ADC3_Buf_f32[0] *= 1.6; //反映射为电流 
+    /* 采集输出电流, 虞劲锋*/
+    // ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+    // ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    // ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
+    // ADC3_Buf_f32[2] *= 1.6; //反映射为电流
 }
 
 //对单片机2是采集单片机1的输出电流，对于单片机1而言是采集电网的电压
@@ -121,14 +149,23 @@ void ADC_BUF_TO_F32_3(void)
 switch (chip_select)
 {
 case 0:
-    /* 采集电网电压 */
+    /* 采集电网电压*/
     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
-    ADC3_Buf_f32[2] *= 0.0007326;
+    ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
+    // ADC3_Buf_f32[2] *= ***; //反映射为电压
     break;
 case 1:
-    /* 采集逆变器1电流 */
+    /* 采集逆变器1电流, 张嘉骞*/
     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
-    ADC3_Buf_f32[2] *= 0.0007326;
+    ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
+    ADC3_Buf_f32[2] *= 1.6; //反映射为电流 
+    /* 采集逆变器1电流, 虞劲锋*/
+    // ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+    // ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    // ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
+    // ADC3_Buf_f32[2] *= 1.6; //反映射为电流
     break;
 }
 }

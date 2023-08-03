@@ -55,14 +55,13 @@ u32 pid_4[3][5] = {0};
 u8 ctrl_pid[4] = {0};
 u8 ctrl_num[4] = {0};
 u32 ctrl_display = 0;
-u32 mode_select = 0;    //0:Single 1,Double
+u32 mode_select = 2;    //0:Single 1:Double 2:单环 3:PR控制
 u32 current_num_select = 0; //0~5:检测
 u32 current_num[5] = {2,0,0,0,0};
 u32 rato_num_select = 0; //0~3:检测
 u32 rato_num[3] = {1,0,0};
 u32 chip_select = 0; //0: Chip A, 1: Chip B
 u32 chip_b_mode = 0; //0: RL, 1: Network
-
 
 float kp_1 = 0;
 float ki_1 = 0;
@@ -167,7 +166,7 @@ void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
     //AR3
     void AR3_AC1(void)
     {
-        if(mode_select==0) mode_select++;
+        if(mode_select!=3) mode_select++;
     }
 
     void AR3_AC2(void)
@@ -191,7 +190,7 @@ void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
     //AR4
     void AR4_AC1(void)
     {
-        if(mode_select==1) mode_select--;
+        if(mode_select!=0) mode_select--;
     }
 
     void AR4_AC2(void)

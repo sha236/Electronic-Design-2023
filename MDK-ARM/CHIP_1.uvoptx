@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134235182</Address>
+          <Address>134236114</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -168,9 +168,9 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>83</LineNumber>
+          <LineNumber>109</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223206</Address>
+          <Address>134224144</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -179,23 +179,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\UC\usercode.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\CHIP_1\../UC/usercode.c\83</Expression>
+          <Expression>\\CHIP_1\../UC/usercode.c\109</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>36</LineNumber>
+          <LineNumber>100</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134233496</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\UC\usercode.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\CHIP_1\../UC/usercode.c\36</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -283,6 +283,16 @@
           <count>16</count>
           <WinNumber>1</WinNumber>
           <ItemText>chip_select</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pid_4</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>S_4</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -4347,6 +4357,30 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>328</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\CONTROL\votage.c</PathWithFileName>
+      <FilenameWithoutPath>votage.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>329</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\CONTROL\votage.h</PathWithFileName>
+      <FilenameWithoutPath>votage.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -4357,7 +4391,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>328</FileNumber>
+      <FileNumber>330</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -4369,7 +4403,7 @@
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
-      <FileNumber>329</FileNumber>
+      <FileNumber>331</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -4389,7 +4423,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>330</FileNumber>
+      <FileNumber>332</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -4401,7 +4435,7 @@
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
-      <FileNumber>331</FileNumber>
+      <FileNumber>333</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -4421,7 +4455,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>14</GroupNumber>
-      <FileNumber>332</FileNumber>
+      <FileNumber>334</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -4433,7 +4467,7 @@
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
-      <FileNumber>333</FileNumber>
+      <FileNumber>335</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>

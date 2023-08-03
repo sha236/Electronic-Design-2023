@@ -3004,6 +3004,16 @@
               <FileType>5</FileType>
               <FilePath>..\CONTROL\current.h</FilePath>
             </File>
+            <File>
+              <FileName>votage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\CONTROL\votage.c</FilePath>
+            </File>
+            <File>
+              <FileName>votage.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\CONTROL\votage.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -317,6 +317,7 @@
 "..\DSP\Lib\arm_cortexM4lf_math.lib"
 "chip_1\current_votage.o"
 "chip_1\current.o"
+"chip_1\votage.o"
 "chip_1\sogi.o"
 "chip_1\protect.o"
 "chip_1\pr.o"

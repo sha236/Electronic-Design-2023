@@ -59,23 +59,45 @@ void DISPLAY_PID(void)
     if(chip_b_mode==0) OLED_ShowChar(110,47,'1',16,1);
     else OLED_ShowChar(110,47,'2',16,1);
     //Display Mode
-    if(mode_select==0)
+    switch(mode_select)
     {
-        OLED_ShowChar(70,0,'S',16,1);
-        OLED_ShowChar(77,0,'i',16,1);
-        OLED_ShowChar(84,0,'n',16,1);
-        OLED_ShowChar(91,0,'g',16,1);
-        OLED_ShowChar(97,0,'l',16,1);
-        OLED_ShowChar(104,0,'e',16,1);
+        case 0:
+            OLED_ShowChar(70,0,'S',16,1);
+            OLED_ShowChar(77,0,'i',16,1);
+            OLED_ShowChar(84,0,'n',16,1);
+            OLED_ShowChar(91,0,'g',16,1);
+            OLED_ShowChar(97,0,'l',16,1);
+            OLED_ShowChar(104,0,'e',16,1);
+        break;
+
+        case 1:
+            OLED_ShowChar(70,0,'D',16,1);
+            OLED_ShowChar(77,0,'o',16,1);
+            OLED_ShowChar(84,0,'u',16,1);
+            OLED_ShowChar(91,0,'b',16,1);
+            OLED_ShowChar(101,0,'l',16,1);
+            OLED_ShowChar(107,0,'e',16,1);
+        break;
+
+        case 2:
+            OLED_ShowChar(70,0,'V',16,1);
+            OLED_ShowChar(77,0,'o',16,1);
+            OLED_ShowChar(84,0,'t',16,1);
+            OLED_ShowChar(91,0,'a',16,1);
+            OLED_ShowChar(101,0,'g',16,1);
+            OLED_ShowChar(107,0,'e',16,1);
+        break;
+
+        case 3:
+            OLED_ShowChar(70,0,'P',16,1);
+            OLED_ShowChar(77,0,'R',16,1);
+            OLED_ShowChar(84,0,'C',16,1);
+            OLED_ShowChar(91,0,'t',16,1);
+            OLED_ShowChar(101,0,'r',16,1);
+            OLED_ShowChar(107,0,'l',16,1);
+        break;       
     } 
-    else{
-        OLED_ShowChar(70,0,'D',16,1);
-        OLED_ShowChar(77,0,'o',16,1);
-        OLED_ShowChar(84,0,'u',16,1);
-        OLED_ShowChar(91,0,'b',16,1);
-        OLED_ShowChar(101,0,'l',16,1);
-        OLED_ShowChar(107,0,'e',16,1);
-    }
+
     //Display PID
     switch (ctrl_display)
     {
