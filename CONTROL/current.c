@@ -19,6 +19,7 @@ int count_1 = 0;
 float32_t angle_1 = 0;
 float32_t I_ref = 0;
 float32_t rato = 0;
+float32_t percentage = 0;
 float32_t real_I_ref = 0; //经过计算单电路的目标电流
 float32_t I_target = 0; //实时的目标电流
 float32_t I_error = 0;
@@ -102,6 +103,7 @@ void COUNT_CURRENT_PID(void)
     angle_1 = (float32_t)(count_1);
     angle_1 *= 0.01570795;
     angle_1 += sineA.theta;
+    percentage = rato/(rato+1);
     real_I_ref = rato * I_ref;
     I_target = arm_sin_f32(angle_1);
     I_target = I_target * real_I_ref * 1.414;
@@ -110,7 +112,10 @@ void COUNT_CURRENT_PID(void)
     // OLED_Refresh_Gram();
     I_error -= OUTPUT_CURRENT;
     current_pid_result = arm_pid_f32(&S_3,I_error);
-    TIM1->CCR1 = current_pid_result*10;
+    //过调制保护
+    if(current_pid_result*10>1372)TIM1->CCR1 = 1372;
+    else if(current_pid_result*10<28) TIM1->CCR1 = 1372;
+    else TIM1->CCR1 = current_pid_result*10;
 
     if(count_1==399) count_1 = 0;
     else count_1++;

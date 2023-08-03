@@ -95,7 +95,11 @@ void COUNT_CURRENT_VOTAGE_PID(void)
     iref = arm_pid_f32(&S_1, v_error);
     i_error = iref - ADC3_Buf_f32[0];
     pwm_compare = arm_pid_f32(&S_2, i_error);
-    TIM1->CCR1 = pwm_compare*10;
+    //过调制保护
+    if(pwm_compare*10>1372) TIM1->CCR1=1372; 
+    else if(pwm_compare*10<28) TIM1->CCR1=28;
+    else TIM1->CCR1 = pwm_compare*10;
+
     if(count==399) count = 0;
     else count++;
 }
