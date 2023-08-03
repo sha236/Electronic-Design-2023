@@ -65,20 +65,20 @@ void DISPLAY_PID(void)
     switch (ctrl_display)
     {
     case 0:
-        OLED_ShowChar(25,0,'0',16,1);
+        OLED_ShowChar(25,0,'1',16,1);
         PID_TO_OLED(pid_1);
         break;
     
     case 1:
-        OLED_ShowChar(25,0,'1',16,1);
+        OLED_ShowChar(25,0,'2',16,1);
         PID_TO_OLED(pid_2);
         break;
     case 2:
-    OLED_ShowChar(25,0,'2',16,1);
+    OLED_ShowChar(25,0,'3',16,1);
         PID_TO_OLED(pid_3);
         break;
     case 3:
-    OLED_ShowChar(25,0,'3',16,1);
+    OLED_ShowChar(25,0,'4',16,1);
         PID_TO_OLED(pid_4);
         break;
     }

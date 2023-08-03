@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "current_votage.h": "c",
-        "protect.h": "c"
+        "protect.h": "c",
+        "button_display.h": "c",
+        "arm_math.h": "c"
     }
 }

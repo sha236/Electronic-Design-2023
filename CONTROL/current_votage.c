@@ -26,6 +26,7 @@ float32_t pwm_compare = 0;
 extern u32 pid_1[3][5];
 extern u32 pid_2[3][5];
 extern float32_t ADC1_Buf_f32[4];
+extern float32_t ADC3_Buf_f32[4];
 
 void CURRENT_VOTAGE_PID_INIT(void)
 {
@@ -84,15 +85,15 @@ void UPDATE_CURRENT_VOOTAGE_PID(void)
 
 void COUNT_CURRENT_VOTAGE_PID(void)
 {
-    count++;
-    if(count==401) count =0;
-    angle = (float32_t)(count-1);
+    angle = (float32_t)(count);
     angle = angle*0.01570795;
     V_ref = arm_sin_f32(angle);
     V_ref = V_ref*VREF*1.414;
     v_error = V_ref - ADC1_Buf_f32[0];
     iref = arm_pid_f32(&S_1, v_error);
-    i_error = iref - ADC1_Buf_f32[1];
+    i_error = iref - ADC3_Buf_f32[0];
     pwm_compare = arm_pid_f32(&S_2, i_error);
     TIM1->CCR1 = pwm_compare*10;
+    if(count==399) count = 0;
+    else count++;
 }

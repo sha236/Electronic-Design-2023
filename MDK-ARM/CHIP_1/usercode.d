@@ -47,3 +47,4 @@ chip_1\usercode.o: ../BUTTON/button.h
 chip_1\usercode.o: ../BUTTON/button_display.h
 chip_1\usercode.o: ../CONTROL/current_votage.h
 chip_1\usercode.o: ../PROTECT/protect.h
+chip_1\usercode.o: ../CONTROL/current.h
