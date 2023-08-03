@@ -18,6 +18,7 @@ extern uint16_t ADC1_Buf[4];
 extern float32_t ADC1_Buf_f32[4];
 extern float32_t pwm_compare;
 extern u32 mode_select;
+extern u32 chip_select; //0: Chip A, 1: Chip B
 
 void USER_INIT(void);
 void ADC_BUF_TO_F32(void);
@@ -114,9 +115,20 @@ void ADC_BUF_TO_F32_2(void)
     ADC3_Buf_f32[0] *= 0.00293;
 }
 
-//采集输出电压
+//对单片机2是采集单片机1的输出电流，对于单片机1而言是采集电网的电压
 void ADC_BUF_TO_F32_3(void)
 {
+switch (chip_select)
+{
+case 0:
+    /* 采集电网电压 */
     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
     ADC3_Buf_f32[2] *= 0.0007326;
+    break;
+case 1:
+    /* 采集逆变器1电流 */
+    ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+    ADC3_Buf_f32[2] *= 0.0007326;
+    break;
+}
 }

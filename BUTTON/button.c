@@ -55,11 +55,13 @@ u32 pid_4[3][5] = {0};
 u8 ctrl_pid[4] = {0};
 u8 ctrl_num[4] = {0};
 u32 ctrl_display = 0;
-u32 mode_select = 1;    //0:Single 1,Double
+u32 mode_select = 0;    //0:Single 1,Double
 u32 current_num_select = 0; //0~5:检测
 u32 current_num[5] = {2,0,0,0,0};
 u32 rato_num_select = 0; //0~3:检测
 u32 rato_num[3] = {1,0,0};
+u32 chip_select = 0; //0: Chip A, 1: Chip B
+u32 chip_b_mode = 0; //0: RL, 1: Network
 
 
 float kp_1 = 0;
@@ -313,13 +315,13 @@ void READ_BUTTON_A(void)
 
     void BR1_BC2(void)
     {
-        OLED_ShowString(0,0,"BR1_BC2",16);
+        if(chip_select!=1) chip_select++;
         
     }
 
     void BR1_BC3(void)
     {
-        OLED_ShowString(0,0,"BR1_BC3",16);
+        if(chip_b_mode!=1) chip_b_mode++;
         
     }
 
@@ -337,13 +339,13 @@ void READ_BUTTON_A(void)
 
     void BR2_BC2(void)
     {
-        OLED_ShowString(0,0,"BR2_BC2",16);
+        if(chip_select!=0) chip_select--;
         
     }
 
     void BR2_BC3(void)
     {
-        OLED_ShowString(0,0,"BR2_BC3",16);
+        if(chip_b_mode!=0) chip_b_mode--;
              
     }
 

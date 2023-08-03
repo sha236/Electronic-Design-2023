@@ -15,6 +15,8 @@ extern u32 mode_select;
 
 extern u32 current_num[5];
 extern u32 rato_num[3];
+extern u32 chip_select; //0: Chip A, 1: Chip B
+extern u32 chip_b_mode; //0: RL, 1: Network
 
 
 void DISPLAY_PID_SYMBLE(void)
@@ -32,17 +34,30 @@ void DISPLAY_PID_SYMBLE(void)
     OLED_ShowChar(8,32,'i',16,1);
     OLED_ShowChar(0,47,'K',16,1);
     OLED_ShowChar(8,47,'d',16,1);
-    OLED_Refresh_Gram();
     OLED_ShowChar(60,17,'I',16,1);
     OLED_ShowChar(67,17,'r',16,1);
     OLED_ShowChar(60,32,'R',16,1);
     OLED_ShowChar(67,32,'a',16,1);
     OLED_ShowChar(74,32,'t',16,1);
     OLED_ShowChar(81,32,'o',16,1);
+    OLED_ShowChar(60,47,'C',16,1);
+    OLED_ShowChar(67,47,'h',16,1);
+    OLED_ShowChar(74,47,'i',16,1);
+    OLED_ShowChar(81,47,'p',16,1);
+    OLED_ShowChar(88,47,'.',16,1);
+    OLED_ShowChar(104,47,'.',16,1);
+
+    OLED_Refresh_Gram();
 }
 
 void DISPLAY_PID(void)
 {
+    //Display Chip
+    if(chip_select == 0) OLED_ShowChar(95,47,'A',16,1);
+    else OLED_ShowChar(95,47,'B',16,1);
+    //Display CHip.B Mode
+    if(chip_b_mode==0) OLED_ShowChar(110,47,'1',16,1);
+    else OLED_ShowChar(110,47,'2',16,1);
     //Display Mode
     if(mode_select==0)
     {

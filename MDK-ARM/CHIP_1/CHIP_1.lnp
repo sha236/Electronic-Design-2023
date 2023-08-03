@@ -319,6 +319,7 @@
 "chip_1\current.o"
 "chip_1\sogi.o"
 "chip_1\protect.o"
+"chip_1\pr.o"
 --strict --scatter "CHIP_1\CHIP_1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
