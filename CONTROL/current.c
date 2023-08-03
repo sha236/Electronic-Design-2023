@@ -105,7 +105,10 @@ void COUNT_CURRENT_PID(void)
     real_I_ref = rato * I_ref;
     I_target = arm_sin_f32(angle_1);
     I_target = I_target * real_I_ref * 1.414;
-    I_error = I_target - ADC3_Buf_f32[0];
+    I_error = I_target;
+    // OLED_ShowNum(0,0,I_error*100, 7,16);
+    // OLED_Refresh_Gram();
+    I_error -= OUTPUT_CURRENT;
     current_pid_result = arm_pid_f32(&S_3,I_error);
     TIM1->CCR1 = current_pid_result*10;
 

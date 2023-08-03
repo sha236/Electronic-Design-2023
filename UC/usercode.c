@@ -67,6 +67,18 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
     if(hadc->Instance == ADC3)
     {
+        // Version.Test_Receive
+        // OLED_ShowNum(0,0,ADC1_Buf[0],4,16);
+        // OLED_ShowNum(0,13,ADC1_Buf[1],4,16);
+        // OLED_ShowNum(0,26,ADC1_Buf[2],4,16);
+        // OLED_ShowNum(0,39,ADC1_Buf[3],4,16);
+        
+        // OLED_ShowNum(50,0,ADC3_Buf[0],4,16);
+        // OLED_ShowNum(50,13,ADC3_Buf[1],4,16);
+        // OLED_ShowNum(50,26,ADC3_Buf[2],4,16);
+        // OLED_ShowNum(50,39,ADC3_Buf[3],4,16);
+        // OLED_Refresh_Gram();
+        
         ADC_BUF_TO_F32();
         PROTECT_GUARD();
         switch (mode_select)
