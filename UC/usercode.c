@@ -42,7 +42,7 @@ void StartDefaultTask(void *argument)
         UPDATE_CURRENT_PID();
         UPDATE_IREF_RATO_PID();
         UPDATE_VOTAGE_PID();
-        UPDATE_PR_PID();
+        UPDATE_PHASE_PID();
         
         //Display
         DISPLAY_PID();
@@ -66,7 +66,7 @@ void USER_INIT(void)
     UPDATE_CURRENT_NUM();
     UPDATE_IREF_RATO_NUM();
     UPDATE_VOTAGE_NUM();
-    UPDATE_PR_NUM();
+    UPDATE_PHASE_NUM();
 
     HOLD_MOS();
 
