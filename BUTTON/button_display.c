@@ -133,4 +133,6 @@ void DISPLAY_PID(void)
     CURRENT_TO_OLED(current_num);
     //Display Rato
     RATO_TO_OLED(rato_num);
+
+    OLED_Refresh_Gram();
 }

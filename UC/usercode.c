@@ -47,7 +47,6 @@ void StartDefaultTask(void *argument)
         //Display
         DISPLAY_PID();
 
-        OLED_Refresh_Gram();
         HAL_Delay(50-1);
     }
 }
@@ -107,22 +106,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
             COUNT_CURRENT_VOTAGE_PID();
             break;
         case 1:
-            if(OK_Flag==1) COUNT_CURRENT_PID();
-            else
-            {
-                if(count_1_period == 0) HOLD_MOS();
-                //Update Phase
-                UPDATE_PHASE();
-                count_1_period++;
-                if(count_1_period == 400 && mode_select ==0){
-                    OK_Flag = 1;
-                    ENABLE_MOS();
-                }
-                if(count_1_period == 800 && mode_select ==1){
-                    OK_Flag = 1;
-                    ENABLE_MOS();
-                } 
-            }
+            COUNT_CURRENT_PID();
             break;
         case 2:
             COUNT_VOTAGE_PID();
