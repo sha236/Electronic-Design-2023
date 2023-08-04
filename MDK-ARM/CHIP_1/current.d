@@ -43,3 +43,4 @@ chip_1\current.o: ../SOGI/sogi.h
 chip_1\current.o: ../OLED/oled.h
 chip_1\current.o: ../OLED/sys.h
 chip_1\current.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+chip_1\current.o: ..\PR\pr.h

@@ -14,3 +14,6 @@ void COUNT_CURRENT_PID(void);
 
 void UPDATE_PHASE(void);
 
+void UPDATE_PR_NUM(void);
+
+void UPDATE_PR_PID(void);

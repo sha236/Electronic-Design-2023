@@ -42,6 +42,7 @@ void StartDefaultTask(void *argument)
         UPDATE_CURRENT_PID();
         UPDATE_IREF_RATO_PID();
         UPDATE_VOTAGE_PID();
+        UPDATE_PR_PID();
         
         //Display
         DISPLAY_PID();
@@ -66,6 +67,7 @@ void USER_INIT(void)
     UPDATE_CURRENT_NUM();
     UPDATE_IREF_RATO_NUM();
     UPDATE_VOTAGE_NUM();
+    UPDATE_PR_NUM();
 
     HOLD_MOS();
 
@@ -112,7 +114,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
                 //Update Phase
                 UPDATE_PHASE();
                 count_1_period++;
-                if(count_1_period == 400){
+                if(count_1_period == 400 && mode_select ==0){
+                    OK_Flag = 1;
+                    ENABLE_MOS();
+                }
+                if(count_1_period == 800 && mode_select ==1){
                     OK_Flag = 1;
                     ENABLE_MOS();
                 } 

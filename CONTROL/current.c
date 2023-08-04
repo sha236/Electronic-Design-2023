@@ -3,6 +3,7 @@
 #include "tim.h"
 #include "sogi.h"
 #include "oled.h"
+#include "pr.h"
 
 #define u8 uint8_t
 #define u16 uint16_t
@@ -27,9 +28,16 @@ float32_t I_target = 0; //实时的目标电流
 float32_t I_error = 0;
 float32_t current_pid_result = 0;
 
+#define PR_KP 1
+#define PR_KR 99
+#define PR_WC 0.5
+PR pr_1 = {0};
+float32_t pr_output = 0;
+
 extern u32 pid_3[3][5];
 extern float32_t ADC1_Buf_f32[4];
 extern float32_t ADC3_Buf_f32[4];
+extern u32 pid_5[3][5];
 extern u32 current_num[5];
 extern u32 rato_num[3];
 extern u32 chip_select; //0: Chip A, 1: Chip B
@@ -52,6 +60,8 @@ void CURRENT_PID_INIT(void)
 
     I_ref = I_REF;
     rato = RATO;
+
+    PR_init(&pr_1, PR_KP, PR_KR, 0.00005, PR_WC, 314.15926);
 }
 
 void UPDATE_CURRENT_NUM(void)
@@ -87,6 +97,22 @@ void UPDATE_IREF_RATO_NUM(void)
     rato_num[0] = (temp-rato_num[2]-rato_num[1]*10)/100;
 }
 
+void UPDATE_PR_NUM(void)
+{
+    u32 temp[3];
+    temp[0] = PR_KP*100;
+    temp[1] = PR_KR*1000;
+    temp[2] = PR_WC*10000;
+    for(int i=0;i<3;i++)
+    {
+        pid_5[i][4] = temp[i]%10;
+        pid_5[i][3] = ((temp[i]- pid_5[i][4])%100)/10;
+        pid_5[i][2] = ((temp[i]- pid_5[i][4]- pid_5[i][3]*10)%1000)/100;
+        pid_5[i][1] = ((temp[i]- pid_5[i][4]- pid_5[i][3]*10-pid_5[i][2]*100)%10000)/1000;
+        pid_5[i][0] = (temp[i]- pid_5[i][4]- pid_5[i][3]*10-pid_5[i][2]*100-pid_5[i][1]*1000)/10000;
+    }   
+}
+
 //将按键的存储值赋给计算用的值
 void UPDATE_IREF_RATO_PID(void)
 {
@@ -102,12 +128,25 @@ void UPDATE_CURRENT_PID(void)
     arm_pid_init_f32(&S_3, 0);
 }
 
+void UPDATE_PR_PID(void)
+{
+    float32_t temp_kp = 0, temp_kr = 0, temp_wc = 0; 
+    temp_kp = (float32_t)(pid_5[0][0])*100 + (float32_t)(pid_5[0][1])*10 + (float32_t)(pid_5[0][2]) + (float32_t)(pid_5[0][3])*0.1 + (float32_t)(pid_5[0][4])*0.01;
+    temp_kr = (float32_t)(pid_5[1][0])*10 + (float32_t)(pid_5[1][1]) + (float32_t)(pid_5[1][2])*0.1 + (float32_t)(pid_5[1][3])*0.01 + (float32_t)(pid_5[1][4])*0.001;
+    temp_wc = (float32_t)(pid_5[2][0]) + (float32_t)(pid_5[2][1])*0.1 + (float32_t)(pid_5[2][2])*0.01 + (float32_t)(pid_5[2][3])*0.001 + (float32_t)(pid_5[2][4])*0.0001;
+    PR_init(&pr_1, temp_kp, temp_kr, 0.00005, temp_wc, 314.15926);
+
+}
+
 void COUNT_CURRENT_PID(void)
 {
     if (chip_select == 0)
     {
         //单片机1并网工作代码
-        SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
+        pr_1.vi = NETWORK_VOTAGE;
+        PR_calc(&pr_1);
+        pr_output = pr_1.vo;
+        SPLL_1PH_SOGI_run(&sineA, pr_output);
         angle_1 = (float32_t)(count_1);
         angle_1 *= 0.01570795;
         angle_1 += sineA.theta;
@@ -129,7 +168,7 @@ void COUNT_CURRENT_PID(void)
     else if(chip_b_mode == 0)
     {
         //单片机2带负载工作代码
-        SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
+        SPLL_1PH_SOGI_run(&sineA, CHIPA_CURRENT);
         angle_1 = (float32_t)(count_1);
         angle_1 *= 0.01570795;
         angle_1 += sineA.theta;
@@ -151,7 +190,7 @@ void COUNT_CURRENT_PID(void)
     else
     {
         //单片机2并网工作代码
-        SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
+        SPLL_1PH_SOGI_run(&sineA, CHIPA_CURRENT);
         angle_1 = (float32_t)(count_1);
         angle_1 *= 0.01570795;
         angle_1 += sineA.theta;
@@ -176,5 +215,12 @@ void COUNT_CURRENT_PID(void)
 
 void UPDATE_PHASE(void)
 {
-    SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
+    if(chip_select==0)
+    {
+        pr_1.vi = NETWORK_VOTAGE;
+        PR_calc(&pr_1);
+        pr_output = pr_1.vo;
+        SPLL_1PH_SOGI_run(&sineA, pr_output);       
+    }
+    else SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
 }

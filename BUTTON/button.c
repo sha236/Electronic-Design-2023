@@ -54,10 +54,10 @@ u32 pid_4[3][5] = {0};
 u32 pid_5[3][5] = {0};
 u32 pid_6[3][5] = {0};
 
-u8 ctrl_pid[4] = {0};
-u8 ctrl_num[4] = {0};
+u8 ctrl_pid[6] = {0};
+u8 ctrl_num[6] = {0};
 u32 ctrl_display = 0;
-u32 mode_select = 2;    //0:Single 1:Double 2:单环 3:PR控制
+u32 mode_select = 1;    //0:Single 1:Double 2:单环 3:PR控制
 u32 current_num_select = 0; //0~5:检测
 u32 current_num[5] = {2,0,0,0,0};
 u32 rato_num_select = 0; //0~3:检测
@@ -101,7 +101,7 @@ void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
 
     void AR1_AC2(void)
     {
-        if(ctrl_num[ctrl_display]!=4) ctrl_num[ctrl_display]++;         
+        if(ctrl_num[ctrl_display]!=5) ctrl_num[ctrl_display]++;         
     }
 
     void AR1_AC3(void)
