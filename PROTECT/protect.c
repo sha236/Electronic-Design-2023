@@ -2,7 +2,7 @@
 #include "main.h"
 #include "arm_math.h"
 
-#define MAX_SAFE_CURRENT 8
+#define MAX_SAFE_CURRENT 20
 extern float32_t ADC1_Buf_f32[4];
 extern float32_t ADC3_Buf_f32[4];
 

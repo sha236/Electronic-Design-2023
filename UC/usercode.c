@@ -99,7 +99,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
         // OLED_Refresh_Gram();
         
         ADC_BUF_TO_F32();
-        PROTECT_GUARD();
+        //PROTECT_GUARD();
         switch (mode_select)
         {
         case 0:

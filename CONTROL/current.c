@@ -143,10 +143,11 @@ void COUNT_CURRENT_PID(void)
     if (chip_select == 0)
     {
         //单片机1并网工作代码
-        pr_1.vi = NETWORK_VOTAGE;
-        PR_calc(&pr_1);
-        pr_output = pr_1.vo;
-        SPLL_1PH_SOGI_run(&sineA, pr_output);
+        // pr_1.vi = NETWORK_VOTAGE;
+        // PR_calc(&pr_1);
+        // pr_output = pr_1.vo;
+        // SPLL_1PH_SOGI_run(&sineA, pr_output);
+        SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
         angle_1 = (float32_t)(count_1);
         angle_1 *= 0.01570795;
         angle_1 += sineA.theta;

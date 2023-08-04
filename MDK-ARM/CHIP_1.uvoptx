@@ -152,6 +152,38 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+          <LineNumber>73</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134222528</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\CONTROL\votage.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\CHIP_1\../CONTROL/votage.c\73</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>34</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134234896</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\UC\usercode.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\CHIP_1\../UC/usercode.c\34</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
           <LineNumber>60</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134222304</Address>
@@ -166,27 +198,11 @@
           <Expression>\\CHIP_1\../CONTROL/votage.c\60</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
+          <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>66</LineNumber>
+          <LineNumber>146</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134222472</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\CONTROL\votage.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\CHIP_1\../CONTROL/votage.c\66</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>143</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221236</Address>
+          <Address>134221254</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -195,23 +211,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\CONTROL\current.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\CHIP_1\../CONTROL/current.c\143</Expression>
+          <Expression>\\CHIP_1\../CONTROL/current.c\146</Expression>
         </Bp>
         <Bp>
-          <Number>3</Number>
+          <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>38</LineNumber>
+          <LineNumber>149</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134235056</Address>
+          <Address>134221242</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\UC\usercode.c</Filename>
+          <Filename>..\CONTROL\current.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\CHIP_1\../UC/usercode.c\38</Expression>
+          <Expression>\\CHIP_1\../CONTROL/current.c\149</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

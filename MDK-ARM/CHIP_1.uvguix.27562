@@ -93,8 +93,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-32000</xPos>
-        <yPos>-32000</yPos>
+        <xPos>-1</xPos>
+        <yPos>-1</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>
@@ -3625,8 +3625,8 @@
       <Doc>
         <Name>..\UC\usercode.c</Name>
         <ColumnNumber>0</ColumnNumber>
-        <TopLine>40</TopLine>
-        <CurrentLine>48</CurrentLine>
+        <TopLine>26</TopLine>
+        <CurrentLine>34</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -3688,8 +3688,8 @@
       <Doc>
         <Name>..\CONTROL\current.c</Name>
         <ColumnNumber>0</ColumnNumber>
-        <TopLine>135</TopLine>
-        <CurrentLine>143</CurrentLine>
+        <TopLine>148</TopLine>
+        <CurrentLine>149</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -3751,7 +3751,7 @@
       <Doc>
         <Name>..\OLED\customoled.c</Name>
         <ColumnNumber>0</ColumnNumber>
-        <TopLine>27</TopLine>
+        <TopLine>26</TopLine>
         <CurrentLine>59</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
