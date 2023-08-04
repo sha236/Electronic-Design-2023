@@ -173,3 +173,8 @@ void COUNT_CURRENT_PID(void)
     if(count_1==399) count_1 = 0;
     else count_1++;
 }
+
+void UPDATE_PHASE(void)
+{
+    SPLL_1PH_SOGI_run(&sineA, NETWORK_VOTAGE);
+}

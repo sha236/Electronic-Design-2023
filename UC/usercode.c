@@ -21,6 +21,8 @@ extern float32_t pwm_compare;
 extern u32 mode_select;
 extern u32 chip_select; //0: Chip A, 1: Chip B
 
+int count_1_period = 0, OK_Flag = 0;
+
 void USER_INIT(void);
 void ADC_BUF_TO_F32(void);
 void ADC_BUF_TO_F32_1(void);
@@ -103,7 +105,18 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
             COUNT_CURRENT_VOTAGE_PID();
             break;
         case 1:
-            COUNT_CURRENT_PID();
+            if(OK_Flag==1) COUNT_CURRENT_PID();
+            else
+            {
+                if(count_1_period == 0) HOLD_MOS();
+                //Update Phase
+                UPDATE_PHASE();
+                count_1_period++;
+                if(count_1_period == 400){
+                    OK_Flag = 1;
+                    ENABLE_MOS();
+                } 
+            }
             break;
         case 2:
             COUNT_VOTAGE_PID();
@@ -125,22 +138,22 @@ void ADC_BUF_TO_F32(void)
 void ADC_BUF_TO_F32_1(void)
 {
     ADC1_Buf_f32[0] = (float32_t)(ADC1_Buf[0]);
-    ADC1_Buf_f32[0] *= 0.0007326; 
+    ADC1_Buf_f32[0] *= 0.0007326; //采集电压值Uo
+    ADC1_Buf_f32[0] = ADC1_Buf_f32[0]*27.44681 - 41.1702;
 }
 
 //采集电流
 void ADC_BUF_TO_F32_2(void)
 {
     /* 采集输出电流, 张嘉骞*/
-    ADC3_Buf_f32[0] = (float32_t)(ADC3_Buf[0]);
-    ADC3_Buf_f32[0] *= 0.0007326; //4095->3V
-    ADC3_Buf_f32[0] -= 1.5; //-1.5V 输出电压偏置
-    ADC3_Buf_f32[0] *= 1.6; //反映射为电流 
+    // ADC3_Buf_f32[0] = (float32_t)(ADC3_Buf[0]);
+    // ADC3_Buf_f32[0] *= 0.0007326; //4095->3V
+    // ADC3_Buf_f32[0] -= 1.5; //-1.5V 输出电压偏置
+    // ADC3_Buf_f32[0] *= 1.6; //反映射为电流 
     /* 采集输出电流, 虞劲锋*/
-    // ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
-    // ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
-    // ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
-    // ADC3_Buf_f32[2] *= 1.6; //反映射为电流
+    ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+    ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    ADC3_Buf_f32[2] = 2.0202*ADC3_Buf_f32[2] - 3.0303;
 }
 
 //对单片机2是采集单片机1的输出电流，对于单片机1而言是采集电网的电压
@@ -152,20 +165,18 @@ case 0:
     /* 采集电网电压*/
     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
-    ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
-    // ADC3_Buf_f32[2] *= ***; //反映射为电压
+    ADC3_Buf_f32[2] = 27.44681*ADC3_Buf_f32[2] - 41.1702;
     break;
 case 1:
     /* 采集逆变器1电流, 张嘉骞*/
-    ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
-    ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
-    ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
-    ADC3_Buf_f32[2] *= 1.6; //反映射为电流 
-    /* 采集逆变器1电流, 虞劲锋*/
     // ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
     // ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
     // ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
-    // ADC3_Buf_f32[2] *= 1.6; //反映射为电流
+    // ADC3_Buf_f32[2] *= 1.6; //反映射为电流 
+    /* 采集逆变器1电流, 虞劲锋*/
+    ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+    ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+    ADC3_Buf_f32[2] = ADC3_Buf_f32[2]*2.0202 - 3.0303;
     break;
 }
 }

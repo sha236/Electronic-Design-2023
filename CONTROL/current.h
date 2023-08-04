@@ -12,3 +12,5 @@ void UPDATE_CURRENT_PID(void);
 
 void COUNT_CURRENT_PID(void);
 
+void UPDATE_PHASE(void);
+

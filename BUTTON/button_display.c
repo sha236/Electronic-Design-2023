@@ -58,8 +58,8 @@ void DISPLAY_PID(void)
     if(chip_select == 0) OLED_ShowChar(95,47,'A',16,1);
     else OLED_ShowChar(95,47,'B',16,1);
     //Display CHip.B Mode
-    if(chip_b_mode==0) OLED_ShowChar(110,47,'1',16,1);
-    else OLED_ShowChar(110,47,'2',16,1);
+    if(chip_b_mode==0) OLED_ShowChar(110,47,'0',16,1);
+    else OLED_ShowChar(110,47,'1',16,1);
     //Display Mode
     switch(mode_select)
     {
