@@ -157,7 +157,7 @@ void COUNT_CURRENT_PID(void)
 
         // angle_1 += sineA.theta;
         // angle_1 += A_phase_correction;
-        angle_error = sineA.theta - sineB.theta;
+        angle_error = sineA.theta - sineB.theta + A_phase_correction;
         phase_pid_output = arm_pid_f32(&S_5, angle_error);
         phase_pid_output += A_phase_correction;
         angle_1 += phase_pid_output;

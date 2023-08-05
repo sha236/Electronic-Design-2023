@@ -7,3 +7,7 @@ void UPDATE_VOTAGE_NUM(void);
 void UPDATE_VOTAGE_PID(void);
 
 void COUNT_VOTAGE_PID(void);
+
+void UPDATE_RATO_NUM(void);
+
+void UPDATE_RATO_PID(void);

@@ -23,6 +23,9 @@ extern u32 chip_select; //0: Chip A, 1: Chip B
 
 int count_1_period = 0, OK_Flag = 0;
 
+extern float32_t debug_votage;
+extern float32_t debug_rate;
+
 void USER_INIT(void);
 void ADC_BUF_TO_F32(void);
 void ADC_BUF_TO_F32_1(void);
@@ -43,9 +46,17 @@ void StartDefaultTask(void *argument)
         UPDATE_IREF_RATO_PID();
         UPDATE_VOTAGE_PID();
         UPDATE_PHASE_PID();
+
+        //DEBUG
+        //UPDATE_RATO_PID();
         
         //Display
         DISPLAY_PID();
+
+        //Debug
+        OLED_ShowNum(74,17,debug_votage,3,16);
+        OLED_ShowNum(90,32,debug_rate*100,4,16);
+        OLED_Refresh_Gram();
 
         HAL_Delay(50-1);
     }
@@ -67,6 +78,8 @@ void USER_INIT(void)
     UPDATE_IREF_RATO_NUM();
     UPDATE_VOTAGE_NUM();
     UPDATE_PHASE_NUM();
+    //Debug
+    //UPDATE_RATO_NUM();
 
     HOLD_MOS();
 
@@ -77,6 +90,9 @@ void USER_INIT(void)
     HAL_TIM_Base_Start(&htim1);
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
 
     ENABLE_MOS();
     
@@ -129,7 +145,7 @@ void ADC_BUF_TO_F32_1(void)
 {
     ADC1_Buf_f32[0] = (float32_t)(ADC1_Buf[0]);
     ADC1_Buf_f32[0] *= 0.0007326; //采集电压值Uo
-    ADC1_Buf_f32[0] = ADC1_Buf_f32[0]*27.44681 - 41.1702;
+    ADC1_Buf_f32[0] = ADC1_Buf_f32[0]*28.723404 - 43.08511;
 }
 
 //采集电流
