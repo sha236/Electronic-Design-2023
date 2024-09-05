@@ -1,0 +1,655 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"sogi.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "SOGI/Src/sogi.c"
+  20              		.section	.text.SPLL_1PH_SOGI_reset,"ax",%progbits
+  21              		.align	1
+  22              		.global	SPLL_1PH_SOGI_reset
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	SPLL_1PH_SOGI_reset:
+  28              	.LVL0:
+  29              	.LFB272:
+   1:SOGI/Src/sogi.c **** #include "sogi.h"
+   2:SOGI/Src/sogi.c **** #include "arm_math.h"
+   3:SOGI/Src/sogi.c **** #include "main.h"
+   4:SOGI/Src/sogi.c **** 
+   5:SOGI/Src/sogi.c ****  inline  void SPLL_1PH_SOGI_reset(SPLL_1PH_SOGI *spll_obj)
+   6:SOGI/Src/sogi.c **** {
+  30              		.loc 1 6 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+   7:SOGI/Src/sogi.c ****     spll_obj->u[0]=(float32_t)(0.0);
+  35              		.loc 1 7 5 view .LVU1
+  36              		.loc 1 7 19 is_stmt 0 view .LVU2
+  37 0000 0023     		movs	r3, #0
+  38 0002 0360     		str	r3, [r0]	@ float
+   8:SOGI/Src/sogi.c ****     spll_obj->u[1]=(float32_t)(0.0);
+  39              		.loc 1 8 5 is_stmt 1 view .LVU3
+  40              		.loc 1 8 19 is_stmt 0 view .LVU4
+  41 0004 4360     		str	r3, [r0, #4]	@ float
+   9:SOGI/Src/sogi.c ****     spll_obj->u[2]=(float32_t)(0.0);
+  42              		.loc 1 9 5 is_stmt 1 view .LVU5
+  43              		.loc 1 9 19 is_stmt 0 view .LVU6
+  44 0006 8360     		str	r3, [r0, #8]	@ float
+  10:SOGI/Src/sogi.c ****     
+  11:SOGI/Src/sogi.c ****     spll_obj->osg_u[0]=(float32_t)(0.0);
+  45              		.loc 1 11 5 is_stmt 1 view .LVU7
+  46              		.loc 1 11 23 is_stmt 0 view .LVU8
+  47 0008 C360     		str	r3, [r0, #12]	@ float
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 2
+
+
+  12:SOGI/Src/sogi.c ****     spll_obj->osg_u[1]=(float32_t)(0.0);
+  48              		.loc 1 12 5 is_stmt 1 view .LVU9
+  49              		.loc 1 12 23 is_stmt 0 view .LVU10
+  50 000a 0361     		str	r3, [r0, #16]	@ float
+  13:SOGI/Src/sogi.c ****     spll_obj->osg_u[2]=(float32_t)(0.0);
+  51              		.loc 1 13 5 is_stmt 1 view .LVU11
+  52              		.loc 1 13 23 is_stmt 0 view .LVU12
+  53 000c 4361     		str	r3, [r0, #20]	@ float
+  14:SOGI/Src/sogi.c ****     
+  15:SOGI/Src/sogi.c ****     spll_obj->osg_qu[0]=(float32_t)(0.0);
+  54              		.loc 1 15 5 is_stmt 1 view .LVU13
+  55              		.loc 1 15 24 is_stmt 0 view .LVU14
+  56 000e 8361     		str	r3, [r0, #24]	@ float
+  16:SOGI/Src/sogi.c ****     spll_obj->osg_qu[1]=(float32_t)(0.0);
+  57              		.loc 1 16 5 is_stmt 1 view .LVU15
+  58              		.loc 1 16 24 is_stmt 0 view .LVU16
+  59 0010 C361     		str	r3, [r0, #28]	@ float
+  17:SOGI/Src/sogi.c ****     spll_obj->osg_qu[2]=(float32_t)(0.0);
+  60              		.loc 1 17 5 is_stmt 1 view .LVU17
+  61              		.loc 1 17 24 is_stmt 0 view .LVU18
+  62 0012 0362     		str	r3, [r0, #32]	@ float
+  18:SOGI/Src/sogi.c ****     
+  19:SOGI/Src/sogi.c ****     spll_obj->u_Q[0]=(float32_t)(0.0);
+  63              		.loc 1 19 5 is_stmt 1 view .LVU19
+  64              		.loc 1 19 21 is_stmt 0 view .LVU20
+  65 0014 4362     		str	r3, [r0, #36]	@ float
+  20:SOGI/Src/sogi.c ****     spll_obj->u_Q[1]=(float32_t)(0.0);
+  66              		.loc 1 20 5 is_stmt 1 view .LVU21
+  67              		.loc 1 20 21 is_stmt 0 view .LVU22
+  68 0016 8362     		str	r3, [r0, #40]	@ float
+  21:SOGI/Src/sogi.c ****     
+  22:SOGI/Src/sogi.c ****     spll_obj->u_D[0]=(float32_t)(0.0);
+  69              		.loc 1 22 5 is_stmt 1 view .LVU23
+  70              		.loc 1 22 21 is_stmt 0 view .LVU24
+  71 0018 C362     		str	r3, [r0, #44]	@ float
+  23:SOGI/Src/sogi.c ****     spll_obj->u_D[1]=(float32_t)(0.0);
+  72              		.loc 1 23 5 is_stmt 1 view .LVU25
+  73              		.loc 1 23 21 is_stmt 0 view .LVU26
+  74 001a 0363     		str	r3, [r0, #48]	@ float
+  24:SOGI/Src/sogi.c ****     
+  25:SOGI/Src/sogi.c ****     spll_obj->ylf[0]=(float32_t)(0.0);
+  75              		.loc 1 25 5 is_stmt 1 view .LVU27
+  76              		.loc 1 25 21 is_stmt 0 view .LVU28
+  77 001c 4363     		str	r3, [r0, #52]	@ float
+  26:SOGI/Src/sogi.c ****     spll_obj->ylf[1]=(float32_t)(0.0);
+  78              		.loc 1 26 5 is_stmt 1 view .LVU29
+  79              		.loc 1 26 21 is_stmt 0 view .LVU30
+  80 001e 8363     		str	r3, [r0, #56]	@ float
+  27:SOGI/Src/sogi.c ****     
+  28:SOGI/Src/sogi.c ****     spll_obj->fo=(float32_t)(0.0);
+  81              		.loc 1 28 5 is_stmt 1 view .LVU31
+  82              		.loc 1 28 17 is_stmt 0 view .LVU32
+  83 0020 C363     		str	r3, [r0, #60]	@ float
+  29:SOGI/Src/sogi.c ****     
+  30:SOGI/Src/sogi.c ****     spll_obj->theta=(float32_t)(0.0);
+  84              		.loc 1 30 5 is_stmt 1 view .LVU33
+  85              		.loc 1 30 20 is_stmt 0 view .LVU34
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 3
+
+
+  86 0022 4364     		str	r3, [r0, #68]	@ float
+  31:SOGI/Src/sogi.c ****     
+  32:SOGI/Src/sogi.c ****     spll_obj->sine=(float32_t)(0.0);
+  87              		.loc 1 32 5 is_stmt 1 view .LVU35
+  88              		.loc 1 32 19 is_stmt 0 view .LVU36
+  89 0024 C364     		str	r3, [r0, #76]	@ float
+  33:SOGI/Src/sogi.c ****     spll_obj->cosine=(float32_t)(0.0);
+  90              		.loc 1 33 5 is_stmt 1 view .LVU37
+  91              		.loc 1 33 21 is_stmt 0 view .LVU38
+  92 0026 8364     		str	r3, [r0, #72]	@ float
+  34:SOGI/Src/sogi.c **** }
+  93              		.loc 1 34 1 view .LVU39
+  94 0028 7047     		bx	lr
+  95              		.cfi_endproc
+  96              	.LFE272:
+  98              		.section	.text.SPLL_1PH_SOGI_coeff_calc,"ax",%progbits
+  99              		.align	1
+ 100              		.global	SPLL_1PH_SOGI_coeff_calc
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 105              	SPLL_1PH_SOGI_coeff_calc:
+ 106              	.LVL1:
+ 107              	.LFB273:
+  35:SOGI/Src/sogi.c **** 
+  36:SOGI/Src/sogi.c **** 
+  37:SOGI/Src/sogi.c ****  inline  void SPLL_1PH_SOGI_coeff_calc(SPLL_1PH_SOGI *spll_obj)
+  38:SOGI/Src/sogi.c **** {
+ 108              		.loc 1 38 1 is_stmt 1 view -0
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 0
+ 111              		@ frame_needed = 0, uses_anonymous_args = 0
+ 112              		@ link register save eliminated.
+  39:SOGI/Src/sogi.c ****     float32_t osgx,osgy,temp, wn;
+ 113              		.loc 1 39 5 view .LVU41
+  40:SOGI/Src/sogi.c ****     wn= spll_obj->fn *6.2831852f;
+ 114              		.loc 1 40 5 view .LVU42
+ 115              		.loc 1 40 17 is_stmt 0 view .LVU43
+ 116 0000 D0ED106A 		vldr.32	s13, [r0, #64]
+ 117              		.loc 1 40 7 view .LVU44
+ 118 0004 DFED217A 		vldr.32	s15, .L3
+ 119 0008 66EEA76A 		vmul.f32	s13, s13, s15
+ 120              	.LVL2:
+  41:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_k=(float32_t)(0.5);
+ 121              		.loc 1 41 5 is_stmt 1 view .LVU45
+ 122              		.loc 1 41 30 is_stmt 0 view .LVU46
+ 123 000c B6EE005A 		vmov.f32	s10, #5.0e-1
+ 124 0010 80ED155A 		vstr.32	s10, [r0, #84]
+  42:SOGI/Src/sogi.c ****     osgx = (float32_t)(1.0f*wn*spll_obj->delta_t);
+ 125              		.loc 1 42 5 is_stmt 1 view .LVU47
+ 126              		.loc 1 42 40 is_stmt 0 view .LVU48
+ 127 0014 D0ED147A 		vldr.32	s15, [r0, #80]
+ 128              		.loc 1 42 10 view .LVU49
+ 129 0018 27EEA67A 		vmul.f32	s14, s15, s13
+ 130              	.LVL3:
+  43:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_x=(float32_t)(osgx);
+ 131              		.loc 1 43 5 is_stmt 1 view .LVU50
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 4
+
+
+ 132              		.loc 1 43 30 is_stmt 0 view .LVU51
+ 133 001c 80ED167A 		vstr.32	s14, [r0, #88]
+  44:SOGI/Src/sogi.c ****     osgy = (float32_t)(wn*spll_obj->delta_t*wn*spll_obj->delta_t);
+ 134              		.loc 1 44 5 is_stmt 1 view .LVU52
+ 135              		.loc 1 44 44 is_stmt 0 view .LVU53
+ 136 0020 66EE876A 		vmul.f32	s13, s13, s14
+ 137              	.LVL4:
+ 138              		.loc 1 44 10 view .LVU54
+ 139 0024 67EEA67A 		vmul.f32	s15, s15, s13
+ 140              	.LVL5:
+  45:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_y=(float32_t)(osgy);
+ 141              		.loc 1 45 5 is_stmt 1 view .LVU55
+ 142              		.loc 1 45 30 is_stmt 0 view .LVU56
+ 143 0028 C0ED177A 		vstr.32	s15, [r0, #92]
+  46:SOGI/Src/sogi.c ****     temp = 1.0f/(osgx+osgy+4.0f);
+ 144              		.loc 1 46 5 is_stmt 1 view .LVU57
+ 145              		.loc 1 46 22 is_stmt 0 view .LVU58
+ 146 002c 77EE276A 		vadd.f32	s13, s14, s15
+ 147              		.loc 1 46 27 view .LVU59
+ 148 0030 F1EE005A 		vmov.f32	s11, #4.0e+0
+ 149 0034 76EEA56A 		vadd.f32	s13, s13, s11
+ 150              		.loc 1 46 10 view .LVU60
+ 151 0038 F7EE004A 		vmov.f32	s9, #1.0e+0
+ 152 003c 84EEA66A 		vdiv.f32	s12, s9, s13
+ 153              	.LVL6:
+  47:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_b0=((float32_t)osgx*temp);
+ 154              		.loc 1 47 5 is_stmt 1 view .LVU61
+ 155              		.loc 1 47 48 is_stmt 0 view .LVU62
+ 156 0040 67EE066A 		vmul.f32	s13, s14, s12
+ 157              		.loc 1 47 31 view .LVU63
+ 158 0044 C0ED186A 		vstr.32	s13, [r0, #96]
+  48:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_b2=((float32_t)(-1.0f)*spll_obj->osg_coeff.osg_b0);
+ 159              		.loc 1 48 5 is_stmt 1 view .LVU64
+ 160              		.loc 1 48 51 is_stmt 0 view .LVU65
+ 161 0048 F1EE666A 		vneg.f32	s13, s13
+ 162              		.loc 1 48 31 view .LVU66
+ 163 004c C0ED196A 		vstr.32	s13, [r0, #100]
+  49:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_a1=((float32_t)(2.0f*(4.0f-osgy))*temp);
+ 164              		.loc 1 49 5 is_stmt 1 view .LVU67
+ 165              		.loc 1 49 55 is_stmt 0 view .LVU68
+ 166 0050 75EEE76A 		vsub.f32	s13, s11, s15
+ 167              		.loc 1 49 33 view .LVU69
+ 168 0054 76EEA66A 		vadd.f32	s13, s13, s13
+ 169              		.loc 1 49 62 view .LVU70
+ 170 0058 66EE866A 		vmul.f32	s13, s13, s12
+ 171              		.loc 1 49 31 view .LVU71
+ 172 005c C0ED1A6A 		vstr.32	s13, [r0, #104]
+  50:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_a2=((float32_t)(osgx-osgy-4)*temp);
+ 173              		.loc 1 50 5 is_stmt 1 view .LVU72
+ 174              		.loc 1 50 49 is_stmt 0 view .LVU73
+ 175 0060 37EE677A 		vsub.f32	s14, s14, s15
+ 176              	.LVL7:
+ 177              		.loc 1 50 54 view .LVU74
+ 178 0064 37EE657A 		vsub.f32	s14, s14, s11
+ 179              		.loc 1 50 57 view .LVU75
+ 180 0068 27EE067A 		vmul.f32	s14, s14, s12
+ 181              		.loc 1 50 31 view .LVU76
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 5
+
+
+ 182 006c 80ED1B7A 		vstr.32	s14, [r0, #108]
+  51:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_qb0=((float32_t)(0.5f*osgy)*temp);
+ 183              		.loc 1 51 5 is_stmt 1 view .LVU77
+ 184              		.loc 1 51 34 is_stmt 0 view .LVU78
+ 185 0070 67EE857A 		vmul.f32	s15, s15, s10
+ 186              	.LVL8:
+ 187              		.loc 1 51 56 view .LVU79
+ 188 0074 67EE867A 		vmul.f32	s15, s15, s12
+ 189              		.loc 1 51 32 view .LVU80
+ 190 0078 C0ED1C7A 		vstr.32	s15, [r0, #112]
+  52:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_qb1=(spll_obj->osg_coeff.osg_qb0*2.0f);
+ 191              		.loc 1 52 5 is_stmt 1 view .LVU81
+ 192              		.loc 1 52 61 is_stmt 0 view .LVU82
+ 193 007c 37EEA77A 		vadd.f32	s14, s15, s15
+ 194              		.loc 1 52 32 view .LVU83
+ 195 0080 80ED1D7A 		vstr.32	s14, [r0, #116]
+  53:SOGI/Src/sogi.c ****     spll_obj->osg_coeff.osg_qb2=spll_obj->osg_coeff.osg_qb0;
+ 196              		.loc 1 53 5 is_stmt 1 view .LVU84
+ 197              		.loc 1 53 32 is_stmt 0 view .LVU85
+ 198 0084 C0ED1E7A 		vstr.32	s15, [r0, #120]
+  54:SOGI/Src/sogi.c **** }
+ 199              		.loc 1 54 1 view .LVU86
+ 200 0088 7047     		bx	lr
+ 201              	.L4:
+ 202 008a 00BF     		.align	2
+ 203              	.L3:
+ 204 008c DA0FC940 		.word	1086918618
+ 205              		.cfi_endproc
+ 206              	.LFE273:
+ 208              		.section	.text.SPLL_1PH_SOGI_config,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	SPLL_1PH_SOGI_config
+ 211              		.syntax unified
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	SPLL_1PH_SOGI_config:
+ 216              	.LVL9:
+ 217              	.LFB274:
+  55:SOGI/Src/sogi.c **** 
+  56:SOGI/Src/sogi.c **** inline  void SPLL_1PH_SOGI_config(SPLL_1PH_SOGI *spll_obj,
+  57:SOGI/Src/sogi.c ****                          float32_t acFreq,
+  58:SOGI/Src/sogi.c ****                          float32_t isrFrequency,
+  59:SOGI/Src/sogi.c ****                          float32_t lpf_b0,
+  60:SOGI/Src/sogi.c ****                          float32_t lpf_b1)
+  61:SOGI/Src/sogi.c **** {
+ 218              		.loc 1 61 1 is_stmt 1 view -0
+ 219              		.cfi_startproc
+ 220              		@ args = 0, pretend = 0, frame = 0
+ 221              		@ frame_needed = 0, uses_anonymous_args = 0
+ 222              		.loc 1 61 1 is_stmt 0 view .LVU88
+ 223 0000 70B5     		push	{r4, r5, r6, lr}
+ 224              	.LCFI0:
+ 225              		.cfi_def_cfa_offset 16
+ 226              		.cfi_offset 4, -16
+ 227              		.cfi_offset 5, -12
+ 228              		.cfi_offset 6, -8
+ 229              		.cfi_offset 14, -4
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 6
+
+
+ 230 0002 0446     		mov	r4, r0
+ 231 0004 11EE106A 		vmov	r6, s2
+ 232 0008 11EE905A 		vmov	r5, s3
+  62:SOGI/Src/sogi.c ****     spll_obj->fn=acFreq;
+ 233              		.loc 1 62 5 is_stmt 1 view .LVU89
+ 234              		.loc 1 62 17 is_stmt 0 view .LVU90
+ 235 000c 80ED100A 		vstr.32	s0, [r0, #64]
+  63:SOGI/Src/sogi.c ****     spll_obj->delta_t=((1.0f)/isrFrequency);
+ 236              		.loc 1 63 5 is_stmt 1 view .LVU91
+ 237              		.loc 1 63 30 is_stmt 0 view .LVU92
+ 238 0010 B7EE007A 		vmov.f32	s14, #1.0e+0
+ 239 0014 C7EE207A 		vdiv.f32	s15, s14, s1
+ 240              		.loc 1 63 22 view .LVU93
+ 241 0018 C0ED147A 		vstr.32	s15, [r0, #80]
+  64:SOGI/Src/sogi.c **** 
+  65:SOGI/Src/sogi.c ****     SPLL_1PH_SOGI_coeff_calc(spll_obj);
+ 242              		.loc 1 65 5 is_stmt 1 view .LVU94
+ 243 001c FFF7FEFF 		bl	SPLL_1PH_SOGI_coeff_calc
+ 244              	.LVL10:
+  66:SOGI/Src/sogi.c **** 
+  67:SOGI/Src/sogi.c ****     spll_obj->lpf_coeff.b0=lpf_b0;
+ 245              		.loc 1 67 5 view .LVU95
+ 246              		.loc 1 67 27 is_stmt 0 view .LVU96
+ 247 0020 C4F88060 		str	r6, [r4, #128]	@ float
+  68:SOGI/Src/sogi.c ****     spll_obj->lpf_coeff.b1=lpf_b1;
+ 248              		.loc 1 68 5 is_stmt 1 view .LVU97
+ 249              		.loc 1 68 27 is_stmt 0 view .LVU98
+ 250 0024 E567     		str	r5, [r4, #124]	@ float
+  69:SOGI/Src/sogi.c **** }
+ 251              		.loc 1 69 1 view .LVU99
+ 252 0026 70BD     		pop	{r4, r5, r6, pc}
+ 253              		.loc 1 69 1 view .LVU100
+ 254              		.cfi_endproc
+ 255              	.LFE274:
+ 257              		.section	.text.SPLL_1PH_SOGI_run,"ax",%progbits
+ 258              		.align	1
+ 259              		.global	SPLL_1PH_SOGI_run
+ 260              		.syntax unified
+ 261              		.thumb
+ 262              		.thumb_func
+ 264              	SPLL_1PH_SOGI_run:
+ 265              	.LVL11:
+ 266              	.LFB275:
+  70:SOGI/Src/sogi.c **** 
+  71:SOGI/Src/sogi.c **** 
+  72:SOGI/Src/sogi.c ****  inline  void SPLL_1PH_SOGI_run(SPLL_1PH_SOGI *spll_obj,
+  73:SOGI/Src/sogi.c ****                                      float32_t acValue)
+  74:SOGI/Src/sogi.c **** {
+ 267              		.loc 1 74 1 is_stmt 1 view -0
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 0
+ 270              		@ frame_needed = 0, uses_anonymous_args = 0
+ 271              		.loc 1 74 1 is_stmt 0 view .LVU102
+ 272 0000 10B5     		push	{r4, lr}
+ 273              	.LCFI1:
+ 274              		.cfi_def_cfa_offset 8
+ 275              		.cfi_offset 4, -8
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 7
+
+
+ 276              		.cfi_offset 14, -4
+ 277 0002 0446     		mov	r4, r0
+  75:SOGI/Src/sogi.c ****     // Update the spll_obj->u[0] with the grid value
+  76:SOGI/Src/sogi.c ****     spll_obj->u[0]=acValue;
+ 278              		.loc 1 76 5 is_stmt 1 view .LVU103
+ 279              		.loc 1 76 19 is_stmt 0 view .LVU104
+ 280 0004 80ED000A 		vstr.32	s0, [r0]
+  77:SOGI/Src/sogi.c **** 
+  78:SOGI/Src/sogi.c ****     
+  79:SOGI/Src/sogi.c ****     spll_obj->osg_u[0]=(spll_obj->osg_coeff.osg_b0*
+ 281              		.loc 1 79 5 is_stmt 1 view .LVU105
+ 282              		.loc 1 79 44 is_stmt 0 view .LVU106
+ 283 0008 90ED187A 		vldr.32	s14, [r0, #96]
+  80:SOGI/Src/sogi.c ****                        (spll_obj->u[0]-spll_obj->u[2])) +
+ 284              		.loc 1 80 51 view .LVU107
+ 285 000c D0ED025A 		vldr.32	s11, [r0, #8]
+ 286              		.loc 1 80 39 view .LVU108
+ 287 0010 70EE657A 		vsub.f32	s15, s0, s11
+  79:SOGI/Src/sogi.c ****                        (spll_obj->u[0]-spll_obj->u[2])) +
+ 288              		.loc 1 79 51 view .LVU109
+ 289 0014 27EE277A 		vmul.f32	s14, s14, s15
+  81:SOGI/Src/sogi.c ****                        (spll_obj->osg_coeff.osg_a1*spll_obj->osg_u[1]) +
+ 290              		.loc 1 81 44 view .LVU110
+ 291 0018 90ED1A6A 		vldr.32	s12, [r0, #104]
+ 292              		.loc 1 81 67 view .LVU111
+ 293 001c 90ED045A 		vldr.32	s10, [r0, #16]
+ 294              		.loc 1 81 51 view .LVU112
+ 295 0020 66EE057A 		vmul.f32	s15, s12, s10
+  80:SOGI/Src/sogi.c ****                        (spll_obj->u[0]-spll_obj->u[2])) +
+ 296              		.loc 1 80 57 view .LVU113
+ 297 0024 37EE277A 		vadd.f32	s14, s14, s15
+  82:SOGI/Src/sogi.c ****                        (spll_obj->osg_coeff.osg_a2*spll_obj->osg_u[2]);
+ 298              		.loc 1 82 44 view .LVU114
+ 299 0028 D0ED1B6A 		vldr.32	s13, [r0, #108]
+ 300              		.loc 1 82 67 view .LVU115
+ 301 002c D0ED057A 		vldr.32	s15, [r0, #20]
+ 302              		.loc 1 82 51 view .LVU116
+ 303 0030 66EEA77A 		vmul.f32	s15, s13, s15
+  81:SOGI/Src/sogi.c ****                        (spll_obj->osg_coeff.osg_a1*spll_obj->osg_u[1]) +
+ 304              		.loc 1 81 72 view .LVU117
+ 305 0034 37EE277A 		vadd.f32	s14, s14, s15
+  79:SOGI/Src/sogi.c ****                        (spll_obj->u[0]-spll_obj->u[2])) +
+ 306              		.loc 1 79 23 view .LVU118
+ 307 0038 80ED037A 		vstr.32	s14, [r0, #12]
+  83:SOGI/Src/sogi.c **** 
+  84:SOGI/Src/sogi.c ****     spll_obj->osg_u[2]=spll_obj->osg_u[1];
+ 308              		.loc 1 84 5 is_stmt 1 view .LVU119
+ 309              		.loc 1 84 23 is_stmt 0 view .LVU120
+ 310 003c 80ED055A 		vstr.32	s10, [r0, #20]
+  85:SOGI/Src/sogi.c ****     spll_obj->osg_u[1]=spll_obj->osg_u[0];
+ 311              		.loc 1 85 5 is_stmt 1 view .LVU121
+ 312              		.loc 1 85 23 is_stmt 0 view .LVU122
+ 313 0040 80ED047A 		vstr.32	s14, [r0, #16]
+  86:SOGI/Src/sogi.c **** 
+  87:SOGI/Src/sogi.c ****     spll_obj->osg_qu[0]=(spll_obj->osg_coeff.osg_qb0*spll_obj->u[0]) +
+ 314              		.loc 1 87 5 is_stmt 1 view .LVU123
+ 315              		.loc 1 87 45 is_stmt 0 view .LVU124
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 8
+
+
+ 316 0044 D0ED1C7A 		vldr.32	s15, [r0, #112]
+ 317              		.loc 1 87 53 view .LVU125
+ 318 0048 67EE807A 		vmul.f32	s15, s15, s0
+  88:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb1*spll_obj->u[1]) +
+ 319              		.loc 1 88 45 view .LVU126
+ 320 004c 90ED1D5A 		vldr.32	s10, [r0, #116]
+ 321              		.loc 1 88 65 view .LVU127
+ 322 0050 D0ED014A 		vldr.32	s9, [r0, #4]
+ 323              		.loc 1 88 53 view .LVU128
+ 324 0054 25EE245A 		vmul.f32	s10, s10, s9
+  87:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb1*spll_obj->u[1]) +
+ 325              		.loc 1 87 70 view .LVU129
+ 326 0058 77EE857A 		vadd.f32	s15, s15, s10
+  89:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb2*spll_obj->u[2]) +
+ 327              		.loc 1 89 45 view .LVU130
+ 328 005c 90ED1E5A 		vldr.32	s10, [r0, #120]
+ 329              		.loc 1 89 53 view .LVU131
+ 330 0060 65EE855A 		vmul.f32	s11, s11, s10
+  88:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb1*spll_obj->u[1]) +
+ 331              		.loc 1 88 70 view .LVU132
+ 332 0064 77EEA57A 		vadd.f32	s15, s15, s11
+  90:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_a1*spll_obj->osg_qu[1]) +
+ 333              		.loc 1 90 69 view .LVU133
+ 334 0068 D0ED075A 		vldr.32	s11, [r0, #28]
+ 335              		.loc 1 90 52 view .LVU134
+ 336 006c 26EE256A 		vmul.f32	s12, s12, s11
+  89:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb2*spll_obj->u[2]) +
+ 337              		.loc 1 89 70 view .LVU135
+ 338 0070 77EE867A 		vadd.f32	s15, s15, s12
+  91:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_a2*spll_obj->osg_qu[2]);
+ 339              		.loc 1 91 69 view .LVU136
+ 340 0074 90ED086A 		vldr.32	s12, [r0, #32]
+ 341              		.loc 1 91 52 view .LVU137
+ 342 0078 66EE866A 		vmul.f32	s13, s13, s12
+  90:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_a1*spll_obj->osg_qu[1]) +
+ 343              		.loc 1 90 74 view .LVU138
+ 344 007c 77EEA67A 		vadd.f32	s15, s15, s13
+  87:SOGI/Src/sogi.c ****                         (spll_obj->osg_coeff.osg_qb1*spll_obj->u[1]) +
+ 345              		.loc 1 87 24 view .LVU139
+ 346 0080 C0ED067A 		vstr.32	s15, [r0, #24]
+  92:SOGI/Src/sogi.c **** 
+  93:SOGI/Src/sogi.c ****     spll_obj->osg_qu[2]=spll_obj->osg_qu[1];
+ 347              		.loc 1 93 5 is_stmt 1 view .LVU140
+ 348              		.loc 1 93 24 is_stmt 0 view .LVU141
+ 349 0084 C0ED085A 		vstr.32	s11, [r0, #32]
+  94:SOGI/Src/sogi.c ****     spll_obj->osg_qu[1]=spll_obj->osg_qu[0];
+ 350              		.loc 1 94 5 is_stmt 1 view .LVU142
+ 351              		.loc 1 94 24 is_stmt 0 view .LVU143
+ 352 0088 C0ED077A 		vstr.32	s15, [r0, #28]
+  95:SOGI/Src/sogi.c **** 
+  96:SOGI/Src/sogi.c ****     spll_obj->u[2]=spll_obj->u[1];
+ 353              		.loc 1 96 5 is_stmt 1 view .LVU144
+ 354              		.loc 1 96 19 is_stmt 0 view .LVU145
+ 355 008c C0ED024A 		vstr.32	s9, [r0, #8]
+  97:SOGI/Src/sogi.c ****     spll_obj->u[1]=spll_obj->u[0];
+ 356              		.loc 1 97 5 is_stmt 1 view .LVU146
+ 357              		.loc 1 97 19 is_stmt 0 view .LVU147
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 9
+
+
+ 358 0090 80ED010A 		vstr.32	s0, [r0, #4]
+  98:SOGI/Src/sogi.c **** 
+  99:SOGI/Src/sogi.c ****     
+ 100:SOGI/Src/sogi.c ****     
+ 101:SOGI/Src/sogi.c ****     spll_obj->u_Q[0]=(spll_obj->cosine*spll_obj->osg_u[0]) +
+ 359              		.loc 1 101 5 is_stmt 1 view .LVU148
+ 360              		.loc 1 101 31 is_stmt 0 view .LVU149
+ 361 0094 D0ED125A 		vldr.32	s11, [r0, #72]
+ 362              		.loc 1 101 39 view .LVU150
+ 363 0098 67EE256A 		vmul.f32	s13, s14, s11
+ 102:SOGI/Src/sogi.c ****                      (spll_obj->sine*spll_obj->osg_qu[0]);
+ 364              		.loc 1 102 31 view .LVU151
+ 365 009c 90ED136A 		vldr.32	s12, [r0, #76]
+ 366              		.loc 1 102 37 view .LVU152
+ 367 00a0 27EE865A 		vmul.f32	s10, s15, s12
+ 101:SOGI/Src/sogi.c ****                      (spll_obj->sine*spll_obj->osg_qu[0]);
+ 368              		.loc 1 101 60 view .LVU153
+ 369 00a4 76EE856A 		vadd.f32	s13, s13, s10
+ 101:SOGI/Src/sogi.c ****                      (spll_obj->sine*spll_obj->osg_qu[0]);
+ 370              		.loc 1 101 21 view .LVU154
+ 371 00a8 C0ED096A 		vstr.32	s13, [r0, #36]
+ 103:SOGI/Src/sogi.c ****     spll_obj->u_D[0]=(spll_obj->cosine*spll_obj->osg_qu[0]) -
+ 372              		.loc 1 103 5 is_stmt 1 view .LVU155
+ 373              		.loc 1 103 39 is_stmt 0 view .LVU156
+ 374 00ac 67EEA57A 		vmul.f32	s15, s15, s11
+ 104:SOGI/Src/sogi.c ****                      (spll_obj->sine*spll_obj->osg_u[0]);
+ 375              		.loc 1 104 37 view .LVU157
+ 376 00b0 27EE067A 		vmul.f32	s14, s14, s12
+ 103:SOGI/Src/sogi.c ****     spll_obj->u_D[0]=(spll_obj->cosine*spll_obj->osg_qu[0]) -
+ 377              		.loc 1 103 61 view .LVU158
+ 378 00b4 77EEC77A 		vsub.f32	s15, s15, s14
+ 103:SOGI/Src/sogi.c ****     spll_obj->u_D[0]=(spll_obj->cosine*spll_obj->osg_qu[0]) -
+ 379              		.loc 1 103 21 view .LVU159
+ 380 00b8 C0ED0B7A 		vstr.32	s15, [r0, #44]
+ 105:SOGI/Src/sogi.c **** 
+ 106:SOGI/Src/sogi.c ****    
+ 107:SOGI/Src/sogi.c ****     spll_obj->ylf[0]=spll_obj->ylf[1] +
+ 381              		.loc 1 107 5 is_stmt 1 view .LVU160
+ 382              		.loc 1 107 35 is_stmt 0 view .LVU161
+ 383 00bc D0ED0E7A 		vldr.32	s15, [r0, #56]
+ 108:SOGI/Src/sogi.c ****                      (spll_obj->lpf_coeff.b0*spll_obj->u_Q[0]) +
+ 384              		.loc 1 108 42 view .LVU162
+ 385 00c0 90ED207A 		vldr.32	s14, [r0, #128]
+ 386              		.loc 1 108 45 view .LVU163
+ 387 00c4 26EE877A 		vmul.f32	s14, s13, s14
+ 107:SOGI/Src/sogi.c ****                      (spll_obj->lpf_coeff.b0*spll_obj->u_Q[0]) +
+ 388              		.loc 1 107 39 view .LVU164
+ 389 00c8 77EE877A 		vadd.f32	s15, s15, s14
+ 109:SOGI/Src/sogi.c ****                      (spll_obj->lpf_coeff.b1*spll_obj->u_Q[1]);
+ 390              		.loc 1 109 42 view .LVU165
+ 391 00cc 90ED1F7A 		vldr.32	s14, [r0, #124]
+ 392              		.loc 1 109 59 view .LVU166
+ 393 00d0 90ED0A6A 		vldr.32	s12, [r0, #40]
+ 394              		.loc 1 109 45 view .LVU167
+ 395 00d4 27EE067A 		vmul.f32	s14, s14, s12
+ 108:SOGI/Src/sogi.c ****                      (spll_obj->lpf_coeff.b0*spll_obj->u_Q[0]) +
+ 396              		.loc 1 108 64 view .LVU168
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 10
+
+
+ 397 00d8 77EE877A 		vadd.f32	s15, s15, s14
+ 107:SOGI/Src/sogi.c ****                      (spll_obj->lpf_coeff.b0*spll_obj->u_Q[0]) +
+ 398              		.loc 1 107 21 view .LVU169
+ 399 00dc C0ED0D7A 		vstr.32	s15, [r0, #52]
+ 110:SOGI/Src/sogi.c ****     spll_obj->ylf[1]=spll_obj->ylf[0];
+ 400              		.loc 1 110 5 is_stmt 1 view .LVU170
+ 401              		.loc 1 110 21 is_stmt 0 view .LVU171
+ 402 00e0 C0ED0E7A 		vstr.32	s15, [r0, #56]
+ 111:SOGI/Src/sogi.c **** 
+ 112:SOGI/Src/sogi.c ****     spll_obj->u_Q[1]=spll_obj->u_Q[0];
+ 403              		.loc 1 112 5 is_stmt 1 view .LVU172
+ 404              		.loc 1 112 21 is_stmt 0 view .LVU173
+ 405 00e4 C0ED0A6A 		vstr.32	s13, [r0, #40]
+ 113:SOGI/Src/sogi.c **** 
+ 114:SOGI/Src/sogi.c ****     spll_obj->fo=spll_obj->fn+spll_obj->ylf[0];
+ 406              		.loc 1 114 5 is_stmt 1 view .LVU174
+ 407              		.loc 1 114 26 is_stmt 0 view .LVU175
+ 408 00e8 90ED107A 		vldr.32	s14, [r0, #64]
+ 409              		.loc 1 114 30 view .LVU176
+ 410 00ec 77EE877A 		vadd.f32	s15, s15, s14
+ 411              		.loc 1 114 17 view .LVU177
+ 412 00f0 C0ED0F7A 		vstr.32	s15, [r0, #60]
+ 115:SOGI/Src/sogi.c **** 
+ 116:SOGI/Src/sogi.c ****     spll_obj->theta=spll_obj->theta + (spll_obj->fo*spll_obj->delta_t)*
+ 413              		.loc 1 116 5 is_stmt 1 view .LVU178
+ 414              		.loc 1 116 29 is_stmt 0 view .LVU179
+ 415 00f4 90ED117A 		vldr.32	s14, [r0, #68]
+ 416              		.loc 1 116 61 view .LVU180
+ 417 00f8 D0ED146A 		vldr.32	s13, [r0, #80]
+ 418              		.loc 1 116 52 view .LVU181
+ 419 00fc 67EEA67A 		vmul.f32	s15, s15, s13
+ 420              		.loc 1 116 71 view .LVU182
+ 421 0100 DFED0E6A 		vldr.32	s13, .L12
+ 422 0104 67EEA67A 		vmul.f32	s15, s15, s13
+ 423              		.loc 1 116 37 view .LVU183
+ 424 0108 77EE277A 		vadd.f32	s15, s14, s15
+ 425              		.loc 1 116 20 view .LVU184
+ 426 010c C0ED117A 		vstr.32	s15, [r0, #68]
+ 117:SOGI/Src/sogi.c ****                      6.2831852f;
+ 118:SOGI/Src/sogi.c **** 
+ 119:SOGI/Src/sogi.c ****     if(spll_obj->theta>6.2831852f)
+ 427              		.loc 1 119 5 is_stmt 1 view .LVU185
+ 428              		.loc 1 119 7 is_stmt 0 view .LVU186
+ 429 0110 F4EEE67A 		vcmpe.f32	s15, s13
+ 430 0114 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 431 0118 03DD     		ble	.L8
+ 120:SOGI/Src/sogi.c ****     {
+ 121:SOGI/Src/sogi.c ****         spll_obj->theta=spll_obj->theta - 6.2831852f;
+ 432              		.loc 1 121 9 is_stmt 1 view .LVU187
+ 433              		.loc 1 121 41 is_stmt 0 view .LVU188
+ 434 011a 77EEE67A 		vsub.f32	s15, s15, s13
+ 435              		.loc 1 121 24 view .LVU189
+ 436 011e C0ED117A 		vstr.32	s15, [r0, #68]
+ 437              	.L8:
+ 122:SOGI/Src/sogi.c ****     }
+ 123:SOGI/Src/sogi.c **** 
+ 124:SOGI/Src/sogi.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 11
+
+
+ 125:SOGI/Src/sogi.c ****     spll_obj->sine=arm_sin_f32(spll_obj->theta);
+ 438              		.loc 1 125 5 is_stmt 1 view .LVU190
+ 439              		.loc 1 125 20 is_stmt 0 view .LVU191
+ 440 0122 94ED110A 		vldr.32	s0, [r4, #68]
+ 441              	.LVL12:
+ 442              		.loc 1 125 20 view .LVU192
+ 443 0126 FFF7FEFF 		bl	arm_sin_f32
+ 444              	.LVL13:
+ 445              		.loc 1 125 19 discriminator 1 view .LVU193
+ 446 012a 84ED130A 		vstr.32	s0, [r4, #76]
+ 126:SOGI/Src/sogi.c ****     spll_obj->cosine=arm_cos_f32(spll_obj->theta);
+ 447              		.loc 1 126 5 is_stmt 1 view .LVU194
+ 448              		.loc 1 126 22 is_stmt 0 view .LVU195
+ 449 012e 94ED110A 		vldr.32	s0, [r4, #68]
+ 450 0132 FFF7FEFF 		bl	arm_cos_f32
+ 451              	.LVL14:
+ 452              		.loc 1 126 21 discriminator 1 view .LVU196
+ 453 0136 84ED120A 		vstr.32	s0, [r4, #72]
+ 127:SOGI/Src/sogi.c **** }...
+ 454              		.loc 1 127 1 view .LVU197
+ 455 013a 10BD     		pop	{r4, pc}
+ 456              	.LVL15:
+ 457              	.L13:
+ 458              		.loc 1 127 1 view .LVU198
+ 459              		.align	2
+ 460              	.L12:
+ 461 013c DA0FC940 		.word	1086918618
+ 462              		.cfi_endproc
+ 463              	.LFE275:
+ 465              		.text
+ 466              	.Letext0:
+ 467              		.file 2 "SOGI/Inc/sogi.h"
+ 468              		.file 3 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 sogi.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:21     .text.SPLL_1PH_SOGI_reset:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:27     .text.SPLL_1PH_SOGI_reset:00000000 SPLL_1PH_SOGI_reset
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:99     .text.SPLL_1PH_SOGI_coeff_calc:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:105    .text.SPLL_1PH_SOGI_coeff_calc:00000000 SPLL_1PH_SOGI_coeff_calc
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:204    .text.SPLL_1PH_SOGI_coeff_calc:0000008c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:209    .text.SPLL_1PH_SOGI_config:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:215    .text.SPLL_1PH_SOGI_config:00000000 SPLL_1PH_SOGI_config
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:258    .text.SPLL_1PH_SOGI_run:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:264    .text.SPLL_1PH_SOGI_run:00000000 SPLL_1PH_SOGI_run
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cc3FZPM9.s:461    .text.SPLL_1PH_SOGI_run:0000013c $d
+
+UNDEFINED SYMBOLS
+arm_sin_f32
+arm_cos_f32

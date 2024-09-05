@@ -1,0 +1,323 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"pr.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "PR/Src/pr.c"
+  20              		.section	.text.PR_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	PR_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	PR_init:
+  28              	.LVL0:
+  29              	.LFB272:
+   1:PR/Src/pr.c   **** #include "pr.h"
+   2:PR/Src/pr.c   **** #include "main.h"
+   3:PR/Src/pr.c   **** #include "arm_math.h"
+   4:PR/Src/pr.c   **** 
+   5:PR/Src/pr.c   **** PR pr_v_ac = { 0 };
+   6:PR/Src/pr.c   **** PR pr_i_ac = { 0 };
+   7:PR/Src/pr.c   **** 
+   8:PR/Src/pr.c   **** void PR_init(PR *p,float32_t Kp,float32_t Kr,float32_t Ts,float32_t wc, float32_t wo)
+   9:PR/Src/pr.c   **** {
+  30              		.loc 1 9 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  10:PR/Src/pr.c   ****     float temp = 0;
+  35              		.loc 1 10 5 view .LVU1
+  11:PR/Src/pr.c   ****     p->Ts=Ts;
+  36              		.loc 1 11 5 view .LVU2
+  37              		.loc 1 11 10 is_stmt 0 view .LVU3
+  38 0000 80ED041A 		vstr.32	s2, [r0, #16]
+  12:PR/Src/pr.c   ****     p->Kp=Kp;
+  39              		.loc 1 12 5 is_stmt 1 view .LVU4
+  40              		.loc 1 12 10 is_stmt 0 view .LVU5
+  41 0004 80ED000A 		vstr.32	s0, [r0]
+  13:PR/Src/pr.c   ****     p->Kr=Kr;
+  42              		.loc 1 13 5 is_stmt 1 view .LVU6
+  43              		.loc 1 13 10 is_stmt 0 view .LVU7
+  44 0008 C0ED010A 		vstr.32	s1, [r0, #4]
+  14:PR/Src/pr.c   ****     p->wc=wc;
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 2
+
+
+  45              		.loc 1 14 5 is_stmt 1 view .LVU8
+  46              		.loc 1 14 10 is_stmt 0 view .LVU9
+  47 000c C0ED031A 		vstr.32	s3, [r0, #12]
+  15:PR/Src/pr.c   ****     p->wo=wo;
+  48              		.loc 1 15 5 is_stmt 1 view .LVU10
+  49              		.loc 1 15 10 is_stmt 0 view .LVU11
+  50 0010 80ED022A 		vstr.32	s4, [r0, #8]
+  16:PR/Src/pr.c   ****     temp = 4 / p->Ts / p->Ts + 4 * p->wc / p->Ts + p->wo * p->wo;
+  51              		.loc 1 16 5 is_stmt 1 view .LVU12
+  52              		.loc 1 16 14 is_stmt 0 view .LVU13
+  53 0014 B1EE007A 		vmov.f32	s14, #4.0e+0
+  54 0018 C7EE017A 		vdiv.f32	s15, s14, s2
+  55              		.loc 1 16 22 view .LVU14
+  56 001c C7EE815A 		vdiv.f32	s11, s15, s2
+  57              		.loc 1 16 34 view .LVU15
+  58 0020 61EE871A 		vmul.f32	s3, s3, s14
+  59              	.LVL1:
+  60              		.loc 1 16 42 view .LVU16
+  61 0024 C1EE814A 		vdiv.f32	s9, s3, s2
+  62              		.loc 1 16 30 view .LVU17
+  63 0028 75EEA47A 		vadd.f32	s15, s11, s9
+  64              		.loc 1 16 58 view .LVU18
+  65 002c 22EE026A 		vmul.f32	s12, s4, s4
+  66              		.loc 1 16 10 view .LVU19
+  67 0030 77EE867A 		vadd.f32	s15, s15, s12
+  68              	.LVL2:
+  17:PR/Src/pr.c   **** 
+  18:PR/Src/pr.c   ****     p->B0 = (4 * p->Kp / p->Ts / p->Ts + 4 * p->wc * (p->Kp + p->Kr) / p->Ts
+  69              		.loc 1 18 5 is_stmt 1 view .LVU20
+  70              		.loc 1 18 16 is_stmt 0 view .LVU21
+  71 0034 20EE077A 		vmul.f32	s14, s0, s14
+  72              		.loc 1 18 24 view .LVU22
+  73 0038 C7EE016A 		vdiv.f32	s13, s14, s2
+  74              		.loc 1 18 32 view .LVU23
+  75 003c 86EE815A 		vdiv.f32	s10, s13, s2
+  76              		.loc 1 18 61 view .LVU24
+  77 0040 70EE200A 		vadd.f32	s1, s0, s1
+  78              	.LVL3:
+  79              		.loc 1 18 52 view .LVU25
+  80 0044 61EEA01A 		vmul.f32	s3, s3, s1
+  81              		.loc 1 18 70 view .LVU26
+  82 0048 C1EE816A 		vdiv.f32	s13, s3, s2
+  83              		.loc 1 18 40 view .LVU27
+  84 004c 75EE266A 		vadd.f32	s13, s10, s13
+  19:PR/Src/pr.c   ****             + p->Kp * p->wo * p->wo) / temp;
+  85              		.loc 1 19 21 view .LVU28
+  86 0050 20EE027A 		vmul.f32	s14, s0, s4
+  87              		.loc 1 19 29 view .LVU29
+  88 0054 27EE027A 		vmul.f32	s14, s14, s4
+  89              		.loc 1 19 13 view .LVU30
+  90 0058 76EE876A 		vadd.f32	s13, s13, s14
+  91              		.loc 1 19 38 view .LVU31
+  92 005c 86EEA74A 		vdiv.f32	s8, s13, s15
+  18:PR/Src/pr.c   ****             + p->Kp * p->wo * p->wo) / temp;
+  93              		.loc 1 18 11 view .LVU32
+  94 0060 80ED084A 		vstr.32	s8, [r0, #32]
+  20:PR/Src/pr.c   ****     p->B1 = (-8 * p->Kp / p->Ts / p->Ts + 2 * p->Kp * p->wo * p->wo) / temp;
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 3
+
+
+  95              		.loc 1 20 5 is_stmt 1 view .LVU33
+  96              		.loc 1 20 17 is_stmt 0 view .LVU34
+  97 0064 BAEE004A 		vmov.f32	s8, #-8.0e+0
+  98 0068 60EE046A 		vmul.f32	s13, s0, s8
+  99              		.loc 1 20 25 view .LVU35
+ 100 006c C6EE813A 		vdiv.f32	s7, s13, s2
+ 101              		.loc 1 20 33 view .LVU36
+ 102 0070 C3EE816A 		vdiv.f32	s13, s7, s2
+ 103              		.loc 1 20 45 view .LVU37
+ 104 0074 30EE000A 		vadd.f32	s0, s0, s0
+ 105              	.LVL4:
+ 106              		.loc 1 20 53 view .LVU38
+ 107 0078 20EE020A 		vmul.f32	s0, s0, s4
+ 108              		.loc 1 20 61 view .LVU39
+ 109 007c 20EE020A 		vmul.f32	s0, s0, s4
+ 110              		.loc 1 20 41 view .LVU40
+ 111 0080 76EE806A 		vadd.f32	s13, s13, s0
+ 112              		.loc 1 20 70 view .LVU41
+ 113 0084 C6EEA73A 		vdiv.f32	s7, s13, s15
+ 114              		.loc 1 20 11 view .LVU42
+ 115 0088 C0ED093A 		vstr.32	s7, [r0, #36]
+  21:PR/Src/pr.c   ****     p->B2 = (4 * p->Kp / p->Ts / p->Ts - 4 * p->wc / p->Ts * (p->Kp + p->Kr)
+ 116              		.loc 1 21 5 is_stmt 1 view .LVU43
+ 117              		.loc 1 21 60 is_stmt 0 view .LVU44
+ 118 008c 64EEA00A 		vmul.f32	s1, s9, s1
+ 119              		.loc 1 21 40 view .LVU45
+ 120 0090 35EE605A 		vsub.f32	s10, s10, s1
+  22:PR/Src/pr.c   ****             + p->Kp * p->wo * p->wo) / temp;
+ 121              		.loc 1 22 13 view .LVU46
+ 122 0094 37EE057A 		vadd.f32	s14, s14, s10
+ 123              		.loc 1 22 38 view .LVU47
+ 124 0098 C7EE276A 		vdiv.f32	s13, s14, s15
+  21:PR/Src/pr.c   ****     p->B2 = (4 * p->Kp / p->Ts / p->Ts - 4 * p->wc / p->Ts * (p->Kp + p->Kr)
+ 125              		.loc 1 21 11 view .LVU48
+ 126 009c C0ED0A6A 		vstr.32	s13, [r0, #40]
+  23:PR/Src/pr.c   ****     p->A1 = (-8 / p->Ts / p->Ts + 2 * p->wo * p->wo) / temp;
+ 127              		.loc 1 23 5 is_stmt 1 view .LVU49
+ 128              		.loc 1 23 17 is_stmt 0 view .LVU50
+ 129 00a0 C4EE016A 		vdiv.f32	s13, s8, s2
+ 130              		.loc 1 23 25 view .LVU51
+ 131 00a4 86EE817A 		vdiv.f32	s14, s13, s2
+ 132              		.loc 1 23 37 view .LVU52
+ 133 00a8 72EE026A 		vadd.f32	s13, s4, s4
+ 134              		.loc 1 23 45 view .LVU53
+ 135 00ac 66EE826A 		vmul.f32	s13, s13, s4
+ 136              		.loc 1 23 33 view .LVU54
+ 137 00b0 37EE267A 		vadd.f32	s14, s14, s13
+ 138              		.loc 1 23 54 view .LVU55
+ 139 00b4 C7EE276A 		vdiv.f32	s13, s14, s15
+ 140              		.loc 1 23 11 view .LVU56
+ 141 00b8 C0ED066A 		vstr.32	s13, [r0, #24]
+  24:PR/Src/pr.c   ****     p->A2 = (4 / p->Ts / p->Ts - 4 * p->wc / p->Ts + p->wo * p->wo) / temp;
+ 142              		.loc 1 24 5 is_stmt 1 view .LVU57
+ 143              		.loc 1 24 32 is_stmt 0 view .LVU58
+ 144 00bc 75EEE45A 		vsub.f32	s11, s11, s9
+ 145              		.loc 1 24 52 view .LVU59
+ 146 00c0 36EE256A 		vadd.f32	s12, s12, s11
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 4
+
+
+ 147              		.loc 1 24 69 view .LVU60
+ 148 00c4 86EE277A 		vdiv.f32	s14, s12, s15
+ 149              		.loc 1 24 11 view .LVU61
+ 150 00c8 80ED077A 		vstr.32	s14, [r0, #28]
+  25:PR/Src/pr.c   ****     /*PRpr;
+  26:PR/Src/pr.c   ****      * 差分方程
+  27:PR/Src/pr.c   ****      * y[n]+A1[n-1]+A2[n-2]=B0x[n]+B1x[n-1]+B2[n-2]
+  28:PR/Src/pr.c   ****      */
+  29:PR/Src/pr.c   **** }
+ 151              		.loc 1 29 1 view .LVU62
+ 152 00cc 7047     		bx	lr
+ 153              		.cfi_endproc
+ 154              	.LFE272:
+ 156              		.section	.text.PR_calc,"ax",%progbits
+ 157              		.align	1
+ 158              		.global	PR_calc
+ 159              		.syntax unified
+ 160              		.thumb
+ 161              		.thumb_func
+ 163              	PR_calc:
+ 164              	.LVL5:
+ 165              	.LFB273:
+  30:PR/Src/pr.c   **** 
+  31:PR/Src/pr.c   **** void PR_calc(PR *p)
+  32:PR/Src/pr.c   **** {
+ 166              		.loc 1 32 1 is_stmt 1 view -0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 0
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170              		@ link register save eliminated.
+  33:PR/Src/pr.c   ****     p->vo = -p->A1 * p->vo_1 - p->A2 * p->vo_2 + p->B0 * p->vi + p->B1 * p->vi_1
+ 171              		.loc 1 33 5 view .LVU64
+ 172              		.loc 1 33 15 is_stmt 0 view .LVU65
+ 173 0000 D0ED067A 		vldr.32	s15, [r0, #24]
+ 174              		.loc 1 33 23 view .LVU66
+ 175 0004 D0ED0C5A 		vldr.32	s11, [r0, #48]
+ 176              		.loc 1 33 20 view .LVU67
+ 177 0008 67EEE57A 		vnmul.f32	s15, s15, s11
+ 178              		.loc 1 33 33 view .LVU68
+ 179 000c 90ED077A 		vldr.32	s14, [r0, #28]
+ 180              		.loc 1 33 41 view .LVU69
+ 181 0010 D0ED0D6A 		vldr.32	s13, [r0, #52]
+ 182              		.loc 1 33 38 view .LVU70
+ 183 0014 27EE267A 		vmul.f32	s14, s14, s13
+ 184              		.loc 1 33 30 view .LVU71
+ 185 0018 77EEC77A 		vsub.f32	s15, s15, s14
+ 186              		.loc 1 33 51 view .LVU72
+ 187 001c 90ED087A 		vldr.32	s14, [r0, #32]
+ 188              		.loc 1 33 59 view .LVU73
+ 189 0020 D0ED0E6A 		vldr.32	s13, [r0, #56]
+ 190              		.loc 1 33 56 view .LVU74
+ 191 0024 27EE267A 		vmul.f32	s14, s14, s13
+ 192              		.loc 1 33 48 view .LVU75
+ 193 0028 77EE877A 		vadd.f32	s15, s15, s14
+ 194              		.loc 1 33 67 view .LVU76
+ 195 002c 90ED097A 		vldr.32	s14, [r0, #36]
+ 196              		.loc 1 33 75 view .LVU77
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 5
+
+
+ 197 0030 90ED0F6A 		vldr.32	s12, [r0, #60]
+ 198              		.loc 1 33 72 view .LVU78
+ 199 0034 27EE067A 		vmul.f32	s14, s14, s12
+ 200              		.loc 1 33 64 view .LVU79
+ 201 0038 77EE877A 		vadd.f32	s15, s15, s14
+  34:PR/Src/pr.c   ****             + p->B2 * p->vi_2;
+ 202              		.loc 1 34 16 view .LVU80
+ 203 003c 90ED0A7A 		vldr.32	s14, [r0, #40]
+ 204              		.loc 1 34 24 view .LVU81
+ 205 0040 90ED105A 		vldr.32	s10, [r0, #64]
+ 206              		.loc 1 34 21 view .LVU82
+ 207 0044 27EE057A 		vmul.f32	s14, s14, s10
+ 208              		.loc 1 34 13 view .LVU83
+ 209 0048 77EE877A 		vadd.f32	s15, s15, s14
+  33:PR/Src/pr.c   ****     p->vo = -p->A1 * p->vo_1 - p->A2 * p->vo_2 + p->B0 * p->vi + p->B1 * p->vi_1
+ 210              		.loc 1 33 11 view .LVU84
+ 211 004c C0ED0B7A 		vstr.32	s15, [r0, #44]
+  35:PR/Src/pr.c   **** 
+  36:PR/Src/pr.c   ****     // update and store
+  37:PR/Src/pr.c   ****     p->vo_2=p->vo_1;
+ 212              		.loc 1 37 5 is_stmt 1 view .LVU85
+ 213              		.loc 1 37 12 is_stmt 0 view .LVU86
+ 214 0050 C0ED0D5A 		vstr.32	s11, [r0, #52]
+  38:PR/Src/pr.c   ****     p->vo_1 = p->vo;
+ 215              		.loc 1 38 5 is_stmt 1 view .LVU87
+ 216              		.loc 1 38 13 is_stmt 0 view .LVU88
+ 217 0054 C0ED0C7A 		vstr.32	s15, [r0, #48]
+  39:PR/Src/pr.c   ****     p->vi_2 = p->vi_1;
+ 218              		.loc 1 39 5 is_stmt 1 view .LVU89
+ 219              		.loc 1 39 13 is_stmt 0 view .LVU90
+ 220 0058 80ED106A 		vstr.32	s12, [r0, #64]
+  40:PR/Src/pr.c   ****     p->vi_1 = p->vi;
+ 221              		.loc 1 40 5 is_stmt 1 view .LVU91
+ 222              		.loc 1 40 13 is_stmt 0 view .LVU92
+ 223 005c C0ED0F6A 		vstr.32	s13, [r0, #60]
+  41:PR/Src/pr.c   **** }
+ 224              		.loc 1 41 1 view .LVU93
+ 225 0060 7047     		bx	lr
+ 226              		.cfi_endproc
+ 227              	.LFE273:
+ 229              		.global	pr_i_ac
+ 230              		.section	.bss.pr_i_ac,"aw",%nobits
+ 231              		.align	2
+ 234              	pr_i_ac:
+ 235 0000 00000000 		.space	68
+ 235      00000000 
+ 235      00000000 
+ 235      00000000 
+ 235      00000000 
+ 236              		.global	pr_v_ac
+ 237              		.section	.bss.pr_v_ac,"aw",%nobits
+ 238              		.align	2
+ 241              	pr_v_ac:
+ 242 0000 00000000 		.space	68
+ 242      00000000 
+ 242      00000000 
+ 242      00000000 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 6
+
+
+ 242      00000000 
+ 243              		.text
+ 244              	.Letext0:
+ 245              		.file 2 "PR/Inc/pr.h"
+ 246              		.file 3 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pr.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:21     .text.PR_init:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:27     .text.PR_init:00000000 PR_init
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:157    .text.PR_calc:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:163    .text.PR_calc:00000000 PR_calc
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:234    .bss.pr_i_ac:00000000 pr_i_ac
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:231    .bss.pr_i_ac:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:241    .bss.pr_v_ac:00000000 pr_v_ac
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccqQ3WFd.s:238    .bss.pr_v_ac:00000000 $d
+
+NO UNDEFINED SYMBOLS

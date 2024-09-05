@@ -1,0 +1,120 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"protect.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "PROTECT/Src/protect.c"
+  20              		.section	.text.PROTECT_GUARD,"ax",%progbits
+  21              		.align	1
+  22              		.global	PROTECT_GUARD
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	PROTECT_GUARD:
+  28              	.LFB272:
+   1:PROTECT/Src/protect.c **** #include "protect.h"
+   2:PROTECT/Src/protect.c **** #include "main.h"
+   3:PROTECT/Src/protect.c **** #include "arm_math.h"
+   4:PROTECT/Src/protect.c **** 
+   5:PROTECT/Src/protect.c **** #define MAX_SAFE_CURRENT 20
+   6:PROTECT/Src/protect.c **** extern float32_t ADC1_Buf_f32[4];
+   7:PROTECT/Src/protect.c **** extern float32_t ADC3_Buf_f32[4];
+   8:PROTECT/Src/protect.c **** 
+   9:PROTECT/Src/protect.c **** 
+  10:PROTECT/Src/protect.c **** void PROTECT_GUARD(void)
+  11:PROTECT/Src/protect.c **** {
+  29              		.loc 1 11 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  12:PROTECT/Src/protect.c ****     if(ADC3_Buf_f32[2]>MAX_SAFE_CURRENT) 
+  38              		.loc 1 12 5 view .LVU1
+  39              		.loc 1 12 20 is_stmt 0 view .LVU2
+  40 0002 0B4B     		ldr	r3, .L9
+  41 0004 93ED027A 		vldr.32	s14, [r3, #8]
+  42              		.loc 1 12 7 view .LVU3
+  43 0008 F3EE047A 		vmov.f32	s15, #2.0e+1
+  44 000c B4EEE77A 		vcmpe.f32	s14, s15
+  45 0010 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  46 0014 00DC     		bgt	.L8
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s 			page 2
+
+
+  13:PROTECT/Src/protect.c ****     {
+  14:PROTECT/Src/protect.c ****         HOLD_MOS();
+  15:PROTECT/Src/protect.c ****         while (1)
+  16:PROTECT/Src/protect.c ****         {
+  17:PROTECT/Src/protect.c ****             HAL_Delay(500-1);
+  18:PROTECT/Src/protect.c ****         } 
+  19:PROTECT/Src/protect.c ****     }
+  20:PROTECT/Src/protect.c **** }...
+  47              		.loc 1 20 1 view .LVU4
+  48 0016 08BD     		pop	{r3, pc}
+  49              	.L8:
+  14:PROTECT/Src/protect.c ****         HOLD_MOS();
+  50              		.loc 1 14 9 is_stmt 1 view .LVU5
+  51 0018 0022     		movs	r2, #0
+  52 001a 4FF40061 		mov	r1, #2048
+  53 001e 0548     		ldr	r0, .L9+4
+  54 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  55              	.LVL0:
+  56              	.L4:
+  15:PROTECT/Src/protect.c ****         while (1)
+  57              		.loc 1 15 9 view .LVU6
+  17:PROTECT/Src/protect.c ****             HAL_Delay(500-1);
+  58              		.loc 1 17 13 discriminator 1 view .LVU7
+  59 0024 40F2F310 		movw	r0, #499
+  60 0028 FFF7FEFF 		bl	HAL_Delay
+  61              	.LVL1:
+  15:PROTECT/Src/protect.c ****         while (1)
+  62              		.loc 1 15 15 view .LVU8
+  63 002c FAE7     		b	.L4
+  64              	.L10:
+  65 002e 00BF     		.align	2
+  66              	.L9:
+  67 0030 00000000 		.word	ADC3_Buf_f32
+  68 0034 000C0240 		.word	1073875968
+  69              		.cfi_endproc
+  70              	.LFE272:
+  72              		.text
+  73              	.Letext0:
+  74              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+  75              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+  76              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+  77              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+  78              		.file 6 "DSP/Inc/arm_math.h"
+  79              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 protect.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s:21     .text.PROTECT_GUARD:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s:27     .text.PROTECT_GUARD:00000000 PROTECT_GUARD
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccuZdzbC.s:67     .text.PROTECT_GUARD:00000030 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_Delay
+ADC3_Buf_f32

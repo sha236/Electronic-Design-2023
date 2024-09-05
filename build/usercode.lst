@@ -1,0 +1,1049 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usercode.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "UC/Src/usercode.c"
+  20              		.section	.text.USER_INIT,"ax",%progbits
+  21              		.align	1
+  22              		.global	USER_INIT
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	USER_INIT:
+  28              	.LFB273:
+   1:UC/Src/usercode.c **** #include "usercode.h"
+   2:UC/Src/usercode.c **** #include "main.h"
+   3:UC/Src/usercode.c **** #include "oled.h"
+   4:UC/Src/usercode.c **** #include "adc.h"
+   5:UC/Src/usercode.c **** #include "tim.h"
+   6:UC/Src/usercode.c **** #include "button.h"
+   7:UC/Src/usercode.c **** #include "button_display.h"
+   8:UC/Src/usercode.c **** #include "current_votage.h"
+   9:UC/Src/usercode.c **** #include "arm_math.h"
+  10:UC/Src/usercode.c **** #include "protect.h"
+  11:UC/Src/usercode.c **** #include "current.h"
+  12:UC/Src/usercode.c **** #include "votage.h"
+  13:UC/Src/usercode.c **** 
+  14:UC/Src/usercode.c **** #define u8 uint8_t
+  15:UC/Src/usercode.c **** #define u16 uint16_t
+  16:UC/Src/usercode.c **** #define u32 uint32_t
+  17:UC/Src/usercode.c **** 
+  18:UC/Src/usercode.c **** extern uint16_t ADC1_Buf[4];
+  19:UC/Src/usercode.c **** extern float32_t ADC1_Buf_f32[4];
+  20:UC/Src/usercode.c **** extern float32_t pwm_compare;
+  21:UC/Src/usercode.c **** extern u32 mode_select;
+  22:UC/Src/usercode.c **** extern u32 chip_select; //0: Chip A, 1: Chip B
+  23:UC/Src/usercode.c **** 
+  24:UC/Src/usercode.c **** int count_1_period = 0, OK_Flag = 0;
+  25:UC/Src/usercode.c **** 
+  26:UC/Src/usercode.c **** extern float32_t debug_votage;
+  27:UC/Src/usercode.c **** extern float32_t debug_rate;
+  28:UC/Src/usercode.c **** 
+  29:UC/Src/usercode.c **** void USER_INIT(void);
+  30:UC/Src/usercode.c **** void ADC_BUF_TO_F32(void);
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 2
+
+
+  31:UC/Src/usercode.c **** void ADC_BUF_TO_F32_1(void);
+  32:UC/Src/usercode.c **** void ADC_BUF_TO_F32_2(void);
+  33:UC/Src/usercode.c **** void ADC_BUF_TO_F32_3(void);
+  34:UC/Src/usercode.c **** 
+  35:UC/Src/usercode.c **** void StartDefaultTask(void *argument)
+  36:UC/Src/usercode.c **** {
+  37:UC/Src/usercode.c ****     USER_INIT();
+  38:UC/Src/usercode.c **** 
+  39:UC/Src/usercode.c ****     while(1)
+  40:UC/Src/usercode.c ****     {
+  41:UC/Src/usercode.c ****         READ_BUTTON_A();
+  42:UC/Src/usercode.c ****         READ_BUTTON_B();
+  43:UC/Src/usercode.c **** 
+  44:UC/Src/usercode.c ****         UPDATE_CURRENT_VOOTAGE_PID();
+  45:UC/Src/usercode.c ****         UPDATE_CURRENT_PID();
+  46:UC/Src/usercode.c ****         UPDATE_IREF_RATO_PID();
+  47:UC/Src/usercode.c ****         UPDATE_VOTAGE_PID();
+  48:UC/Src/usercode.c ****         UPDATE_PHASE_PID();
+  49:UC/Src/usercode.c **** 
+  50:UC/Src/usercode.c ****         //DEBUG
+  51:UC/Src/usercode.c ****         //UPDATE_RATO_PID();
+  52:UC/Src/usercode.c ****         
+  53:UC/Src/usercode.c ****         //Display
+  54:UC/Src/usercode.c ****         DISPLAY_PID();
+  55:UC/Src/usercode.c **** 
+  56:UC/Src/usercode.c ****         //Debug
+  57:UC/Src/usercode.c ****         OLED_ShowNum(74,17,debug_votage,3,16);
+  58:UC/Src/usercode.c ****         OLED_ShowNum(90,32,debug_rate*100,4,16);
+  59:UC/Src/usercode.c ****         OLED_Refresh_Gram();
+  60:UC/Src/usercode.c **** 
+  61:UC/Src/usercode.c ****         HAL_Delay(50-1);
+  62:UC/Src/usercode.c ****     }
+  63:UC/Src/usercode.c **** }
+  64:UC/Src/usercode.c **** 
+  65:UC/Src/usercode.c **** void USER_INIT(void)
+  66:UC/Src/usercode.c **** {
+  29              		.loc 1 66 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 38B5     		push	{r3, r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 3, -16
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  67:UC/Src/usercode.c ****     OLED_Init();
+  40              		.loc 1 67 5 view .LVU1
+  41 0002 FFF7FEFF 		bl	OLED_Init
+  42              	.LVL0:
+  68:UC/Src/usercode.c **** 
+  69:UC/Src/usercode.c ****     //Display
+  70:UC/Src/usercode.c ****     DISPLAY_PID_SYMBLE();
+  43              		.loc 1 70 5 view .LVU2
+  44 0006 FFF7FEFF 		bl	DISPLAY_PID_SYMBLE
+  45              	.LVL1:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 3
+
+
+  71:UC/Src/usercode.c **** 
+  72:UC/Src/usercode.c ****     CURRENT_VOTAGE_PID_INIT();
+  46              		.loc 1 72 5 view .LVU3
+  47 000a FFF7FEFF 		bl	CURRENT_VOTAGE_PID_INIT
+  48              	.LVL2:
+  73:UC/Src/usercode.c ****     CURRENT_PID_INIT();
+  49              		.loc 1 73 5 view .LVU4
+  50 000e FFF7FEFF 		bl	CURRENT_PID_INIT
+  51              	.LVL3:
+  74:UC/Src/usercode.c ****     VOTAGE_PID_INIT();
+  52              		.loc 1 74 5 view .LVU5
+  53 0012 FFF7FEFF 		bl	VOTAGE_PID_INIT
+  54              	.LVL4:
+  75:UC/Src/usercode.c **** 
+  76:UC/Src/usercode.c ****     UPDATE_CURRENT_VOTAGE_NUM();
+  55              		.loc 1 76 5 view .LVU6
+  56 0016 FFF7FEFF 		bl	UPDATE_CURRENT_VOTAGE_NUM
+  57              	.LVL5:
+  77:UC/Src/usercode.c ****     UPDATE_CURRENT_NUM();
+  58              		.loc 1 77 5 view .LVU7
+  59 001a FFF7FEFF 		bl	UPDATE_CURRENT_NUM
+  60              	.LVL6:
+  78:UC/Src/usercode.c ****     UPDATE_IREF_RATO_NUM();
+  61              		.loc 1 78 5 view .LVU8
+  62 001e FFF7FEFF 		bl	UPDATE_IREF_RATO_NUM
+  63              	.LVL7:
+  79:UC/Src/usercode.c ****     UPDATE_VOTAGE_NUM();
+  64              		.loc 1 79 5 view .LVU9
+  65 0022 FFF7FEFF 		bl	UPDATE_VOTAGE_NUM
+  66              	.LVL8:
+  80:UC/Src/usercode.c ****     UPDATE_PHASE_NUM();
+  67              		.loc 1 80 5 view .LVU10
+  68 0026 FFF7FEFF 		bl	UPDATE_PHASE_NUM
+  69              	.LVL9:
+  81:UC/Src/usercode.c ****     //Debug
+  82:UC/Src/usercode.c ****     //UPDATE_RATO_NUM();
+  83:UC/Src/usercode.c **** 
+  84:UC/Src/usercode.c ****     HOLD_MOS();
+  70              		.loc 1 84 5 view .LVU11
+  71 002a 194D     		ldr	r5, .L3
+  72 002c 0022     		movs	r2, #0
+  73 002e 4FF40061 		mov	r1, #2048
+  74 0032 2846     		mov	r0, r5
+  75 0034 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  76              	.LVL10:
+  85:UC/Src/usercode.c **** 
+  86:UC/Src/usercode.c ****     HAL_TIM_Base_Start(&htim1);
+  77              		.loc 1 86 5 view .LVU12
+  78 0038 164C     		ldr	r4, .L3+4
+  79 003a 2046     		mov	r0, r4
+  80 003c FFF7FEFF 		bl	HAL_TIM_Base_Start
+  81              	.LVL11:
+  87:UC/Src/usercode.c ****     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+  82              		.loc 1 87 5 view .LVU13
+  83 0040 0421     		movs	r1, #4
+  84 0042 2046     		mov	r0, r4
+  85 0044 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 4
+
+
+  86              	.LVL12:
+  88:UC/Src/usercode.c ****     HAL_ADC_Start_DMA(&hadc1,(uint32_t *)ADC1_Buf,4);
+  87              		.loc 1 88 5 view .LVU14
+  88 0048 0422     		movs	r2, #4
+  89 004a 1349     		ldr	r1, .L3+8
+  90 004c 1348     		ldr	r0, .L3+12
+  91 004e FFF7FEFF 		bl	HAL_ADC_Start_DMA
+  92              	.LVL13:
+  89:UC/Src/usercode.c ****     HAL_ADC_Start_DMA(&hadc3,(uint32_t *)ADC3_Buf,4);
+  93              		.loc 1 89 5 view .LVU15
+  94 0052 0422     		movs	r2, #4
+  95 0054 1249     		ldr	r1, .L3+16
+  96 0056 1348     		ldr	r0, .L3+20
+  97 0058 FFF7FEFF 		bl	HAL_ADC_Start_DMA
+  98              	.LVL14:
+  90:UC/Src/usercode.c ****     HAL_TIM_Base_Start(&htim1);
+  99              		.loc 1 90 5 view .LVU16
+ 100 005c 2046     		mov	r0, r4
+ 101 005e FFF7FEFF 		bl	HAL_TIM_Base_Start
+ 102              	.LVL15:
+  91:UC/Src/usercode.c ****     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+ 103              		.loc 1 91 5 view .LVU17
+ 104 0062 0021     		movs	r1, #0
+ 105 0064 2046     		mov	r0, r4
+ 106 0066 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 107              	.LVL16:
+  92:UC/Src/usercode.c ****     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+ 108              		.loc 1 92 5 view .LVU18
+ 109 006a 0021     		movs	r1, #0
+ 110 006c 2046     		mov	r0, r4
+ 111 006e FFF7FEFF 		bl	HAL_TIMEx_PWMN_Start
+ 112              	.LVL17:
+  93:UC/Src/usercode.c **** 
+  94:UC/Src/usercode.c ****     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+ 113              		.loc 1 94 5 view .LVU19
+ 114 0072 0821     		movs	r1, #8
+ 115 0074 2046     		mov	r0, r4
+ 116 0076 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 117              	.LVL18:
+  95:UC/Src/usercode.c ****     HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+ 118              		.loc 1 95 5 view .LVU20
+ 119 007a 0821     		movs	r1, #8
+ 120 007c 2046     		mov	r0, r4
+ 121 007e FFF7FEFF 		bl	HAL_TIMEx_PWMN_Start
+ 122              	.LVL19:
+  96:UC/Src/usercode.c **** 
+  97:UC/Src/usercode.c ****     ENABLE_MOS();
+ 123              		.loc 1 97 5 view .LVU21
+ 124 0082 0122     		movs	r2, #1
+ 125 0084 4FF40061 		mov	r1, #2048
+ 126 0088 2846     		mov	r0, r5
+ 127 008a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 128              	.LVL20:
+  98:UC/Src/usercode.c ****     
+  99:UC/Src/usercode.c **** }
+ 129              		.loc 1 99 1 is_stmt 0 view .LVU22
+ 130 008e 38BD     		pop	{r3, r4, r5, pc}
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 5
+
+
+ 131              	.L4:
+ 132              		.align	2
+ 133              	.L3:
+ 134 0090 000C0240 		.word	1073875968
+ 135 0094 00000000 		.word	htim1
+ 136 0098 00000000 		.word	ADC1_Buf
+ 137 009c 00000000 		.word	hadc1
+ 138 00a0 00000000 		.word	ADC3_Buf
+ 139 00a4 00000000 		.word	hadc3
+ 140              		.cfi_endproc
+ 141              	.LFE273:
+ 143              		.section	.text.StartDefaultTask,"ax",%progbits
+ 144              		.align	1
+ 145              		.global	StartDefaultTask
+ 146              		.syntax unified
+ 147              		.thumb
+ 148              		.thumb_func
+ 150              	StartDefaultTask:
+ 151              	.LVL21:
+ 152              	.LFB272:
+  36:UC/Src/usercode.c ****     USER_INIT();
+ 153              		.loc 1 36 1 is_stmt 1 view -0
+ 154              		.cfi_startproc
+ 155              		@ Volatile: function does not return.
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+  36:UC/Src/usercode.c ****     USER_INIT();
+ 158              		.loc 1 36 1 is_stmt 0 view .LVU24
+ 159 0000 00B5     		push	{lr}
+ 160              	.LCFI1:
+ 161              		.cfi_def_cfa_offset 4
+ 162              		.cfi_offset 14, -4
+ 163 0002 83B0     		sub	sp, sp, #12
+ 164              	.LCFI2:
+ 165              		.cfi_def_cfa_offset 16
+  37:UC/Src/usercode.c **** 
+ 166              		.loc 1 37 5 is_stmt 1 view .LVU25
+ 167 0004 FFF7FEFF 		bl	USER_INIT
+ 168              	.LVL22:
+ 169              	.L6:
+  39:UC/Src/usercode.c ****     {
+ 170              		.loc 1 39 5 view .LVU26
+  41:UC/Src/usercode.c ****         READ_BUTTON_B();
+ 171              		.loc 1 41 9 view .LVU27
+ 172 0008 FFF7FEFF 		bl	READ_BUTTON_A
+ 173              	.LVL23:
+  42:UC/Src/usercode.c **** 
+ 174              		.loc 1 42 9 view .LVU28
+ 175 000c FFF7FEFF 		bl	READ_BUTTON_B
+ 176              	.LVL24:
+  44:UC/Src/usercode.c ****         UPDATE_CURRENT_PID();
+ 177              		.loc 1 44 9 view .LVU29
+ 178 0010 FFF7FEFF 		bl	UPDATE_CURRENT_VOOTAGE_PID
+ 179              	.LVL25:
+  45:UC/Src/usercode.c ****         UPDATE_IREF_RATO_PID();
+ 180              		.loc 1 45 9 view .LVU30
+ 181 0014 FFF7FEFF 		bl	UPDATE_CURRENT_PID
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 6
+
+
+ 182              	.LVL26:
+  46:UC/Src/usercode.c ****         UPDATE_VOTAGE_PID();
+ 183              		.loc 1 46 9 view .LVU31
+ 184 0018 FFF7FEFF 		bl	UPDATE_IREF_RATO_PID
+ 185              	.LVL27:
+  47:UC/Src/usercode.c ****         UPDATE_PHASE_PID();
+ 186              		.loc 1 47 9 view .LVU32
+ 187 001c FFF7FEFF 		bl	UPDATE_VOTAGE_PID
+ 188              	.LVL28:
+  48:UC/Src/usercode.c **** 
+ 189              		.loc 1 48 9 view .LVU33
+ 190 0020 FFF7FEFF 		bl	UPDATE_PHASE_PID
+ 191              	.LVL29:
+  54:UC/Src/usercode.c **** 
+ 192              		.loc 1 54 9 view .LVU34
+ 193 0024 FFF7FEFF 		bl	DISPLAY_PID
+ 194              	.LVL30:
+  57:UC/Src/usercode.c ****         OLED_ShowNum(90,32,debug_rate*100,4,16);
+ 195              		.loc 1 57 9 view .LVU35
+ 196 0028 124B     		ldr	r3, .L8
+ 197 002a D3ED007A 		vldr.32	s15, [r3]
+ 198 002e 1024     		movs	r4, #16
+ 199 0030 0094     		str	r4, [sp]
+ 200 0032 0323     		movs	r3, #3
+ 201 0034 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 202 0038 17EE902A 		vmov	r2, s15	@ int
+ 203 003c 1121     		movs	r1, #17
+ 204 003e 4A20     		movs	r0, #74
+ 205 0040 FFF7FEFF 		bl	OLED_ShowNum
+ 206              	.LVL31:
+  58:UC/Src/usercode.c ****         OLED_Refresh_Gram();
+ 207              		.loc 1 58 9 view .LVU36
+  58:UC/Src/usercode.c ****         OLED_Refresh_Gram();
+ 208              		.loc 1 58 38 is_stmt 0 view .LVU37
+ 209 0044 0C4B     		ldr	r3, .L8+4
+ 210 0046 D3ED007A 		vldr.32	s15, [r3]
+ 211 004a 9FED0C7A 		vldr.32	s14, .L8+8
+ 212 004e 67EE877A 		vmul.f32	s15, s15, s14
+  58:UC/Src/usercode.c ****         OLED_Refresh_Gram();
+ 213              		.loc 1 58 9 view .LVU38
+ 214 0052 0094     		str	r4, [sp]
+ 215 0054 0423     		movs	r3, #4
+ 216 0056 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 217 005a 17EE902A 		vmov	r2, s15	@ int
+ 218 005e 2021     		movs	r1, #32
+ 219 0060 5A20     		movs	r0, #90
+ 220 0062 FFF7FEFF 		bl	OLED_ShowNum
+ 221              	.LVL32:
+  59:UC/Src/usercode.c **** 
+ 222              		.loc 1 59 9 is_stmt 1 view .LVU39
+ 223 0066 FFF7FEFF 		bl	OLED_Refresh_Gram
+ 224              	.LVL33:
+  61:UC/Src/usercode.c ****     }
+ 225              		.loc 1 61 9 discriminator 1 view .LVU40
+ 226 006a 3120     		movs	r0, #49
+ 227 006c FFF7FEFF 		bl	HAL_Delay
+ 228              	.LVL34:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 7
+
+
+  39:UC/Src/usercode.c ****     {
+ 229              		.loc 1 39 10 view .LVU41
+ 230 0070 CAE7     		b	.L6
+ 231              	.L9:
+ 232 0072 00BF     		.align	2
+ 233              	.L8:
+ 234 0074 00000000 		.word	debug_votage
+ 235 0078 00000000 		.word	debug_rate
+ 236 007c 0000C842 		.word	1120403456
+ 237              		.cfi_endproc
+ 238              	.LFE272:
+ 240              		.global	__aeabi_f2d
+ 241              		.global	__aeabi_dmul
+ 242              		.global	__aeabi_d2f
+ 243              		.global	__aeabi_dsub
+ 244              		.section	.text.ADC_BUF_TO_F32_1,"ax",%progbits
+ 245              		.align	1
+ 246              		.global	ADC_BUF_TO_F32_1
+ 247              		.syntax unified
+ 248              		.thumb
+ 249              		.thumb_func
+ 251              	ADC_BUF_TO_F32_1:
+ 252              	.LFB276:
+ 100:UC/Src/usercode.c **** 
+ 101:UC/Src/usercode.c **** void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+ 102:UC/Src/usercode.c **** {
+ 103:UC/Src/usercode.c ****     if(hadc->Instance == ADC3)
+ 104:UC/Src/usercode.c ****     {
+ 105:UC/Src/usercode.c ****         // Version.Test_Receive
+ 106:UC/Src/usercode.c ****         // OLED_ShowNum(0,0,ADC1_Buf[0],4,16);
+ 107:UC/Src/usercode.c ****         // OLED_ShowNum(0,13,ADC1_Buf[1],4,16);
+ 108:UC/Src/usercode.c ****         // OLED_ShowNum(0,26,ADC1_Buf[2],4,16);
+ 109:UC/Src/usercode.c ****         // OLED_ShowNum(0,39,ADC1_Buf[3],4,16);
+ 110:UC/Src/usercode.c ****         
+ 111:UC/Src/usercode.c ****         // OLED_ShowNum(50,0,ADC3_Buf[0],4,16);
+ 112:UC/Src/usercode.c ****         // OLED_ShowNum(50,13,ADC3_Buf[1],4,16);
+ 113:UC/Src/usercode.c ****         // OLED_ShowNum(50,26,ADC3_Buf[2],4,16);
+ 114:UC/Src/usercode.c ****         // OLED_ShowNum(50,39,ADC3_Buf[3],4,16);
+ 115:UC/Src/usercode.c ****         // OLED_Refresh_Gram();
+ 116:UC/Src/usercode.c ****         
+ 117:UC/Src/usercode.c ****         ADC_BUF_TO_F32();
+ 118:UC/Src/usercode.c ****         //PROTECT_GUARD();
+ 119:UC/Src/usercode.c ****         switch (mode_select)
+ 120:UC/Src/usercode.c ****         {
+ 121:UC/Src/usercode.c ****         case 0:
+ 122:UC/Src/usercode.c ****             COUNT_CURRENT_VOTAGE_PID();
+ 123:UC/Src/usercode.c ****             break;
+ 124:UC/Src/usercode.c ****         case 1:
+ 125:UC/Src/usercode.c ****             COUNT_CURRENT_PID();
+ 126:UC/Src/usercode.c ****             break;
+ 127:UC/Src/usercode.c ****         case 2:
+ 128:UC/Src/usercode.c ****             COUNT_VOTAGE_PID();
+ 129:UC/Src/usercode.c ****             break;
+ 130:UC/Src/usercode.c ****         case 3:
+ 131:UC/Src/usercode.c ****             break;
+ 132:UC/Src/usercode.c ****         }
+ 133:UC/Src/usercode.c ****     }
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 8
+
+
+ 134:UC/Src/usercode.c **** }
+ 135:UC/Src/usercode.c **** 
+ 136:UC/Src/usercode.c **** void ADC_BUF_TO_F32(void)
+ 137:UC/Src/usercode.c **** {
+ 138:UC/Src/usercode.c ****     ADC_BUF_TO_F32_1();
+ 139:UC/Src/usercode.c ****     ADC_BUF_TO_F32_2();
+ 140:UC/Src/usercode.c ****     ADC_BUF_TO_F32_3();
+ 141:UC/Src/usercode.c **** }
+ 142:UC/Src/usercode.c **** 
+ 143:UC/Src/usercode.c **** //采集电压
+ 144:UC/Src/usercode.c **** void ADC_BUF_TO_F32_1(void)
+ 145:UC/Src/usercode.c **** {
+ 253              		.loc 1 145 1 view -0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ 256              		@ frame_needed = 0, uses_anonymous_args = 0
+ 257 0000 10B5     		push	{r4, lr}
+ 258              	.LCFI3:
+ 259              		.cfi_def_cfa_offset 8
+ 260              		.cfi_offset 4, -8
+ 261              		.cfi_offset 14, -4
+ 146:UC/Src/usercode.c ****     ADC1_Buf_f32[0] = (float32_t)(ADC1_Buf[0]);
+ 262              		.loc 1 146 5 view .LVU43
+ 263              		.loc 1 146 43 is_stmt 0 view .LVU44
+ 264 0002 194B     		ldr	r3, .L12+24
+ 265 0004 1B88     		ldrh	r3, [r3]
+ 266 0006 07EE903A 		vmov	s15, r3	@ int
+ 267              		.loc 1 146 23 view .LVU45
+ 268 000a F8EE677A 		vcvt.f32.u32	s15, s15
+ 269              		.loc 1 146 21 view .LVU46
+ 270 000e 174C     		ldr	r4, .L12+28
+ 271 0010 C4ED007A 		vstr.32	s15, [r4]
+ 147:UC/Src/usercode.c ****     ADC1_Buf_f32[0] *= 0.0007326; //采集电压值Uo
+ 272              		.loc 1 147 5 is_stmt 1 view .LVU47
+ 273              		.loc 1 147 17 is_stmt 0 view .LVU48
+ 274 0014 17EE900A 		vmov	r0, s15
+ 275 0018 FFF7FEFF 		bl	__aeabi_f2d
+ 276              	.LVL35:
+ 277              		.loc 1 147 21 view .LVU49
+ 278 001c 0CA3     		adr	r3, .L12
+ 279 001e D3E90023 		ldrd	r2, [r3]
+ 280 0022 FFF7FEFF 		bl	__aeabi_dmul
+ 281              	.LVL36:
+ 282 0026 FFF7FEFF 		bl	__aeabi_d2f
+ 283              	.LVL37:
+ 284 002a 2060     		str	r0, [r4]	@ float
+ 148:UC/Src/usercode.c ****     ADC1_Buf_f32[0] = ADC1_Buf_f32[0]*28.723404 - 43.08511;
+ 285              		.loc 1 148 5 is_stmt 1 view .LVU50
+ 286              		.loc 1 148 35 is_stmt 0 view .LVU51
+ 287 002c FFF7FEFF 		bl	__aeabi_f2d
+ 288              	.LVL38:
+ 289              		.loc 1 148 38 view .LVU52
+ 290 0030 09A3     		adr	r3, .L12+8
+ 291 0032 D3E90023 		ldrd	r2, [r3]
+ 292 0036 FFF7FEFF 		bl	__aeabi_dmul
+ 293              	.LVL39:
+ 294              		.loc 1 148 49 view .LVU53
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 9
+
+
+ 295 003a 09A3     		adr	r3, .L12+16
+ 296 003c D3E90023 		ldrd	r2, [r3]
+ 297 0040 FFF7FEFF 		bl	__aeabi_dsub
+ 298              	.LVL40:
+ 299 0044 FFF7FEFF 		bl	__aeabi_d2f
+ 300              	.LVL41:
+ 301              		.loc 1 148 21 view .LVU54
+ 302 0048 2060     		str	r0, [r4]	@ float
+ 149:UC/Src/usercode.c **** }
+ 303              		.loc 1 149 1 view .LVU55
+ 304 004a 10BD     		pop	{r4, pc}
+ 305              	.L13:
+ 306 004c AFF30080 		.align	3
+ 307              	.L12:
+ 308 0050 011D4185 		.word	-2059330303
+ 309 0054 7E01483F 		.word	1061683582
+ 310 0058 ABCB2901 		.word	19516331
+ 311 005c 31B93C40 		.word	1077721393
+ 312 0060 02486DE2 		.word	-496154622
+ 313 0064 E48A4540 		.word	1078299364
+ 314 0068 00000000 		.word	ADC1_Buf
+ 315 006c 00000000 		.word	ADC1_Buf_f32
+ 316              		.cfi_endproc
+ 317              	.LFE276:
+ 319              		.section	.text.ADC_BUF_TO_F32_2,"ax",%progbits
+ 320              		.align	1
+ 321              		.global	ADC_BUF_TO_F32_2
+ 322              		.syntax unified
+ 323              		.thumb
+ 324              		.thumb_func
+ 326              	ADC_BUF_TO_F32_2:
+ 327              	.LFB277:
+ 150:UC/Src/usercode.c **** 
+ 151:UC/Src/usercode.c **** //采集电流
+ 152:UC/Src/usercode.c **** void ADC_BUF_TO_F32_2(void)
+ 153:UC/Src/usercode.c **** {
+ 328              		.loc 1 153 1 is_stmt 1 view -0
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 0
+ 331              		@ frame_needed = 0, uses_anonymous_args = 0
+ 332 0000 10B5     		push	{r4, lr}
+ 333              	.LCFI4:
+ 334              		.cfi_def_cfa_offset 8
+ 335              		.cfi_offset 4, -8
+ 336              		.cfi_offset 14, -4
+ 154:UC/Src/usercode.c ****     /* 采集输出电流, 张嘉骞*/
+ 155:UC/Src/usercode.c ****     // ADC3_Buf_f32[0] = (float32_t)(ADC3_Buf[0]);
+ 156:UC/Src/usercode.c ****     // ADC3_Buf_f32[0] *= 0.0007326; //4095->3V
+ 157:UC/Src/usercode.c ****     // ADC3_Buf_f32[0] -= 1.5; //-1.5V 输出电压偏置
+ 158:UC/Src/usercode.c ****     // ADC3_Buf_f32[0] *= 1.6; //反映射为电流 
+ 159:UC/Src/usercode.c ****     /* 采集输出电流, 虞劲锋*/
+ 160:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+ 337              		.loc 1 160 5 view .LVU57
+ 338              		.loc 1 160 43 is_stmt 0 view .LVU58
+ 339 0002 194B     		ldr	r3, .L16+24
+ 340 0004 9B88     		ldrh	r3, [r3, #4]
+ 341 0006 07EE903A 		vmov	s15, r3	@ int
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 10
+
+
+ 342              		.loc 1 160 23 view .LVU59
+ 343 000a F8EE677A 		vcvt.f32.u32	s15, s15
+ 344              		.loc 1 160 21 view .LVU60
+ 345 000e 174C     		ldr	r4, .L16+28
+ 346 0010 C4ED027A 		vstr.32	s15, [r4, #8]
+ 161:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 347              		.loc 1 161 5 is_stmt 1 view .LVU61
+ 348              		.loc 1 161 17 is_stmt 0 view .LVU62
+ 349 0014 17EE900A 		vmov	r0, s15
+ 350 0018 FFF7FEFF 		bl	__aeabi_f2d
+ 351              	.LVL42:
+ 352              		.loc 1 161 21 view .LVU63
+ 353 001c 0CA3     		adr	r3, .L16
+ 354 001e D3E90023 		ldrd	r2, [r3]
+ 355 0022 FFF7FEFF 		bl	__aeabi_dmul
+ 356              	.LVL43:
+ 357 0026 FFF7FEFF 		bl	__aeabi_d2f
+ 358              	.LVL44:
+ 359 002a A060     		str	r0, [r4, #8]	@ float
+ 162:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = 2.0202*ADC3_Buf_f32[2] - 3.0303;
+ 360              		.loc 1 162 5 is_stmt 1 view .LVU64
+ 361              		.loc 1 162 42 is_stmt 0 view .LVU65
+ 362 002c FFF7FEFF 		bl	__aeabi_f2d
+ 363              	.LVL45:
+ 364              		.loc 1 162 29 view .LVU66
+ 365 0030 09A3     		adr	r3, .L16+8
+ 366 0032 D3E90023 		ldrd	r2, [r3]
+ 367 0036 FFF7FEFF 		bl	__aeabi_dmul
+ 368              	.LVL46:
+ 369              		.loc 1 162 46 view .LVU67
+ 370 003a 09A3     		adr	r3, .L16+16
+ 371 003c D3E90023 		ldrd	r2, [r3]
+ 372 0040 FFF7FEFF 		bl	__aeabi_dsub
+ 373              	.LVL47:
+ 374 0044 FFF7FEFF 		bl	__aeabi_d2f
+ 375              	.LVL48:
+ 376              		.loc 1 162 21 view .LVU68
+ 377 0048 A060     		str	r0, [r4, #8]	@ float
+ 163:UC/Src/usercode.c **** }
+ 378              		.loc 1 163 1 view .LVU69
+ 379 004a 10BD     		pop	{r4, pc}
+ 380              	.L17:
+ 381 004c AFF30080 		.align	3
+ 382              	.L16:
+ 383 0050 011D4185 		.word	-2059330303
+ 384 0054 7E01483F 		.word	1061683582
+ 385 0058 9A081B9E 		.word	-1642395494
+ 386 005c 5E290040 		.word	1073752414
+ 387 0060 E78C28ED 		.word	-316109593
+ 388 0064 0D3E0840 		.word	1074281997
+ 389 0068 00000000 		.word	ADC3_Buf
+ 390 006c 00000000 		.word	ADC3_Buf_f32
+ 391              		.cfi_endproc
+ 392              	.LFE277:
+ 394              		.section	.text.ADC_BUF_TO_F32_3,"ax",%progbits
+ 395              		.align	1
+ 396              		.global	ADC_BUF_TO_F32_3
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 11
+
+
+ 397              		.syntax unified
+ 398              		.thumb
+ 399              		.thumb_func
+ 401              	ADC_BUF_TO_F32_3:
+ 402              	.LFB278:
+ 164:UC/Src/usercode.c **** 
+ 165:UC/Src/usercode.c **** //对单片机2是采集单片机1的输出电流，对于单片机1而言是采集电网的电压
+ 166:UC/Src/usercode.c **** void ADC_BUF_TO_F32_3(void)
+ 167:UC/Src/usercode.c **** {
+ 403              		.loc 1 167 1 is_stmt 1 view -0
+ 404              		.cfi_startproc
+ 405              		@ args = 0, pretend = 0, frame = 0
+ 406              		@ frame_needed = 0, uses_anonymous_args = 0
+ 407 0000 10B5     		push	{r4, lr}
+ 408              	.LCFI5:
+ 409              		.cfi_def_cfa_offset 8
+ 410              		.cfi_offset 4, -8
+ 411              		.cfi_offset 14, -4
+ 168:UC/Src/usercode.c **** switch (chip_select)
+ 412              		.loc 1 168 1 view .LVU71
+ 413 0002 314B     		ldr	r3, .L23+40
+ 414 0004 1B68     		ldr	r3, [r3]
+ 415 0006 33B3     		cbz	r3, .L19
+ 416 0008 012B     		cmp	r3, #1
+ 417 000a 48D1     		bne	.L18
+ 169:UC/Src/usercode.c **** {
+ 170:UC/Src/usercode.c **** case 0:
+ 171:UC/Src/usercode.c ****     /* 采集电网电压*/
+ 172:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+ 173:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 174:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = 27.44681*ADC3_Buf_f32[2] - 41.1702;
+ 175:UC/Src/usercode.c ****     break;
+ 176:UC/Src/usercode.c **** case 1:
+ 177:UC/Src/usercode.c ****     /* 采集逆变器1电流, 张嘉骞*/
+ 178:UC/Src/usercode.c ****     // ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+ 179:UC/Src/usercode.c ****     // ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 180:UC/Src/usercode.c ****     // ADC3_Buf_f32[2] -= 1.5; //-1.5V 输出电压偏置
+ 181:UC/Src/usercode.c ****     // ADC3_Buf_f32[2] *= 1.6; //反映射为电流 
+ 182:UC/Src/usercode.c ****     /* 采集逆变器1电流, 虞劲锋*/
+ 183:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = (float32_t)(ADC3_Buf[2]);
+ 418              		.loc 1 183 5 view .LVU72
+ 419              		.loc 1 183 43 is_stmt 0 view .LVU73
+ 420 000c 2F4B     		ldr	r3, .L23+44
+ 421 000e 9B88     		ldrh	r3, [r3, #4]
+ 422 0010 07EE903A 		vmov	s15, r3	@ int
+ 423              		.loc 1 183 23 view .LVU74
+ 424 0014 F8EE677A 		vcvt.f32.u32	s15, s15
+ 425              		.loc 1 183 21 view .LVU75
+ 426 0018 2D4C     		ldr	r4, .L23+48
+ 427 001a C4ED027A 		vstr.32	s15, [r4, #8]
+ 184:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 428              		.loc 1 184 5 is_stmt 1 view .LVU76
+ 429              		.loc 1 184 17 is_stmt 0 view .LVU77
+ 430 001e 17EE900A 		vmov	r0, s15
+ 431 0022 FFF7FEFF 		bl	__aeabi_f2d
+ 432              	.LVL49:
+ 433              		.loc 1 184 21 view .LVU78
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 12
+
+
+ 434 0026 1EA3     		adr	r3, .L23
+ 435 0028 D3E90023 		ldrd	r2, [r3]
+ 436 002c FFF7FEFF 		bl	__aeabi_dmul
+ 437              	.LVL50:
+ 438 0030 FFF7FEFF 		bl	__aeabi_d2f
+ 439              	.LVL51:
+ 440 0034 A060     		str	r0, [r4, #8]	@ float
+ 185:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = ADC3_Buf_f32[2]*2.0202 - 3.0303;
+ 441              		.loc 1 185 5 is_stmt 1 view .LVU79
+ 442              		.loc 1 185 35 is_stmt 0 view .LVU80
+ 443 0036 FFF7FEFF 		bl	__aeabi_f2d
+ 444              	.LVL52:
+ 445              		.loc 1 185 38 view .LVU81
+ 446 003a 1BA3     		adr	r3, .L23+8
+ 447 003c D3E90023 		ldrd	r2, [r3]
+ 448 0040 FFF7FEFF 		bl	__aeabi_dmul
+ 449              	.LVL53:
+ 450              		.loc 1 185 46 view .LVU82
+ 451 0044 1AA3     		adr	r3, .L23+16
+ 452 0046 D3E90023 		ldrd	r2, [r3]
+ 453 004a FFF7FEFF 		bl	__aeabi_dsub
+ 454              	.LVL54:
+ 455 004e FFF7FEFF 		bl	__aeabi_d2f
+ 456              	.LVL55:
+ 457              		.loc 1 185 21 view .LVU83
+ 458 0052 A060     		str	r0, [r4, #8]	@ float
+ 186:UC/Src/usercode.c ****     break;
+ 459              		.loc 1 186 5 is_stmt 1 view .LVU84
+ 187:UC/Src/usercode.c **** }
+ 188:UC/Src/usercode.c **** }
+ 460              		.loc 1 188 1 is_stmt 0 view .LVU85
+ 461 0054 23E0     		b	.L18
+ 462              	.L19:
+ 172:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 463              		.loc 1 172 5 is_stmt 1 view .LVU86
+ 172:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 464              		.loc 1 172 43 is_stmt 0 view .LVU87
+ 465 0056 1D4B     		ldr	r3, .L23+44
+ 466 0058 9B88     		ldrh	r3, [r3, #4]
+ 467 005a 07EE903A 		vmov	s15, r3	@ int
+ 172:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 468              		.loc 1 172 23 view .LVU88
+ 469 005e F8EE677A 		vcvt.f32.u32	s15, s15
+ 172:UC/Src/usercode.c ****     ADC3_Buf_f32[2] *= 0.0007326; //4095->3V
+ 470              		.loc 1 172 21 view .LVU89
+ 471 0062 1B4C     		ldr	r4, .L23+48
+ 472 0064 C4ED027A 		vstr.32	s15, [r4, #8]
+ 173:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = 27.44681*ADC3_Buf_f32[2] - 41.1702;
+ 473              		.loc 1 173 5 is_stmt 1 view .LVU90
+ 173:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = 27.44681*ADC3_Buf_f32[2] - 41.1702;
+ 474              		.loc 1 173 17 is_stmt 0 view .LVU91
+ 475 0068 17EE900A 		vmov	r0, s15
+ 476 006c FFF7FEFF 		bl	__aeabi_f2d
+ 477              	.LVL56:
+ 173:UC/Src/usercode.c ****     ADC3_Buf_f32[2] = 27.44681*ADC3_Buf_f32[2] - 41.1702;
+ 478              		.loc 1 173 21 view .LVU92
+ 479 0070 0BA3     		adr	r3, .L23
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 13
+
+
+ 480 0072 D3E90023 		ldrd	r2, [r3]
+ 481 0076 FFF7FEFF 		bl	__aeabi_dmul
+ 482              	.LVL57:
+ 483 007a FFF7FEFF 		bl	__aeabi_d2f
+ 484              	.LVL58:
+ 485 007e A060     		str	r0, [r4, #8]	@ float
+ 174:UC/Src/usercode.c ****     break;
+ 486              		.loc 1 174 5 is_stmt 1 view .LVU93
+ 174:UC/Src/usercode.c ****     break;
+ 487              		.loc 1 174 44 is_stmt 0 view .LVU94
+ 488 0080 FFF7FEFF 		bl	__aeabi_f2d
+ 489              	.LVL59:
+ 174:UC/Src/usercode.c ****     break;
+ 490              		.loc 1 174 31 view .LVU95
+ 491 0084 0CA3     		adr	r3, .L23+24
+ 492 0086 D3E90023 		ldrd	r2, [r3]
+ 493 008a FFF7FEFF 		bl	__aeabi_dmul
+ 494              	.LVL60:
+ 174:UC/Src/usercode.c ****     break;
+ 495              		.loc 1 174 48 view .LVU96
+ 496 008e 0CA3     		adr	r3, .L23+32
+ 497 0090 D3E90023 		ldrd	r2, [r3]
+ 498 0094 FFF7FEFF 		bl	__aeabi_dsub
+ 499              	.LVL61:
+ 500 0098 FFF7FEFF 		bl	__aeabi_d2f
+ 501              	.LVL62:
+ 174:UC/Src/usercode.c ****     break;
+ 502              		.loc 1 174 21 view .LVU97
+ 503 009c A060     		str	r0, [r4, #8]	@ float
+ 175:UC/Src/usercode.c **** case 1:
+ 504              		.loc 1 175 5 is_stmt 1 view .LVU98
+ 505              	.L18:
+ 506              		.loc 1 188 1 is_stmt 0 view .LVU99
+ 507 009e 10BD     		pop	{r4, pc}
+ 508              	.L24:
+ 509              		.align	3
+ 510              	.L23:
+ 511 00a0 011D4185 		.word	-2059330303
+ 512 00a4 7E01483F 		.word	1061683582
+ 513 00a8 9A081B9E 		.word	-1642395494
+ 514 00ac 5E290040 		.word	1073752414
+ 515 00b0 E78C28ED 		.word	-316109593
+ 516 00b4 0D3E0840 		.word	1074281997
+ 517 00b8 9886E123 		.word	601982616
+ 518 00bc 62723B40 		.word	1077637730
+ 519 00c0 BDE3141D 		.word	487908285
+ 520 00c4 C9954440 		.word	1078236617
+ 521 00c8 00000000 		.word	chip_select
+ 522 00cc 00000000 		.word	ADC3_Buf
+ 523 00d0 00000000 		.word	ADC3_Buf_f32
+ 524              		.cfi_endproc
+ 525              	.LFE278:
+ 527              		.section	.text.ADC_BUF_TO_F32,"ax",%progbits
+ 528              		.align	1
+ 529              		.global	ADC_BUF_TO_F32
+ 530              		.syntax unified
+ 531              		.thumb
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 14
+
+
+ 532              		.thumb_func
+ 534              	ADC_BUF_TO_F32:
+ 535              	.LFB275:
+ 137:UC/Src/usercode.c ****     ADC_BUF_TO_F32_1();
+ 536              		.loc 1 137 1 is_stmt 1 view -0
+ 537              		.cfi_startproc
+ 538              		@ args = 0, pretend = 0, frame = 0
+ 539              		@ frame_needed = 0, uses_anonymous_args = 0
+ 540 0000 08B5     		push	{r3, lr}
+ 541              	.LCFI6:
+ 542              		.cfi_def_cfa_offset 8
+ 543              		.cfi_offset 3, -8
+ 544              		.cfi_offset 14, -4
+ 138:UC/Src/usercode.c ****     ADC_BUF_TO_F32_2();
+ 545              		.loc 1 138 5 view .LVU101
+ 546 0002 FFF7FEFF 		bl	ADC_BUF_TO_F32_1
+ 547              	.LVL63:
+ 139:UC/Src/usercode.c ****     ADC_BUF_TO_F32_3();
+ 548              		.loc 1 139 5 view .LVU102
+ 549 0006 FFF7FEFF 		bl	ADC_BUF_TO_F32_2
+ 550              	.LVL64:
+ 140:UC/Src/usercode.c **** }
+ 551              		.loc 1 140 5 view .LVU103
+ 552 000a FFF7FEFF 		bl	ADC_BUF_TO_F32_3
+ 553              	.LVL65:
+ 141:UC/Src/usercode.c **** 
+ 554              		.loc 1 141 1 is_stmt 0 view .LVU104
+ 555 000e 08BD     		pop	{r3, pc}
+ 556              		.cfi_endproc
+ 557              	.LFE275:
+ 559              		.section	.text.HAL_ADC_ConvCpltCallback,"ax",%progbits
+ 560              		.align	1
+ 561              		.global	HAL_ADC_ConvCpltCallback
+ 562              		.syntax unified
+ 563              		.thumb
+ 564              		.thumb_func
+ 566              	HAL_ADC_ConvCpltCallback:
+ 567              	.LVL66:
+ 568              	.LFB274:
+ 102:UC/Src/usercode.c ****     if(hadc->Instance == ADC3)
+ 569              		.loc 1 102 1 is_stmt 1 view -0
+ 570              		.cfi_startproc
+ 571              		@ args = 0, pretend = 0, frame = 0
+ 572              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102:UC/Src/usercode.c ****     if(hadc->Instance == ADC3)
+ 573              		.loc 1 102 1 is_stmt 0 view .LVU106
+ 574 0000 08B5     		push	{r3, lr}
+ 575              	.LCFI7:
+ 576              		.cfi_def_cfa_offset 8
+ 577              		.cfi_offset 3, -8
+ 578              		.cfi_offset 14, -4
+ 103:UC/Src/usercode.c ****     {
+ 579              		.loc 1 103 5 is_stmt 1 view .LVU107
+ 103:UC/Src/usercode.c ****     {
+ 580              		.loc 1 103 12 is_stmt 0 view .LVU108
+ 581 0002 0268     		ldr	r2, [r0]
+ 103:UC/Src/usercode.c ****     {
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 15
+
+
+ 582              		.loc 1 103 7 view .LVU109
+ 583 0004 0B4B     		ldr	r3, .L33
+ 584 0006 9A42     		cmp	r2, r3
+ 585 0008 00D0     		beq	.L32
+ 586              	.LVL67:
+ 587              	.L27:
+ 134:UC/Src/usercode.c **** 
+ 588              		.loc 1 134 1 view .LVU110
+ 589 000a 08BD     		pop	{r3, pc}
+ 590              	.LVL68:
+ 591              	.L32:
+ 117:UC/Src/usercode.c ****         //PROTECT_GUARD();
+ 592              		.loc 1 117 9 is_stmt 1 view .LVU111
+ 593 000c FFF7FEFF 		bl	ADC_BUF_TO_F32
+ 594              	.LVL69:
+ 119:UC/Src/usercode.c ****         {
+ 595              		.loc 1 119 9 view .LVU112
+ 596 0010 094B     		ldr	r3, .L33+4
+ 597 0012 1B68     		ldr	r3, [r3]
+ 598 0014 012B     		cmp	r3, #1
+ 599 0016 06D0     		beq	.L29
+ 600 0018 022B     		cmp	r3, #2
+ 601 001a 07D0     		beq	.L30
+ 602 001c 002B     		cmp	r3, #0
+ 603 001e F4D1     		bne	.L27
+ 122:UC/Src/usercode.c ****             break;
+ 604              		.loc 1 122 13 view .LVU113
+ 605 0020 FFF7FEFF 		bl	COUNT_CURRENT_VOTAGE_PID
+ 606              	.LVL70:
+ 123:UC/Src/usercode.c ****         case 1:
+ 607              		.loc 1 123 13 view .LVU114
+ 608 0024 F1E7     		b	.L27
+ 609              	.L29:
+ 125:UC/Src/usercode.c ****             break;
+ 610              		.loc 1 125 13 view .LVU115
+ 611 0026 FFF7FEFF 		bl	COUNT_CURRENT_PID
+ 612              	.LVL71:
+ 126:UC/Src/usercode.c ****         case 2:
+ 613              		.loc 1 126 13 view .LVU116
+ 614 002a EEE7     		b	.L27
+ 615              	.L30:
+ 128:UC/Src/usercode.c ****             break;
+ 616              		.loc 1 128 13 view .LVU117
+ 617 002c FFF7FEFF 		bl	COUNT_VOTAGE_PID
+ 618              	.LVL72:
+ 129:UC/Src/usercode.c ****         case 3:
+ 619              		.loc 1 129 13 view .LVU118
+ 134:UC/Src/usercode.c **** 
+ 620              		.loc 1 134 1 is_stmt 0 view .LVU119
+ 621 0030 EBE7     		b	.L27
+ 622              	.L34:
+ 623 0032 00BF     		.align	2
+ 624              	.L33:
+ 625 0034 00220140 		.word	1073816064
+ 626 0038 00000000 		.word	mode_select
+ 627              		.cfi_endproc
+ 628              	.LFE274:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 16
+
+
+ 630              		.global	OK_Flag
+ 631              		.section	.bss.OK_Flag,"aw",%nobits
+ 632              		.align	2
+ 635              	OK_Flag:
+ 636 0000 00000000 		.space	4
+ 637              		.global	count_1_period
+ 638              		.section	.bss.count_1_period,"aw",%nobits
+ 639              		.align	2
+ 642              	count_1_period:
+ 643 0000 00000000 		.space	4
+ 644              		.global	ADC3_Buf_f32
+ 645              		.section	.bss.ADC3_Buf_f32,"aw",%nobits
+ 646              		.align	2
+ 649              	ADC3_Buf_f32:
+ 650 0000 00000000 		.space	16
+ 650      00000000 
+ 650      00000000 
+ 650      00000000 
+ 651              		.global	ADC1_Buf_f32
+ 652              		.section	.bss.ADC1_Buf_f32,"aw",%nobits
+ 653              		.align	2
+ 656              	ADC1_Buf_f32:
+ 657 0000 00000000 		.space	16
+ 657      00000000 
+ 657      00000000 
+ 657      00000000 
+ 658              		.global	ADC3_Buf
+ 659              		.section	.bss.ADC3_Buf,"aw",%nobits
+ 660              		.align	2
+ 663              	ADC3_Buf:
+ 664 0000 00000000 		.space	8
+ 664      00000000 
+ 665              		.global	ADC1_Buf
+ 666              		.section	.bss.ADC1_Buf,"aw",%nobits
+ 667              		.align	2
+ 670              	ADC1_Buf:
+ 671 0000 00000000 		.space	8
+ 671      00000000 
+ 672              		.text
+ 673              	.Letext0:
+ 674              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 675              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 676              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 677              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 678              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 679              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 680              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 681              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h"
+ 682              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 683              		.file 11 "DSP/Inc/arm_math.h"
+ 684              		.file 12 "UC/Inc/usercode.h"
+ 685              		.file 13 "Core/Inc/adc.h"
+ 686              		.file 14 "Core/Inc/tim.h"
+ 687              		.file 15 "CONTROL/Inc/votage.h"
+ 688              		.file 16 "CONTROL/Inc/current.h"
+ 689              		.file 17 "CONTROL/Inc/current_votage.h"
+ 690              		.file 18 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 17
+
+
+ 691              		.file 19 "BUTTON/Inc/button_display.h"
+ 692              		.file 20 "OLED/Inc/oled.h"
+ 693              		.file 21 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 694              		.file 22 "BUTTON/Inc/button.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usercode.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:21     .text.USER_INIT:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:27     .text.USER_INIT:00000000 USER_INIT
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:134    .text.USER_INIT:00000090 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:670    .bss.ADC1_Buf:00000000 ADC1_Buf
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:663    .bss.ADC3_Buf:00000000 ADC3_Buf
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:144    .text.StartDefaultTask:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:150    .text.StartDefaultTask:00000000 StartDefaultTask
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:234    .text.StartDefaultTask:00000074 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:245    .text.ADC_BUF_TO_F32_1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:251    .text.ADC_BUF_TO_F32_1:00000000 ADC_BUF_TO_F32_1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:308    .text.ADC_BUF_TO_F32_1:00000050 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:656    .bss.ADC1_Buf_f32:00000000 ADC1_Buf_f32
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:320    .text.ADC_BUF_TO_F32_2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:326    .text.ADC_BUF_TO_F32_2:00000000 ADC_BUF_TO_F32_2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:383    .text.ADC_BUF_TO_F32_2:00000050 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:649    .bss.ADC3_Buf_f32:00000000 ADC3_Buf_f32
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:395    .text.ADC_BUF_TO_F32_3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:401    .text.ADC_BUF_TO_F32_3:00000000 ADC_BUF_TO_F32_3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:511    .text.ADC_BUF_TO_F32_3:000000a0 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:528    .text.ADC_BUF_TO_F32:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:534    .text.ADC_BUF_TO_F32:00000000 ADC_BUF_TO_F32
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:560    .text.HAL_ADC_ConvCpltCallback:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:566    .text.HAL_ADC_ConvCpltCallback:00000000 HAL_ADC_ConvCpltCallback
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:625    .text.HAL_ADC_ConvCpltCallback:00000034 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:635    .bss.OK_Flag:00000000 OK_Flag
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:632    .bss.OK_Flag:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:642    .bss.count_1_period:00000000 count_1_period
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:639    .bss.count_1_period:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:646    .bss.ADC3_Buf_f32:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:653    .bss.ADC1_Buf_f32:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:660    .bss.ADC3_Buf:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s:667    .bss.ADC1_Buf:00000000 $d
+
+UNDEFINED SYMBOLS
+OLED_Init
+DISPLAY_PID_SYMBLE
+CURRENT_VOTAGE_PID_INIT
+CURRENT_PID_INIT
+VOTAGE_PID_INIT
+UPDATE_CURRENT_VOTAGE_NUM
+UPDATE_CURRENT_NUM
+UPDATE_IREF_RATO_NUM
+UPDATE_VOTAGE_NUM
+UPDATE_PHASE_NUM
+HAL_GPIO_WritePin
+HAL_TIM_Base_Start
+HAL_TIM_PWM_Start
+HAL_ADC_Start_DMA
+HAL_TIMEx_PWMN_Start
+htim1
+hadc1
+hadc3
+READ_BUTTON_A
+READ_BUTTON_B
+UPDATE_CURRENT_VOOTAGE_PID
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccd5yKHp.s 			page 19
+
+
+UPDATE_CURRENT_PID
+UPDATE_IREF_RATO_PID
+UPDATE_VOTAGE_PID
+UPDATE_PHASE_PID
+DISPLAY_PID
+OLED_ShowNum
+OLED_Refresh_Gram
+HAL_Delay
+debug_votage
+debug_rate
+__aeabi_f2d
+__aeabi_dmul
+__aeabi_d2f
+__aeabi_dsub
+chip_select
+COUNT_CURRENT_VOTAGE_PID
+COUNT_CURRENT_PID
+COUNT_VOTAGE_PID
+mode_select

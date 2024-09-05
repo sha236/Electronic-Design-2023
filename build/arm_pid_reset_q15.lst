@@ -1,0 +1,111 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccIdaWyG.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_pid_reset_q15.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/ControllerFunctions/arm_pid_reset_q15.c"
+  20              		.section	.text.arm_pid_reset_q15,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_pid_reset_q15
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_pid_reset_q15:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Title:        arm_pid_reset_q15.c
+   4:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Description:  Q15 PID Control reset function
+   5:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+   6:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * $Date:        27. January 2017
+   7:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+   9:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** /*
+  12:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+  14:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+  16:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+  20:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  *
+  22:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * limitations under the License.
+  27:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  */
+  28:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** 
+  29:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccIdaWyG.s 			page 2
+
+
+  30:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** 
+  31:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  /**
+  32:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * @addtogroup PID
+  33:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  * @{
+  34:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****  */
+  35:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** 
+  36:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** /**
+  37:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** * @brief  Reset function for the Q15 PID Control.
+  38:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** * @param[in] *S		Instance pointer of PID control data structure.
+  39:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** * @return none.
+  40:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** * \par Description:
+  41:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** * The function resets the state buffer to zeros.
+  42:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** */
+  43:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** void arm_pid_reset_q15(
+  44:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****   arm_pid_instance_q15 * S)
+  45:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** {
+  30              		.loc 1 45 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  46:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****   /* Reset state to zero, The size will be always 3 samples */
+  47:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c ****   memset(S->state, 0, 3U * sizeof(q15_t));
+  35              		.loc 1 47 3 view .LVU1
+  36 0000 0023     		movs	r3, #0
+  37 0002 8360     		str	r3, [r0, #8]	@ unaligned
+  38 0004 8381     		strh	r3, [r0, #12]	@ unaligned
+  48:DSP/Source/ControllerFunctions/arm_pid_reset_q15.c **** }
+  39              		.loc 1 48 1 is_stmt 0 view .LVU2
+  40 0006 7047     		bx	lr
+  41              		.cfi_endproc
+  42              	.LFE139:
+  44              		.text
+  45              	.Letext0:
+  46              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+  47              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+  48              		.file 4 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/lib/gcc/a
+  49              		.file 5 "DSP/Inc/arm_math.h"
+  50              		.file 6 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccIdaWyG.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_pid_reset_q15.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccIdaWyG.s:21     .text.arm_pid_reset_q15:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccIdaWyG.s:27     .text.arm_pid_reset_q15:00000000 arm_pid_reset_q15
+
+NO UNDEFINED SYMBOLS

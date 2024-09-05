@@ -1,0 +1,633 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"customoled.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "OLED/Src/customoled.c"
+  20              		.section	.text.UINT32_TO_OLED,"ax",%progbits
+  21              		.align	1
+  22              		.global	UINT32_TO_OLED
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	UINT32_TO_OLED:
+  28              	.LVL0:
+  29              	.LFB239:
+   1:OLED/Src/customoled.c **** #include "main.h"
+   2:OLED/Src/customoled.c **** #include "oled.h"
+   3:OLED/Src/customoled.c **** 
+   4:OLED/Src/customoled.c **** #define u8 uint8_t
+   5:OLED/Src/customoled.c **** #define u16 uint16_t
+   6:OLED/Src/customoled.c **** #define u32 uint32_t
+   7:OLED/Src/customoled.c **** 
+   8:OLED/Src/customoled.c **** void UINT32_TO_OLED(u8 x,u8 y,u32 num,u8 size)
+   9:OLED/Src/customoled.c **** {
+  30              		.loc 1 9 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 9 1 is_stmt 0 view .LVU1
+  35 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 32
+  38              		.cfi_offset 4, -32
+  39              		.cfi_offset 5, -28
+  40              		.cfi_offset 6, -24
+  41              		.cfi_offset 7, -20
+  42              		.cfi_offset 8, -16
+  43              		.cfi_offset 9, -12
+  44              		.cfi_offset 10, -8
+  45              		.cfi_offset 14, -4
+  46 0004 82B0     		sub	sp, sp, #8
+  47              	.LCFI1:
+  48              		.cfi_def_cfa_offset 40
+  49 0006 0546     		mov	r5, r0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 2
+
+
+  50 0008 0F46     		mov	r7, r1
+  51 000a 1E46     		mov	r6, r3
+  10:OLED/Src/customoled.c ****     u32 temp1;
+  52              		.loc 1 10 5 is_stmt 1 view .LVU2
+  11:OLED/Src/customoled.c ****     u32 num1, num2, num3, num4;
+  53              		.loc 1 11 5 view .LVU3
+  12:OLED/Src/customoled.c ****     temp1 = (num*3300)/4095;
+  54              		.loc 1 12 5 view .LVU4
+  55              		.loc 1 12 17 is_stmt 0 view .LVU5
+  56 000c 40F6E443 		movw	r3, #3300
+  57              	.LVL1:
+  58              		.loc 1 12 17 view .LVU6
+  59 0010 03FB02F2 		mul	r2, r3, r2
+  60              	.LVL2:
+  61              		.loc 1 12 11 view .LVU7
+  62 0014 304B     		ldr	r3, .L3
+  63 0016 A3FB023E 		umull	r3, lr, r3, r2
+  64 001a A2EB0E02 		sub	r2, r2, lr
+  65 001e 0EEB520E 		add	lr, lr, r2, lsr #1
+  66 0022 4FEADE2E 		lsr	lr, lr, #11
+  67              	.LVL3:
+  13:OLED/Src/customoled.c ****     num4 = temp1 % 10;
+  68              		.loc 1 13 5 is_stmt 1 view .LVU8
+  69              		.loc 1 13 10 is_stmt 0 view .LVU9
+  70 0026 2D4B     		ldr	r3, .L3+4
+  71 0028 A3FB0E28 		umull	r2, r8, r3, lr
+  72 002c 4FEAD808 		lsr	r8, r8, #3
+  73 0030 08EB880C 		add	ip, r8, r8, lsl #2
+  74 0034 AEEB4C08 		sub	r8, lr, ip, lsl #1
+  75              	.LVL4:
+  14:OLED/Src/customoled.c ****     num3 = ((temp1-num4)%100)/10;
+  76              		.loc 1 14 5 is_stmt 1 view .LVU10
+  77              		.loc 1 14 19 is_stmt 0 view .LVU11
+  78 0038 4FEA4C0C 		lsl	ip, ip, #1
+  79              		.loc 1 14 25 view .LVU12
+  80 003c 284A     		ldr	r2, .L3+8
+  81 003e A2FB0CE4 		umull	lr, r4, r2, ip
+  82              	.LVL5:
+  83              		.loc 1 14 25 view .LVU13
+  84 0042 6409     		lsrs	r4, r4, #5
+  85 0044 4FF0640E 		mov	lr, #100
+  86 0048 0EFB14C4 		mls	r4, lr, r4, ip
+  87              		.loc 1 14 10 view .LVU14
+  88 004c A3FB0434 		umull	r3, r4, r3, r4
+  89 0050 E408     		lsrs	r4, r4, #3
+  90              	.LVL6:
+  15:OLED/Src/customoled.c ****     num2 = ((temp1-num4-num3*10)%1000)/100;
+  91              		.loc 1 15 5 is_stmt 1 view .LVU15
+  92              		.loc 1 15 29 is_stmt 0 view .LVU16
+  93 0052 04EB8403 		add	r3, r4, r4, lsl #2
+  94              		.loc 1 15 24 view .LVU17
+  95 0056 ACEB430C 		sub	ip, ip, r3, lsl #1
+  96              		.loc 1 15 33 view .LVU18
+  97 005a 224B     		ldr	r3, .L3+12
+  98 005c A3FB0CA9 		umull	r10, r9, r3, ip
+  99 0060 4FEA9919 		lsr	r9, r9, #6
+ 100 0064 4FF47A7A 		mov	r10, #1000
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 3
+
+
+ 101 0068 0AFB19C9 		mls	r9, r10, r9, ip
+ 102              		.loc 1 15 10 view .LVU19
+ 103 006c A2FB0929 		umull	r2, r9, r2, r9
+ 104 0070 4FEA5919 		lsr	r9, r9, #5
+ 105              	.LVL7:
+  16:OLED/Src/customoled.c ****     num1 = (temp1-num4-num3*10-num2*100)/1000;
+ 106              		.loc 1 16 5 is_stmt 1 view .LVU20
+ 107              		.loc 1 16 31 is_stmt 0 view .LVU21
+ 108 0074 0EFB19C2 		mls	r2, lr, r9, ip
+ 109              		.loc 1 16 10 view .LVU22
+ 110 0078 A3FB0232 		umull	r3, r2, r3, r2
+ 111              	.LVL8:
+  17:OLED/Src/customoled.c **** 
+  18:OLED/Src/customoled.c ****     OLED_ShowNum(x,y,num1,1,size);
+ 112              		.loc 1 18 5 is_stmt 1 view .LVU23
+ 113 007c 0096     		str	r6, [sp]
+ 114 007e 0123     		movs	r3, #1
+ 115 0080 9209     		lsrs	r2, r2, #6
+ 116              	.LVL9:
+ 117              		.loc 1 18 5 is_stmt 0 view .LVU24
+ 118 0082 FFF7FEFF 		bl	OLED_ShowNum
+ 119              	.LVL10:
+  19:OLED/Src/customoled.c ****     OLED_ShowChar(x+7,y,'.',size,1);
+ 120              		.loc 1 19 5 is_stmt 1 view .LVU25
+ 121 0086 E81D     		adds	r0, r5, #7
+ 122 0088 4FF0010A 		mov	r10, #1
+ 123 008c CDF800A0 		str	r10, [sp]
+ 124 0090 3346     		mov	r3, r6
+ 125 0092 2E22     		movs	r2, #46
+ 126 0094 3946     		mov	r1, r7
+ 127 0096 C0B2     		uxtb	r0, r0
+ 128 0098 FFF7FEFF 		bl	OLED_ShowChar
+ 129              	.LVL11:
+  20:OLED/Src/customoled.c ****     OLED_ShowNum(x+10,y,num2,1,size);
+ 130              		.loc 1 20 5 view .LVU26
+ 131 009c 05F10A00 		add	r0, r5, #10
+ 132 00a0 0096     		str	r6, [sp]
+ 133 00a2 5346     		mov	r3, r10
+ 134 00a4 4A46     		mov	r2, r9
+ 135 00a6 3946     		mov	r1, r7
+ 136 00a8 C0B2     		uxtb	r0, r0
+ 137 00aa FFF7FEFF 		bl	OLED_ShowNum
+ 138              	.LVL12:
+  21:OLED/Src/customoled.c ****     OLED_ShowNum(x+17,y,num3,1,size);
+ 139              		.loc 1 21 5 view .LVU27
+ 140 00ae 05F11100 		add	r0, r5, #17
+ 141 00b2 0096     		str	r6, [sp]
+ 142 00b4 5346     		mov	r3, r10
+ 143 00b6 2246     		mov	r2, r4
+ 144 00b8 3946     		mov	r1, r7
+ 145 00ba C0B2     		uxtb	r0, r0
+ 146 00bc FFF7FEFF 		bl	OLED_ShowNum
+ 147              	.LVL13:
+  22:OLED/Src/customoled.c ****     OLED_ShowNum(x+24,y,num4,1,size);
+ 148              		.loc 1 22 5 view .LVU28
+ 149 00c0 05F11800 		add	r0, r5, #24
+ 150 00c4 0096     		str	r6, [sp]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 4
+
+
+ 151 00c6 5346     		mov	r3, r10
+ 152 00c8 4246     		mov	r2, r8
+ 153 00ca 3946     		mov	r1, r7
+ 154 00cc C0B2     		uxtb	r0, r0
+ 155 00ce FFF7FEFF 		bl	OLED_ShowNum
+ 156              	.LVL14:
+  23:OLED/Src/customoled.c **** }
+ 157              		.loc 1 23 1 is_stmt 0 view .LVU29
+ 158 00d2 02B0     		add	sp, sp, #8
+ 159              	.LCFI2:
+ 160              		.cfi_def_cfa_offset 32
+ 161              		@ sp needed
+ 162 00d4 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 163              	.LVL15:
+ 164              	.L4:
+ 165              		.loc 1 23 1 view .LVU30
+ 166              		.align	2
+ 167              	.L3:
+ 168 00d8 01011000 		.word	1048833
+ 169 00dc CDCCCCCC 		.word	-858993459
+ 170 00e0 1F85EB51 		.word	1374389535
+ 171 00e4 D34D6210 		.word	274877907
+ 172              		.cfi_endproc
+ 173              	.LFE239:
+ 175              		.section	.text.PID_TO_OLED,"ax",%progbits
+ 176              		.align	1
+ 177              		.global	PID_TO_OLED
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 182              	PID_TO_OLED:
+ 183              	.LVL16:
+ 184              	.LFB240:
+  24:OLED/Src/customoled.c **** 
+  25:OLED/Src/customoled.c **** void PID_TO_OLED(u32 pid[3][5])
+  26:OLED/Src/customoled.c **** {
+ 185              		.loc 1 26 1 is_stmt 1 view -0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189              		.loc 1 26 1 is_stmt 0 view .LVU32
+ 190 0000 70B5     		push	{r4, r5, r6, lr}
+ 191              	.LCFI3:
+ 192              		.cfi_def_cfa_offset 16
+ 193              		.cfi_offset 4, -16
+ 194              		.cfi_offset 5, -12
+ 195              		.cfi_offset 6, -8
+ 196              		.cfi_offset 14, -4
+ 197 0002 82B0     		sub	sp, sp, #8
+ 198              	.LCFI4:
+ 199              		.cfi_def_cfa_offset 24
+ 200 0004 0446     		mov	r4, r0
+  27:OLED/Src/customoled.c ****     u32 temp1 = 0;
+ 201              		.loc 1 27 5 is_stmt 1 view .LVU33
+ 202              	.LVL17:
+  28:OLED/Src/customoled.c ****     temp1 = pid[0][0]*100+pid[0][1]*10+pid[0][2];
+ 203              		.loc 1 28 5 view .LVU34
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 5
+
+
+ 204              		.loc 1 28 19 is_stmt 0 view .LVU35
+ 205 0006 0368     		ldr	r3, [r0]
+ 206              		.loc 1 28 33 view .LVU36
+ 207 0008 4268     		ldr	r2, [r0, #4]
+ 208              		.loc 1 28 36 view .LVU37
+ 209 000a 02EB8202 		add	r2, r2, r2, lsl #2
+ 210 000e 5200     		lsls	r2, r2, #1
+ 211              		.loc 1 28 26 view .LVU38
+ 212 0010 6421     		movs	r1, #100
+ 213 0012 01FB0322 		mla	r2, r1, r3, r2
+ 214              		.loc 1 28 46 view .LVU39
+ 215 0016 8168     		ldr	r1, [r0, #8]
+ 216              	.LVL18:
+  29:OLED/Src/customoled.c ****     OLED_ShowNum(15,17,temp1, 3,16);
+ 217              		.loc 1 29 5 is_stmt 1 view .LVU40
+ 218 0018 1025     		movs	r5, #16
+ 219 001a 0095     		str	r5, [sp]
+ 220 001c 0323     		movs	r3, #3
+ 221 001e 0A44     		add	r2, r2, r1
+ 222              	.LVL19:
+ 223              		.loc 1 29 5 is_stmt 0 view .LVU41
+ 224 0020 1121     		movs	r1, #17
+ 225 0022 0F20     		movs	r0, #15
+ 226              	.LVL20:
+ 227              		.loc 1 29 5 view .LVU42
+ 228 0024 FFF7FEFF 		bl	OLED_ShowNum
+ 229              	.LVL21:
+  30:OLED/Src/customoled.c ****     OLED_ShowChar(40,17,'.',16,1);
+ 230              		.loc 1 30 5 is_stmt 1 view .LVU43
+ 231 0028 0126     		movs	r6, #1
+ 232 002a 0096     		str	r6, [sp]
+ 233 002c 2B46     		mov	r3, r5
+ 234 002e 2E22     		movs	r2, #46
+ 235 0030 1121     		movs	r1, #17
+ 236 0032 2820     		movs	r0, #40
+ 237 0034 FFF7FEFF 		bl	OLED_ShowChar
+ 238              	.LVL22:
+  31:OLED/Src/customoled.c ****     OLED_ShowNum(44, 17,pid[0][3],1,16);
+ 239              		.loc 1 31 5 view .LVU44
+ 240 0038 0095     		str	r5, [sp]
+ 241 003a 3346     		mov	r3, r6
+ 242 003c E268     		ldr	r2, [r4, #12]
+ 243 003e 1121     		movs	r1, #17
+ 244 0040 2C20     		movs	r0, #44
+ 245 0042 FFF7FEFF 		bl	OLED_ShowNum
+ 246              	.LVL23:
+  32:OLED/Src/customoled.c ****     OLED_ShowNum(51, 17,pid[0][4],1,16);
+ 247              		.loc 1 32 5 view .LVU45
+ 248 0046 0095     		str	r5, [sp]
+ 249 0048 3346     		mov	r3, r6
+ 250 004a 2269     		ldr	r2, [r4, #16]
+ 251 004c 1121     		movs	r1, #17
+ 252 004e 3320     		movs	r0, #51
+ 253 0050 FFF7FEFF 		bl	OLED_ShowNum
+ 254              	.LVL24:
+  33:OLED/Src/customoled.c ****     temp1 = pid[1][0]*10+pid[1][1];
+ 255              		.loc 1 33 5 view .LVU46
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 6
+
+
+ 256              		.loc 1 33 19 is_stmt 0 view .LVU47
+ 257 0054 6269     		ldr	r2, [r4, #20]
+ 258              		.loc 1 33 22 view .LVU48
+ 259 0056 02EB8202 		add	r2, r2, r2, lsl #2
+ 260              		.loc 1 33 32 view .LVU49
+ 261 005a A169     		ldr	r1, [r4, #24]
+ 262              	.LVL25:
+  34:OLED/Src/customoled.c ****     OLED_ShowNum(15,32,temp1, 2,16);
+ 263              		.loc 1 34 5 is_stmt 1 view .LVU50
+ 264 005c 0095     		str	r5, [sp]
+ 265 005e 0223     		movs	r3, #2
+ 266 0060 01EB4202 		add	r2, r1, r2, lsl #1
+ 267              	.LVL26:
+ 268              		.loc 1 34 5 is_stmt 0 view .LVU51
+ 269 0064 2021     		movs	r1, #32
+ 270 0066 0F20     		movs	r0, #15
+ 271 0068 FFF7FEFF 		bl	OLED_ShowNum
+ 272              	.LVL27:
+  35:OLED/Src/customoled.c ****     OLED_ShowChar(31,32,'.', 16, 1);
+ 273              		.loc 1 35 5 is_stmt 1 view .LVU52
+ 274 006c 0096     		str	r6, [sp]
+ 275 006e 2B46     		mov	r3, r5
+ 276 0070 2E22     		movs	r2, #46
+ 277 0072 2021     		movs	r1, #32
+ 278 0074 1F20     		movs	r0, #31
+ 279 0076 FFF7FEFF 		bl	OLED_ShowChar
+ 280              	.LVL28:
+  36:OLED/Src/customoled.c ****     OLED_ShowNum(35,32,pid[1][2], 1, 16);
+ 281              		.loc 1 36 5 view .LVU53
+ 282 007a 0095     		str	r5, [sp]
+ 283 007c 3346     		mov	r3, r6
+ 284 007e E269     		ldr	r2, [r4, #28]
+ 285 0080 2021     		movs	r1, #32
+ 286 0082 2320     		movs	r0, #35
+ 287 0084 FFF7FEFF 		bl	OLED_ShowNum
+ 288              	.LVL29:
+  37:OLED/Src/customoled.c ****     OLED_ShowNum(42,32,pid[1][3], 1, 16);
+ 289              		.loc 1 37 5 view .LVU54
+ 290 0088 0095     		str	r5, [sp]
+ 291 008a 3346     		mov	r3, r6
+ 292 008c 226A     		ldr	r2, [r4, #32]
+ 293 008e 2021     		movs	r1, #32
+ 294 0090 2A20     		movs	r0, #42
+ 295 0092 FFF7FEFF 		bl	OLED_ShowNum
+ 296              	.LVL30:
+  38:OLED/Src/customoled.c ****     OLED_ShowNum(49,32,pid[1][4], 1, 16);
+ 297              		.loc 1 38 5 view .LVU55
+ 298 0096 0095     		str	r5, [sp]
+ 299 0098 3346     		mov	r3, r6
+ 300 009a 626A     		ldr	r2, [r4, #36]
+ 301 009c 2021     		movs	r1, #32
+ 302 009e 3120     		movs	r0, #49
+ 303 00a0 FFF7FEFF 		bl	OLED_ShowNum
+ 304              	.LVL31:
+  39:OLED/Src/customoled.c ****     OLED_ShowNum(15,47,pid[2][0], 1,16);
+ 305              		.loc 1 39 5 view .LVU56
+ 306 00a4 0095     		str	r5, [sp]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 7
+
+
+ 307 00a6 3346     		mov	r3, r6
+ 308 00a8 A26A     		ldr	r2, [r4, #40]
+ 309 00aa 2F21     		movs	r1, #47
+ 310 00ac 0F20     		movs	r0, #15
+ 311 00ae FFF7FEFF 		bl	OLED_ShowNum
+ 312              	.LVL32:
+  40:OLED/Src/customoled.c ****     OLED_ShowChar(22,47,'.', 16, 1);
+ 313              		.loc 1 40 5 view .LVU57
+ 314 00b2 0096     		str	r6, [sp]
+ 315 00b4 2B46     		mov	r3, r5
+ 316 00b6 2E22     		movs	r2, #46
+ 317 00b8 2F21     		movs	r1, #47
+ 318 00ba 1620     		movs	r0, #22
+ 319 00bc FFF7FEFF 		bl	OLED_ShowChar
+ 320              	.LVL33:
+  41:OLED/Src/customoled.c ****     OLED_ShowNum(29,47,pid[2][1], 1,16);
+ 321              		.loc 1 41 5 view .LVU58
+ 322 00c0 0095     		str	r5, [sp]
+ 323 00c2 3346     		mov	r3, r6
+ 324 00c4 E26A     		ldr	r2, [r4, #44]
+ 325 00c6 2F21     		movs	r1, #47
+ 326 00c8 1D20     		movs	r0, #29
+ 327 00ca FFF7FEFF 		bl	OLED_ShowNum
+ 328              	.LVL34:
+  42:OLED/Src/customoled.c ****     OLED_ShowNum(36,47,pid[2][2], 1,16);
+ 329              		.loc 1 42 5 view .LVU59
+ 330 00ce 0095     		str	r5, [sp]
+ 331 00d0 3346     		mov	r3, r6
+ 332 00d2 226B     		ldr	r2, [r4, #48]
+ 333 00d4 2F21     		movs	r1, #47
+ 334 00d6 2420     		movs	r0, #36
+ 335 00d8 FFF7FEFF 		bl	OLED_ShowNum
+ 336              	.LVL35:
+  43:OLED/Src/customoled.c ****     OLED_ShowNum(43,47,pid[2][3], 1,16);
+ 337              		.loc 1 43 5 view .LVU60
+ 338 00dc 0095     		str	r5, [sp]
+ 339 00de 3346     		mov	r3, r6
+ 340 00e0 626B     		ldr	r2, [r4, #52]
+ 341 00e2 2F21     		movs	r1, #47
+ 342 00e4 2B20     		movs	r0, #43
+ 343 00e6 FFF7FEFF 		bl	OLED_ShowNum
+ 344              	.LVL36:
+  44:OLED/Src/customoled.c ****     OLED_ShowNum(50,47,pid[2][4], 1,16);
+ 345              		.loc 1 44 5 view .LVU61
+ 346 00ea 0095     		str	r5, [sp]
+ 347 00ec 3346     		mov	r3, r6
+ 348 00ee A26B     		ldr	r2, [r4, #56]
+ 349 00f0 2F21     		movs	r1, #47
+ 350 00f2 3220     		movs	r0, #50
+ 351 00f4 FFF7FEFF 		bl	OLED_ShowNum
+ 352              	.LVL37:
+  45:OLED/Src/customoled.c **** }
+ 353              		.loc 1 45 1 is_stmt 0 view .LVU62
+ 354 00f8 02B0     		add	sp, sp, #8
+ 355              	.LCFI5:
+ 356              		.cfi_def_cfa_offset 16
+ 357              		@ sp needed
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 8
+
+
+ 358 00fa 70BD     		pop	{r4, r5, r6, pc}
+ 359              		.loc 1 45 1 view .LVU63
+ 360              		.cfi_endproc
+ 361              	.LFE240:
+ 363              		.section	.text.CURRENT_TO_OLED,"ax",%progbits
+ 364              		.align	1
+ 365              		.global	CURRENT_TO_OLED
+ 366              		.syntax unified
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	CURRENT_TO_OLED:
+ 371              	.LVL38:
+ 372              	.LFB241:
+  46:OLED/Src/customoled.c **** 
+  47:OLED/Src/customoled.c **** void CURRENT_TO_OLED(u32 current[5])
+  48:OLED/Src/customoled.c **** {
+ 373              		.loc 1 48 1 is_stmt 1 view -0
+ 374              		.cfi_startproc
+ 375              		@ args = 0, pretend = 0, frame = 0
+ 376              		@ frame_needed = 0, uses_anonymous_args = 0
+ 377              		.loc 1 48 1 is_stmt 0 view .LVU65
+ 378 0000 70B5     		push	{r4, r5, r6, lr}
+ 379              	.LCFI6:
+ 380              		.cfi_def_cfa_offset 16
+ 381              		.cfi_offset 4, -16
+ 382              		.cfi_offset 5, -12
+ 383              		.cfi_offset 6, -8
+ 384              		.cfi_offset 14, -4
+ 385 0002 82B0     		sub	sp, sp, #8
+ 386              	.LCFI7:
+ 387              		.cfi_def_cfa_offset 24
+ 388 0004 0446     		mov	r4, r0
+  49:OLED/Src/customoled.c ****     OLED_ShowNum(74,17,current[0],1,16);
+ 389              		.loc 1 49 5 is_stmt 1 view .LVU66
+ 390 0006 1025     		movs	r5, #16
+ 391 0008 0095     		str	r5, [sp]
+ 392 000a 0123     		movs	r3, #1
+ 393 000c 0268     		ldr	r2, [r0]
+ 394 000e 1121     		movs	r1, #17
+ 395 0010 4A20     		movs	r0, #74
+ 396              	.LVL39:
+ 397              		.loc 1 49 5 is_stmt 0 view .LVU67
+ 398 0012 FFF7FEFF 		bl	OLED_ShowNum
+ 399              	.LVL40:
+  50:OLED/Src/customoled.c ****     OLED_ShowChar(81,17,'.',16,1);
+ 400              		.loc 1 50 5 is_stmt 1 view .LVU68
+ 401 0016 0126     		movs	r6, #1
+ 402 0018 0096     		str	r6, [sp]
+ 403 001a 2B46     		mov	r3, r5
+ 404 001c 2E22     		movs	r2, #46
+ 405 001e 1121     		movs	r1, #17
+ 406 0020 5120     		movs	r0, #81
+ 407 0022 FFF7FEFF 		bl	OLED_ShowChar
+ 408              	.LVL41:
+  51:OLED/Src/customoled.c ****     OLED_ShowNum(88,17,current[1],1,16);
+ 409              		.loc 1 51 5 view .LVU69
+ 410 0026 0095     		str	r5, [sp]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 9
+
+
+ 411 0028 3346     		mov	r3, r6
+ 412 002a 6268     		ldr	r2, [r4, #4]
+ 413 002c 1121     		movs	r1, #17
+ 414 002e 5820     		movs	r0, #88
+ 415 0030 FFF7FEFF 		bl	OLED_ShowNum
+ 416              	.LVL42:
+  52:OLED/Src/customoled.c ****     OLED_ShowNum(95,17,current[2],1,16);
+ 417              		.loc 1 52 5 view .LVU70
+ 418 0034 0095     		str	r5, [sp]
+ 419 0036 3346     		mov	r3, r6
+ 420 0038 A268     		ldr	r2, [r4, #8]
+ 421 003a 1121     		movs	r1, #17
+ 422 003c 5F20     		movs	r0, #95
+ 423 003e FFF7FEFF 		bl	OLED_ShowNum
+ 424              	.LVL43:
+  53:OLED/Src/customoled.c ****     OLED_ShowNum(102,17,current[3],1,16);
+ 425              		.loc 1 53 5 view .LVU71
+ 426 0042 0095     		str	r5, [sp]
+ 427 0044 3346     		mov	r3, r6
+ 428 0046 E268     		ldr	r2, [r4, #12]
+ 429 0048 1121     		movs	r1, #17
+ 430 004a 6620     		movs	r0, #102
+ 431 004c FFF7FEFF 		bl	OLED_ShowNum
+ 432              	.LVL44:
+  54:OLED/Src/customoled.c ****     OLED_ShowNum(109,17,current[4],1,16);
+ 433              		.loc 1 54 5 view .LVU72
+ 434 0050 0095     		str	r5, [sp]
+ 435 0052 3346     		mov	r3, r6
+ 436 0054 2269     		ldr	r2, [r4, #16]
+ 437 0056 1121     		movs	r1, #17
+ 438 0058 6D20     		movs	r0, #109
+ 439 005a FFF7FEFF 		bl	OLED_ShowNum
+ 440              	.LVL45:
+  55:OLED/Src/customoled.c **** }
+ 441              		.loc 1 55 1 is_stmt 0 view .LVU73
+ 442 005e 02B0     		add	sp, sp, #8
+ 443              	.LCFI8:
+ 444              		.cfi_def_cfa_offset 16
+ 445              		@ sp needed
+ 446 0060 70BD     		pop	{r4, r5, r6, pc}
+ 447              		.loc 1 55 1 view .LVU74
+ 448              		.cfi_endproc
+ 449              	.LFE241:
+ 451              		.section	.text.RATO_TO_OLED,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	RATO_TO_OLED
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 458              	RATO_TO_OLED:
+ 459              	.LVL46:
+ 460              	.LFB242:
+  56:OLED/Src/customoled.c **** 
+  57:OLED/Src/customoled.c **** void RATO_TO_OLED(u32 rato[3])
+  58:OLED/Src/customoled.c **** {
+ 461              		.loc 1 58 1 is_stmt 1 view -0
+ 462              		.cfi_startproc
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 10
+
+
+ 463              		@ args = 0, pretend = 0, frame = 0
+ 464              		@ frame_needed = 0, uses_anonymous_args = 0
+ 465              		.loc 1 58 1 is_stmt 0 view .LVU76
+ 466 0000 70B5     		push	{r4, r5, r6, lr}
+ 467              	.LCFI9:
+ 468              		.cfi_def_cfa_offset 16
+ 469              		.cfi_offset 4, -16
+ 470              		.cfi_offset 5, -12
+ 471              		.cfi_offset 6, -8
+ 472              		.cfi_offset 14, -4
+ 473 0002 82B0     		sub	sp, sp, #8
+ 474              	.LCFI10:
+ 475              		.cfi_def_cfa_offset 24
+ 476 0004 0446     		mov	r4, r0
+  59:OLED/Src/customoled.c ****     OLED_ShowNum(90,32,rato[0],1,16);
+ 477              		.loc 1 59 5 is_stmt 1 view .LVU77
+ 478 0006 1025     		movs	r5, #16
+ 479 0008 0095     		str	r5, [sp]
+ 480 000a 0123     		movs	r3, #1
+ 481 000c 0268     		ldr	r2, [r0]
+ 482 000e 2021     		movs	r1, #32
+ 483 0010 5A20     		movs	r0, #90
+ 484              	.LVL47:
+ 485              		.loc 1 59 5 is_stmt 0 view .LVU78
+ 486 0012 FFF7FEFF 		bl	OLED_ShowNum
+ 487              	.LVL48:
+  60:OLED/Src/customoled.c ****     OLED_ShowChar(97,32,'.',16,1);
+ 488              		.loc 1 60 5 is_stmt 1 view .LVU79
+ 489 0016 0126     		movs	r6, #1
+ 490 0018 0096     		str	r6, [sp]
+ 491 001a 2B46     		mov	r3, r5
+ 492 001c 2E22     		movs	r2, #46
+ 493 001e 2021     		movs	r1, #32
+ 494 0020 6120     		movs	r0, #97
+ 495 0022 FFF7FEFF 		bl	OLED_ShowChar
+ 496              	.LVL49:
+  61:OLED/Src/customoled.c ****     OLED_ShowNum(104,32,rato[1],1,16);
+ 497              		.loc 1 61 5 view .LVU80
+ 498 0026 0095     		str	r5, [sp]
+ 499 0028 3346     		mov	r3, r6
+ 500 002a 6268     		ldr	r2, [r4, #4]
+ 501 002c 2021     		movs	r1, #32
+ 502 002e 6820     		movs	r0, #104
+ 503 0030 FFF7FEFF 		bl	OLED_ShowNum
+ 504              	.LVL50:
+  62:OLED/Src/customoled.c ****     OLED_ShowNum(111,32,rato[2],1,16);    
+ 505              		.loc 1 62 5 view .LVU81
+ 506 0034 0095     		str	r5, [sp]
+ 507 0036 3346     		mov	r3, r6
+ 508 0038 A268     		ldr	r2, [r4, #8]
+ 509 003a 2021     		movs	r1, #32
+ 510 003c 6F20     		movs	r0, #111
+ 511 003e FFF7FEFF 		bl	OLED_ShowNum
+ 512              	.LVL51:
+  63:OLED/Src/customoled.c **** }
+ 513              		.loc 1 63 1 is_stmt 0 view .LVU82
+ 514 0042 02B0     		add	sp, sp, #8
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 11
+
+
+ 515              	.LCFI11:
+ 516              		.cfi_def_cfa_offset 16
+ 517              		@ sp needed
+ 518 0044 70BD     		pop	{r4, r5, r6, pc}
+ 519              		.loc 1 63 1 view .LVU83
+ 520              		.cfi_endproc
+ 521              	.LFE242:
+ 523              		.text
+ 524              	.Letext0:
+ 525              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 526              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 527              		.file 4 "OLED/Inc/oled.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 customoled.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:21     .text.UINT32_TO_OLED:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:27     .text.UINT32_TO_OLED:00000000 UINT32_TO_OLED
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:168    .text.UINT32_TO_OLED:000000d8 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:176    .text.PID_TO_OLED:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:182    .text.PID_TO_OLED:00000000 PID_TO_OLED
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:364    .text.CURRENT_TO_OLED:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:370    .text.CURRENT_TO_OLED:00000000 CURRENT_TO_OLED
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:452    .text.RATO_TO_OLED:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccsHHKMT.s:458    .text.RATO_TO_OLED:00000000 RATO_TO_OLED
+
+UNDEFINED SYMBOLS
+OLED_ShowNum
+OLED_ShowChar

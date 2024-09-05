@@ -1,0 +1,330 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_q15_to_q7.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/SupportFunctions/arm_q15_to_q7.c"
+  20              		.section	.text.arm_q15_to_q7,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_q15_to_q7
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_q15_to_q7:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Title:        arm_q15_to_q7.c
+   4:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Description:  Converts the elements of the Q15 vector to Q7 vector
+   5:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+   6:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * $Date:        27. January 2017
+   7:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+   9:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** /*
+  12:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  14:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  16:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  20:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  22:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * limitations under the License.
+  27:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  */
+  28:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  29:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 2
+
+
+  30:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  31:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** /**
+  32:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @ingroup groupSupport
+  33:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  */
+  34:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  35:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** /**
+  36:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @addtogroup q15_to_x
+  37:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @{
+  38:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  */
+  39:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  40:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  41:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** /**
+  42:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @brief Converts the elements of the Q15 vector to Q7 vector.
+  43:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @param[in]       *pSrc points to the Q15 input vector
+  44:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @param[out]      *pDst points to the Q7 output vector
+  45:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @param[in]       blockSize length of the input vector
+  46:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * @return none.
+  47:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  48:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * \par Description:
+  49:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  50:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * The equation used for the conversion process is:
+  51:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  52:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * <pre>
+  53:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * 	pDst[n] = (q7_t) pSrc[n] >> 8;   0 <= n < blockSize.
+  54:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  * </pre>
+  55:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  *
+  56:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****  */
+  57:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  58:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  59:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** void arm_q15_to_q7(
+  60:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   q15_t * pSrc,
+  61:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   q7_t * pDst,
+  62:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   uint32_t blockSize)
+  63:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** {
+  30              		.loc 1 63 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              		.loc 1 63 1 is_stmt 0 view .LVU1
+  36 0000 30B4     		push	{r4, r5}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 5, -4
+  64:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   q15_t *pIn = pSrc;                             /* Src pointer */
+  41              		.loc 1 64 3 is_stmt 1 view .LVU2
+  42              	.LVL1:
+  65:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   uint32_t blkCnt;                               /* loop counter */
+  43              		.loc 1 65 3 view .LVU3
+  66:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  67:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #if defined (ARM_MATH_DSP)
+  68:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  69:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+  70:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   q31_t in1, in2;
+  44              		.loc 1 70 3 view .LVU4
+  71:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   q31_t out1, out2;
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 3
+
+
+  45              		.loc 1 71 3 view .LVU5
+  72:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  73:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /*loop Unrolling */
+  74:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   blkCnt = blockSize >> 2U;
+  46              		.loc 1 74 3 view .LVU6
+  47              		.loc 1 74 10 is_stmt 0 view .LVU7
+  48 0002 9408     		lsrs	r4, r2, #2
+  49              	.LVL2:
+  75:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  76:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+  77:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+  78:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   while (blkCnt > 0U)
+  50              		.loc 1 78 3 is_stmt 1 view .LVU8
+  51              		.loc 1 78 9 is_stmt 0 view .LVU9
+  52 0004 12E0     		b	.L2
+  53              	.LVL3:
+  54              	.L3:
+  79:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   {
+  80:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* C = (q7_t) A >> 8 */
+  81:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* convert from q15 to q7 and then store the results in the destination buffer */
+  82:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     in1 = *__SIMD32(pIn)++;
+  55              		.loc 1 82 5 is_stmt 1 view .LVU10
+  56              		.loc 1 82 9 is_stmt 0 view .LVU11
+  57 0006 8446     		mov	ip, r0
+  58 0008 5CF8085B 		ldr	r5, [ip], #8
+  59              	.LVL4:
+  83:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     in2 = *__SIMD32(pIn)++;
+  60              		.loc 1 83 5 is_stmt 1 view .LVU12
+  61              		.loc 1 83 9 is_stmt 0 view .LVU13
+  62 000c 4368     		ldr	r3, [r0, #4]
+  63              	.LVL5:
+  84:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  85:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #ifndef ARM_MATH_BIG_ENDIAN
+  86:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  87:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out1 = __PKHTB(in2, in1, 16);
+  64              		.loc 1 87 5 is_stmt 1 view .LVU14
+  65              	.LBB2:
+  66              		.loc 1 87 12 view .LVU15
+  67              		.loc 1 87 12 view .LVU16
+  68              		.loc 1 87 12 discriminator 2 view .LVU17
+  69              		.syntax unified
+  70              	@ 87 "DSP/Source/SupportFunctions/arm_q15_to_q7.c" 1
+  71 000e C3EA2540 		pkhtb r0, r3, r5, asr #16
+  72              	@ 0 "" 2
+  73              	.LVL6:
+  74              		.loc 1 87 12 discriminator 4 view .LVU18
+  75              		.loc 1 87 12 is_stmt 0 discriminator 4 view .LVU19
+  76              		.thumb
+  77              		.syntax unified
+  78              	.LBE2:
+  88:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out2 = __PKHBT(in2, in1, 16);
+  79              		.loc 1 88 5 is_stmt 1 view .LVU20
+  80              	.LBB3:
+  81              		.loc 1 88 12 view .LVU21
+  82              		.loc 1 88 12 view .LVU22
+  83              		.syntax unified
+  84              	@ 88 "DSP/Source/SupportFunctions/arm_q15_to_q7.c" 1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 4
+
+
+  85 0012 C3EA0543 		pkhbt r3, r3, r5, lsl #16
+  86              	@ 0 "" 2
+  87              	.LVL7:
+  88              		.loc 1 88 12 view .LVU23
+  89              		.loc 1 88 12 is_stmt 0 view .LVU24
+  90              		.thumb
+  91              		.syntax unified
+  92              	.LBE3:
+  89:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  90:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #else
+  91:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  92:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out1 = __PKHTB(in1, in2, 16);
+  93:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out2 = __PKHBT(in1, in2, 16);
+  94:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  95:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #endif //      #ifndef ARM_MATH_BIG_ENDIAN
+  96:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+  97:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* rotate packed value by 24 */
+  98:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out2 = ((uint32_t) out2 << 8) | ((uint32_t) out2 >> 24);
+  93              		.loc 1 98 5 is_stmt 1 view .LVU25
+  94              		.loc 1 98 35 is_stmt 0 view .LVU26
+  95 0016 4FEA3363 		ror	r3, r3, #24
+  96              	.LVL8:
+  99:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 100:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* anding with 0xff00ff00 to get two 8 bit values */
+ 101:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out1 = out1 & 0xFF00FF00;
+  97              		.loc 1 101 5 is_stmt 1 view .LVU27
+ 102:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* anding with 0x00ff00ff to get two 8 bit values */
+ 103:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out2 = out2 & 0x00FF00FF;
+  98              		.loc 1 103 5 view .LVU28
+ 104:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 105:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* oring two values(contains two 8 bit values) to get four packed 8 bit values */
+ 106:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     out1 = out1 | out2;
+  99              		.loc 1 106 5 view .LVU29
+ 100              		.loc 1 106 10 is_stmt 0 view .LVU30
+ 101 001a 00F0FF20 		and	r0, r0, #-16711936
+ 102              	.LVL9:
+ 103              		.loc 1 106 10 view .LVU31
+ 104 001e 03F0FF13 		and	r3, r3, #16711935
+ 105              	.LVL10:
+ 106              		.loc 1 106 10 view .LVU32
+ 107 0022 0343     		orrs	r3, r3, r0
+ 108              	.LVL11:
+ 107:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 108:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* store 4 samples at a time to destiantion buffer */
+ 109:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     *__SIMD32(pDst)++ = out1;
+ 109              		.loc 1 109 5 is_stmt 1 view .LVU33
+ 110              		.loc 1 109 23 is_stmt 0 view .LVU34
+ 111 0024 41F8043B 		str	r3, [r1], #4
+ 112              	.LVL12:
+ 110:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 111:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* Decrement the loop counter */
+ 112:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     blkCnt--;
+ 113              		.loc 1 112 5 is_stmt 1 view .LVU35
+ 114              		.loc 1 112 11 is_stmt 0 view .LVU36
+ 115 0028 013C     		subs	r4, r4, #1
+ 116              	.LVL13:
+  83:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 5
+
+
+ 117              		.loc 1 83 25 view .LVU37
+ 118 002a 6046     		mov	r0, ip
+ 119              	.LVL14:
+ 120              	.L2:
+  78:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   {
+ 121              		.loc 1 78 17 is_stmt 1 view .LVU38
+ 122 002c 002C     		cmp	r4, #0
+ 123 002e EAD1     		bne	.L3
+ 113:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   }
+ 114:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 115:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+ 116:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****    ** No loop unrolling is used. */
+ 117:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   blkCnt = blockSize % 0x4U;
+ 124              		.loc 1 117 3 view .LVU39
+ 125              		.loc 1 117 10 is_stmt 0 view .LVU40
+ 126 0030 02F00302 		and	r2, r2, #3
+ 127              	.LVL15:
+ 118:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 119:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #else
+ 120:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 121:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /* Run the below code for Cortex-M0 */
+ 122:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 123:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   /* Loop over blockSize number of values */
+ 124:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   blkCnt = blockSize;
+ 125:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 126:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 127:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 128:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   while (blkCnt > 0U)
+ 128              		.loc 1 128 3 is_stmt 1 view .LVU41
+ 129              		.loc 1 128 9 is_stmt 0 view .LVU42
+ 130 0034 05E0     		b	.L4
+ 131              	.L5:
+ 129:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   {
+ 130:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* C = (q7_t) A >> 8 */
+ 131:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* convert from q15 to q7 and then store the results in the destination buffer */
+ 132:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     *pDst++ = (q7_t) (*pIn++ >> 8);
+ 132              		.loc 1 132 5 is_stmt 1 view .LVU43
+ 133              	.LVL16:
+ 134              		.loc 1 132 23 is_stmt 0 view .LVU44
+ 135 0036 30F9023B 		ldrsh	r3, [r0], #2
+ 136              	.LVL17:
+ 137              		.loc 1 132 15 view .LVU45
+ 138 003a 1B12     		asrs	r3, r3, #8
+ 139              		.loc 1 132 13 view .LVU46
+ 140 003c 01F8013B 		strb	r3, [r1], #1
+ 141              	.LVL18:
+ 133:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 134:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     /* Decrement the loop counter */
+ 135:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****     blkCnt--;
+ 142              		.loc 1 135 5 is_stmt 1 view .LVU47
+ 143              		.loc 1 135 11 is_stmt 0 view .LVU48
+ 144 0040 013A     		subs	r2, r2, #1
+ 145              	.LVL19:
+ 146              	.L4:
+ 128:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   {
+ 147              		.loc 1 128 17 is_stmt 1 view .LVU49
+ 148 0042 002A     		cmp	r2, #0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 6
+
+
+ 149 0044 F7D1     		bne	.L5
+ 136:DSP/Source/SupportFunctions/arm_q15_to_q7.c ****   }
+ 137:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** 
+ 138:DSP/Source/SupportFunctions/arm_q15_to_q7.c **** }
+ 150              		.loc 1 138 1 is_stmt 0 view .LVU50
+ 151 0046 30BC     		pop	{r4, r5}
+ 152              	.LCFI1:
+ 153              		.cfi_restore 5
+ 154              		.cfi_restore 4
+ 155              		.cfi_def_cfa_offset 0
+ 156 0048 7047     		bx	lr
+ 157              		.cfi_endproc
+ 158              	.LFE139:
+ 160              		.text
+ 161              	.Letext0:
+ 162              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 163              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 164              		.file 4 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_q15_to_q7.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s:21     .text.arm_q15_to_q7:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccvgjHYe.s:27     .text.arm_q15_to_q7:00000000 arm_q15_to_q7
+
+NO UNDEFINED SYMBOLS

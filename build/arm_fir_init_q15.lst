@@ -1,0 +1,271 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_fir_init_q15.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/FilteringFunctions/arm_fir_init_q15.c"
+  20              		.section	.text.arm_fir_init_q15,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_fir_init_q15
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_fir_init_q15:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Title:        arm_fir_init_q15.c
+   4:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Description:  Q15 FIR filter initialization function
+   5:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+   6:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * $Date:        27. January 2017
+   7:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+   9:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** /*
+  12:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+  14:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+  16:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+  20:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+  22:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * limitations under the License.
+  27:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  */
+  28:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  29:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 2
+
+
+  30:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  31:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** /**
+  32:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @ingroup groupFilters
+  33:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  */
+  34:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  35:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** /**
+  36:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @addtogroup FIR
+  37:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @{
+  38:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  */
+  39:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  40:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** /**
+  41:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @param[in,out]  *S points to an instance of the Q15 FIR filter structure.
+  42:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @param[in] 	   numTaps  Number of filter coefficients in the filter. Must be even and greater th
+  43:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @param[in]      *pCoeffs points to the filter coefficients buffer.
+  44:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @param[in]      *pState points to the state buffer.
+  45:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @param[in]      blockSize is number of samples processed per call.
+  46:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * @return The function returns ARM_MATH_SUCCESS if initialization is successful or ARM_MATH_ARGUME
+  47:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <code>numTaps</code> is not greater than or equal to 4 and even.
+  48:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *
+  49:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <b>Description:</b>
+  50:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * \par
+  51:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <code>pCoeffs</code> points to the array of filter coefficients stored in time reversed order:
+  52:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <pre>
+  53:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *    {b[numTaps-1], b[numTaps-2], b[N-2], ..., b[1], b[0]}
+  54:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * </pre>
+  55:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Note that <code>numTaps</code> must be even and greater than or equal to 4.
+  56:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * To implement an odd length filter simply increase <code>numTaps</code> by 1 and set the last coe
+  57:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * For example, to implement a filter with <code>numTaps=3</code> and coefficients
+  58:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <pre>
+  59:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *     {0.3, -0.8, 0.3}
+  60:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * </pre>
+  61:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * set <code>numTaps=4</code> and use the coefficients:
+  62:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <pre>
+  63:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *     {0.3, -0.8, 0.3, 0}.
+  64:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * </pre>
+  65:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * Similarly, to implement a two point filter
+  66:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <pre>
+  67:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *     {0.3, -0.3}
+  68:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * </pre>
+  69:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * set <code>numTaps=4</code> and use the coefficients:
+  70:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <pre>
+  71:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  *     {0.3, -0.3, 0, 0}.
+  72:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * </pre>
+  73:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * \par
+  74:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <code>pState</code> points to the array of state variables.
+  75:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  * <code>pState</code> is of length <code>numTaps+blockSize</code>, when running on Cortex-M4 and C
+  76:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****  */
+  77:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  78:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** arm_status arm_fir_init_q15(
+  79:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   arm_fir_instance_q15 * S,
+  80:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   uint16_t numTaps,
+  81:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   q15_t * pCoeffs,
+  82:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   q15_t * pState,
+  83:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   uint32_t blockSize)
+  84:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** {
+  30              		.loc 1 84 1 view -0
+  31              		.cfi_startproc
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 3
+
+
+  32              		@ args = 4, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  85:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   arm_status status;
+  34              		.loc 1 85 3 view .LVU1
+  86:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  87:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  88:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** #if defined (ARM_MATH_DSP)
+  89:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  90:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+  91:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  92:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* The Number of filter coefficients in the filter must be even and at least 4 */
+  93:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   if (numTaps & 0x1U)
+  35              		.loc 1 93 3 view .LVU2
+  36              		.loc 1 93 6 is_stmt 0 view .LVU3
+  37 0000 11F0010F 		tst	r1, #1
+  38 0004 0ED1     		bne	.L3
+  84:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   arm_status status;
+  39              		.loc 1 84 1 view .LVU4
+  40 0006 38B5     		push	{r3, r4, r5, lr}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 16
+  43              		.cfi_offset 3, -16
+  44              		.cfi_offset 4, -12
+  45              		.cfi_offset 5, -8
+  46              		.cfi_offset 14, -4
+  47 0008 0446     		mov	r4, r0
+  48 000a 1D46     		mov	r5, r3
+  94:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   {
+  95:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     status = ARM_MATH_ARGUMENT_ERROR;
+  96:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   }
+  97:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   else
+  98:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   {
+  99:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     /* Assign filter taps */
+ 100:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     S->numTaps = numTaps;
+  49              		.loc 1 100 5 is_stmt 1 view .LVU5
+  50              		.loc 1 100 16 is_stmt 0 view .LVU6
+  51 000c 0180     		strh	r1, [r0]	@ movhi
+ 101:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 102:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     /* Assign coefficient pointer */
+ 103:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     S->pCoeffs = pCoeffs;
+  52              		.loc 1 103 5 is_stmt 1 view .LVU7
+  53              		.loc 1 103 16 is_stmt 0 view .LVU8
+  54 000e 8260     		str	r2, [r0, #8]
+ 104:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 105:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     /* Clear the state buffer.  The size is always (blockSize + numTaps ) */
+ 106:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     memset(pState, 0, (numTaps + (blockSize)) * sizeof(q15_t));
+  55              		.loc 1 106 5 is_stmt 1 view .LVU9
+  56              		.loc 1 106 32 is_stmt 0 view .LVU10
+  57 0010 049B     		ldr	r3, [sp, #16]
+  58              	.LVL1:
+  59              		.loc 1 106 32 view .LVU11
+  60 0012 1944     		add	r1, r1, r3
+  61              	.LVL2:
+  62              		.loc 1 106 5 view .LVU12
+  63 0014 4A00     		lsls	r2, r1, #1
+  64              	.LVL3:
+  65              		.loc 1 106 5 view .LVU13
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 4
+
+
+  66 0016 0021     		movs	r1, #0
+  67 0018 2846     		mov	r0, r5
+  68              	.LVL4:
+  69              		.loc 1 106 5 view .LVU14
+  70 001a FFF7FEFF 		bl	memset
+  71              	.LVL5:
+ 107:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 108:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     /* Assign state pointer */
+ 109:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     S->pState = pState;
+  72              		.loc 1 109 5 is_stmt 1 view .LVU15
+  73              		.loc 1 109 15 is_stmt 0 view .LVU16
+  74 001e 6560     		str	r5, [r4, #4]
+ 110:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 111:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****     status = ARM_MATH_SUCCESS;
+  75              		.loc 1 111 5 is_stmt 1 view .LVU17
+  76              	.LVL6:
+  77              		.loc 1 111 12 is_stmt 0 view .LVU18
+  78 0020 0020     		movs	r0, #0
+  79              	.LVL7:
+ 112:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   }
+ 113:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 114:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   return (status);
+  80              		.loc 1 114 3 is_stmt 1 view .LVU19
+ 115:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 116:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** #else
+ 117:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 118:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Run the below code for Cortex-M0 */
+ 119:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 120:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Assign filter taps */
+ 121:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   S->numTaps = numTaps;
+ 122:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 123:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Assign coefficient pointer */
+ 124:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   S->pCoeffs = pCoeffs;
+ 125:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 126:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Clear the state buffer.  The size is always (blockSize + numTaps - 1) */
+ 127:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(q15_t));
+ 128:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 129:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   /* Assign state pointer */
+ 130:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   S->pState = pState;
+ 131:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 132:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   status = ARM_MATH_SUCCESS;
+ 133:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 134:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   return (status);
+ 135:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 136:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** #endif /*  #if defined (ARM_MATH_DSP) */
+ 137:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+ 138:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** }
+  81              		.loc 1 138 1 is_stmt 0 view .LVU20
+  82 0022 38BD     		pop	{r3, r4, r5, pc}
+  83              	.LVL8:
+  84              	.L3:
+  85              	.LCFI1:
+  86              		.cfi_def_cfa_offset 0
+  87              		.cfi_restore 3
+  88              		.cfi_restore 4
+  89              		.cfi_restore 5
+  90              		.cfi_restore 14
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 5
+
+
+  95:DSP/Source/FilteringFunctions/arm_fir_init_q15.c ****   }
+  91              		.loc 1 95 12 view .LVU21
+  92 0024 4FF0FF30 		mov	r0, #-1
+  93              	.LVL9:
+ 114:DSP/Source/FilteringFunctions/arm_fir_init_q15.c **** 
+  94              		.loc 1 114 3 is_stmt 1 view .LVU22
+  95              		.loc 1 138 1 is_stmt 0 view .LVU23
+  96 0028 7047     		bx	lr
+  97              		.cfi_endproc
+  98              	.LFE139:
+ 100              		.text
+ 101              	.Letext0:
+ 102              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 103              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 104              		.file 4 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/lib/gcc/a
+ 105              		.file 5 "DSP/Inc/arm_math.h"
+ 106              		.file 6 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 107              		.file 7 "<built-in>"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_fir_init_q15.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s:21     .text.arm_fir_init_q15:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctx3JLN.s:27     .text.arm_fir_init_q15:00000000 arm_fir_init_q15
+
+UNDEFINED SYMBOLS
+memset

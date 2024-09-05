@@ -1,0 +1,444 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_cmplx_mag_squared_f32.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c"
+  20              		.section	.text.arm_cmplx_mag_squared_f32,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_cmplx_mag_squared_f32
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_cmplx_mag_squared_f32:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Title:        arm_cmplx_mag_squared_f32.c
+   4:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Description:  Floating-point complex magnitude squared
+   5:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+   6:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * $Date:        27. January 2017
+   7:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+   9:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /*
+  12:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  14:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  16:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  20:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  22:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * limitations under the License.
+  27:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  */
+  28:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  29:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 2
+
+
+  30:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  31:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /**
+  32:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @ingroup groupCmplxMath
+  33:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  */
+  34:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  35:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /**
+  36:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @defgroup cmplx_mag_squared Complex Magnitude Squared
+  37:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  38:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * Computes the magnitude squared of the elements of a complex data vector.
+  39:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  40:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * The <code>pSrc</code> points to the source data and
+  41:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * <code>pDst</code> points to the where the result should be written.
+  42:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * <code>numSamples</code> specifies the number of complex samples
+  43:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * in the input array and the data is stored in an interleaved fashion
+  44:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * (real, imag, real, imag, ...).
+  45:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * The input array has a total of <code>2*numSamples</code> values;
+  46:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * the output array has a total of <code>numSamples</code> values.
+  47:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  48:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * The underlying algorithm is used:
+  49:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  50:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * <pre>
+  51:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * for(n=0; n<numSamples; n++) {
+  52:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *     pDst[n] = pSrc[(2*n)+0]^2 + pSrc[(2*n)+1]^2;
+  53:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * }
+  54:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * </pre>
+  55:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  *
+  56:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * There are separate functions for floating-point, Q15, and Q31 data types.
+  57:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  */
+  58:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  59:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /**
+  60:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @addtogroup cmplx_mag_squared
+  61:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @{
+  62:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  */
+  63:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  64:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  65:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** /**
+  66:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @brief  Floating-point complex magnitude squared
+  67:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @param[in]  *pSrc points to the complex input vector
+  68:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @param[out]  *pDst points to the real output vector
+  69:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @param[in]  numSamples number of complex samples in the input vector
+  70:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  * @return none.
+  71:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****  */
+  72:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  73:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** void arm_cmplx_mag_squared_f32(
+  74:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t * pSrc,
+  75:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t * pDst,
+  76:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   uint32_t numSamples)
+  77:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** {
+  30              		.loc 1 77 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  78:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t real, imag;                          /* Temporary variables to store real and imaginary
+  35              		.loc 1 78 3 view .LVU1
+  79:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   uint32_t blkCnt;                               /* loop counter */
+  36              		.loc 1 79 3 view .LVU2
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 3
+
+
+  80:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  81:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** #if defined (ARM_MATH_DSP)
+  82:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t real1, real2, real3, real4;          /* Temporary variables to hold real values */
+  37              		.loc 1 82 3 view .LVU3
+  83:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t imag1, imag2, imag3, imag4;          /* Temporary variables to hold imaginary values */
+  38              		.loc 1 83 3 view .LVU4
+  84:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t mul1, mul2, mul3, mul4;              /* Temporary variables */
+  39              		.loc 1 84 3 view .LVU5
+  85:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t mul5, mul6, mul7, mul8;              /* Temporary variables */
+  40              		.loc 1 85 3 view .LVU6
+  86:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   float32_t out1, out2, out3, out4;              /* Temporary variables to hold output values */
+  41              		.loc 1 86 3 view .LVU7
+  87:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  88:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   /*loop Unrolling */
+  89:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   blkCnt = numSamples >> 2U;
+  42              		.loc 1 89 3 view .LVU8
+  43              		.loc 1 89 10 is_stmt 0 view .LVU9
+  44 0000 9308     		lsrs	r3, r2, #2
+  45              	.LVL1:
+  90:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+  91:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+  92:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+  93:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   while (blkCnt > 0U)
+  46              		.loc 1 93 3 is_stmt 1 view .LVU10
+  47              		.loc 1 93 9 is_stmt 0 view .LVU11
+  48 0002 32E0     		b	.L2
+  49              	.L3:
+  94:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   {
+  95:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
+  96:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read real input sample from source buffer */
+  97:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     real1 = pSrc[0];
+  50              		.loc 1 97 5 is_stmt 1 view .LVU12
+  51              		.loc 1 97 11 is_stmt 0 view .LVU13
+  52 0004 D0ED007A 		vldr.32	s15, [r0]
+  53              	.LVL2:
+  98:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read imaginary input sample from source buffer */
+  99:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     imag1 = pSrc[1];
+  54              		.loc 1 99 5 is_stmt 1 view .LVU14
+  55              		.loc 1 99 11 is_stmt 0 view .LVU15
+  56 0008 90ED017A 		vldr.32	s14, [r0, #4]
+  57              	.LVL3:
+ 100:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 101:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of real value */
+ 102:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul1 = real1 * real1;
+  58              		.loc 1 102 5 is_stmt 1 view .LVU16
+  59              		.loc 1 102 10 is_stmt 0 view .LVU17
+  60 000c 27EEA76A 		vmul.f32	s12, s15, s15
+  61              	.LVL4:
+ 103:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 104:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read real input sample from source buffer */
+ 105:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     real2 = pSrc[2];
+  62              		.loc 1 105 5 is_stmt 1 view .LVU18
+  63              		.loc 1 105 11 is_stmt 0 view .LVU19
+  64 0010 D0ED027A 		vldr.32	s15, [r0, #8]
+  65              	.LVL5:
+ 106:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 107:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of imaginary value */
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 4
+
+
+ 108:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul2 = imag1 * imag1;
+  66              		.loc 1 108 5 is_stmt 1 view .LVU20
+  67              		.loc 1 108 10 is_stmt 0 view .LVU21
+  68 0014 27EE074A 		vmul.f32	s8, s14, s14
+  69              	.LVL6:
+ 109:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 110:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read imaginary input sample from source buffer */
+ 111:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     imag2 = pSrc[3];
+  70              		.loc 1 111 5 is_stmt 1 view .LVU22
+  71              		.loc 1 111 11 is_stmt 0 view .LVU23
+  72 0018 90ED037A 		vldr.32	s14, [r0, #12]
+  73              	.LVL7:
+ 112:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 113:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of real value */
+ 114:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul3 = real2 * real2;
+  74              		.loc 1 114 5 is_stmt 1 view .LVU24
+  75              		.loc 1 114 10 is_stmt 0 view .LVU25
+  76 001c 67EEA76A 		vmul.f32	s13, s15, s15
+  77              	.LVL8:
+ 115:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 116:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read real input sample from source buffer */
+ 117:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     real3 = pSrc[4];
+  78              		.loc 1 117 5 is_stmt 1 view .LVU26
+  79              		.loc 1 117 11 is_stmt 0 view .LVU27
+  80 0020 D0ED047A 		vldr.32	s15, [r0, #16]
+  81              	.LVL9:
+ 118:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 119:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of imaginary value */
+ 120:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul4 = imag2 * imag2;
+  82              		.loc 1 120 5 is_stmt 1 view .LVU28
+  83              		.loc 1 120 10 is_stmt 0 view .LVU29
+  84 0024 67EE074A 		vmul.f32	s9, s14, s14
+  85              	.LVL10:
+ 121:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 122:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read imaginary input sample from source buffer */
+ 123:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     imag3 = pSrc[5];
+  86              		.loc 1 123 5 is_stmt 1 view .LVU30
+  87              		.loc 1 123 11 is_stmt 0 view .LVU31
+  88 0028 D0ED055A 		vldr.32	s11, [r0, #20]
+  89              	.LVL11:
+ 124:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 125:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of real value */
+ 126:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul5 = real3 * real3;
+  90              		.loc 1 126 5 is_stmt 1 view .LVU32
+  91              		.loc 1 126 10 is_stmt 0 view .LVU33
+  92 002c 27EEA77A 		vmul.f32	s14, s15, s15
+  93              	.LVL12:
+ 127:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of imaginary value */
+ 128:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul6 = imag3 * imag3;
+  94              		.loc 1 128 5 is_stmt 1 view .LVU34
+  95              		.loc 1 128 10 is_stmt 0 view .LVU35
+  96 0030 25EEA55A 		vmul.f32	s10, s11, s11
+  97              	.LVL13:
+ 129:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 130:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read real input sample from source buffer */
+ 131:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     real4 = pSrc[6];
+  98              		.loc 1 131 5 is_stmt 1 view .LVU36
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 5
+
+
+  99              		.loc 1 131 11 is_stmt 0 view .LVU37
+ 100 0034 D0ED067A 		vldr.32	s15, [r0, #24]
+ 101              	.LVL14:
+ 132:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 133:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* accumulate real and imaginary powers */
+ 134:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     out1 = mul1 + mul2;
+ 102              		.loc 1 134 5 is_stmt 1 view .LVU38
+ 103              		.loc 1 134 10 is_stmt 0 view .LVU39
+ 104 0038 36EE046A 		vadd.f32	s12, s12, s8
+ 105              	.LVL15:
+ 135:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 136:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* read imaginary input sample from source buffer */
+ 137:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     imag4 = pSrc[7];
+ 106              		.loc 1 137 5 is_stmt 1 view .LVU40
+ 107              		.loc 1 137 11 is_stmt 0 view .LVU41
+ 108 003c D0ED075A 		vldr.32	s11, [r0, #28]
+ 109              	.LVL16:
+ 138:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 139:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* accumulate real and imaginary powers */
+ 140:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     out2 = mul3 + mul4;
+ 110              		.loc 1 140 5 is_stmt 1 view .LVU42
+ 111              		.loc 1 140 10 is_stmt 0 view .LVU43
+ 112 0040 76EEA46A 		vadd.f32	s13, s13, s9
+ 113              	.LVL17:
+ 141:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 142:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of real value */
+ 143:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul7 = real4 * real4;
+ 114              		.loc 1 143 5 is_stmt 1 view .LVU44
+ 115              		.loc 1 143 10 is_stmt 0 view .LVU45
+ 116 0044 67EEA77A 		vmul.f32	s15, s15, s15
+ 117              	.LVL18:
+ 144:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* calculate power of imaginary value */
+ 145:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     mul8 = imag4 * imag4;
+ 118              		.loc 1 145 5 is_stmt 1 view .LVU46
+ 119              		.loc 1 145 10 is_stmt 0 view .LVU47
+ 120 0048 65EEA55A 		vmul.f32	s11, s11, s11
+ 121              	.LVL19:
+ 146:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 147:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* store output to destination */
+ 148:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pDst[0] = out1;
+ 122              		.loc 1 148 5 is_stmt 1 view .LVU48
+ 123              		.loc 1 148 13 is_stmt 0 view .LVU49
+ 124 004c 81ED006A 		vstr.32	s12, [r1]
+ 125              	.LVL20:
+ 149:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 150:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* accumulate real and imaginary powers */
+ 151:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     out3 = mul5 + mul6;
+ 126              		.loc 1 151 5 is_stmt 1 view .LVU50
+ 127              		.loc 1 151 10 is_stmt 0 view .LVU51
+ 128 0050 37EE057A 		vadd.f32	s14, s14, s10
+ 129              	.LVL21:
+ 152:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 153:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* store output to destination */
+ 154:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pDst[1] = out2;
+ 130              		.loc 1 154 5 is_stmt 1 view .LVU52
+ 131              		.loc 1 154 13 is_stmt 0 view .LVU53
+ 132 0054 C1ED016A 		vstr.32	s13, [r1, #4]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 6
+
+
+ 155:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 156:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* accumulate real and imaginary powers */
+ 157:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     out4 = mul7 + mul8;
+ 133              		.loc 1 157 5 is_stmt 1 view .LVU54
+ 134              		.loc 1 157 10 is_stmt 0 view .LVU55
+ 135 0058 77EEA57A 		vadd.f32	s15, s15, s11
+ 136              	.LVL22:
+ 158:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 159:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* store output to destination */
+ 160:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pDst[2] = out3;
+ 137              		.loc 1 160 5 is_stmt 1 view .LVU56
+ 138              		.loc 1 160 13 is_stmt 0 view .LVU57
+ 139 005c 81ED027A 		vstr.32	s14, [r1, #8]
+ 161:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 162:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* increment destination pointer by 8 to process next samples */
+ 163:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pSrc += 8U;
+ 140              		.loc 1 163 5 is_stmt 1 view .LVU58
+ 141              		.loc 1 163 10 is_stmt 0 view .LVU59
+ 142 0060 2030     		adds	r0, r0, #32
+ 143              	.LVL23:
+ 164:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 165:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* store output to destination */
+ 166:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pDst[3] = out4;
+ 144              		.loc 1 166 5 is_stmt 1 view .LVU60
+ 145              		.loc 1 166 13 is_stmt 0 view .LVU61
+ 146 0062 C1ED037A 		vstr.32	s15, [r1, #12]
+ 167:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 168:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* increment destination pointer by 4 to process next samples */
+ 169:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     pDst += 4U;
+ 147              		.loc 1 169 5 is_stmt 1 view .LVU62
+ 148              		.loc 1 169 10 is_stmt 0 view .LVU63
+ 149 0066 1031     		adds	r1, r1, #16
+ 150              	.LVL24:
+ 170:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 171:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* Decrement the loop counter */
+ 172:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     blkCnt--;
+ 151              		.loc 1 172 5 is_stmt 1 view .LVU64
+ 152              		.loc 1 172 11 is_stmt 0 view .LVU65
+ 153 0068 013B     		subs	r3, r3, #1
+ 154              	.LVL25:
+ 155              	.L2:
+  93:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   {
+ 156              		.loc 1 93 17 is_stmt 1 view .LVU66
+ 157 006a 002B     		cmp	r3, #0
+ 158 006c CAD1     		bne	.L3
+ 173:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   }
+ 174:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 175:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   /* If the numSamples is not a multiple of 4, compute any remaining output samples here.
+ 176:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****    ** No loop unrolling is used. */
+ 177:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   blkCnt = numSamples % 0x4U;
+ 159              		.loc 1 177 3 view .LVU67
+ 160              		.loc 1 177 10 is_stmt 0 view .LVU68
+ 161 006e 02F00302 		and	r2, r2, #3
+ 162              	.LVL26:
+ 178:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 179:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** #else
+ 180:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 7
+
+
+ 181:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   /* Run the below code for Cortex-M0 */
+ 182:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 183:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   blkCnt = numSamples;
+ 184:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 185:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 186:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 187:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   while (blkCnt > 0U)
+ 163              		.loc 1 187 3 is_stmt 1 view .LVU69
+ 164              		.loc 1 187 9 is_stmt 0 view .LVU70
+ 165 0072 0FE0     		b	.L4
+ 166              	.L5:
+ 188:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   {
+ 189:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
+ 190:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     real = *pSrc++;
+ 167              		.loc 1 190 5 is_stmt 1 view .LVU71
+ 168              	.LVL27:
+ 169              		.loc 1 190 10 is_stmt 0 view .LVU72
+ 170 0074 0346     		mov	r3, r0
+ 171 0076 0833     		adds	r3, r3, #8
+ 172 0078 D0ED007A 		vldr.32	s15, [r0]
+ 173              	.LVL28:
+ 191:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     imag = *pSrc++;
+ 174              		.loc 1 191 5 is_stmt 1 view .LVU73
+ 175              		.loc 1 191 10 is_stmt 0 view .LVU74
+ 176 007c 90ED017A 		vldr.32	s14, [r0, #4]
+ 177              	.LVL29:
+ 192:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 193:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* out = (real * real) + (imag * imag) */
+ 194:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* store the result in the destination buffer. */
+ 195:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     *pDst++ = (real * real) + (imag * imag);
+ 178              		.loc 1 195 5 is_stmt 1 view .LVU75
+ 179              		.loc 1 195 21 is_stmt 0 view .LVU76
+ 180 0080 67EEA77A 		vmul.f32	s15, s15, s15
+ 181              	.LVL30:
+ 182              		.loc 1 195 37 view .LVU77
+ 183 0084 27EE077A 		vmul.f32	s14, s14, s14
+ 184              	.LVL31:
+ 185              		.loc 1 195 29 view .LVU78
+ 186 0088 77EE877A 		vadd.f32	s15, s15, s14
+ 187              		.loc 1 195 13 view .LVU79
+ 188 008c E1EC017A 		vstmia.32	r1!, {s15}
+ 189              	.LVL32:
+ 196:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 197:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     /* Decrement the loop counter */
+ 198:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****     blkCnt--;
+ 190              		.loc 1 198 5 is_stmt 1 view .LVU80
+ 191              		.loc 1 198 11 is_stmt 0 view .LVU81
+ 192 0090 013A     		subs	r2, r2, #1
+ 193              	.LVL33:
+ 191:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** 
+ 194              		.loc 1 191 17 view .LVU82
+ 195 0092 1846     		mov	r0, r3
+ 196              	.LVL34:
+ 197              	.L4:
+ 187:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   {
+ 198              		.loc 1 187 17 is_stmt 1 view .LVU83
+ 199 0094 002A     		cmp	r2, #0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 8
+
+
+ 200 0096 EDD1     		bne	.L5
+ 199:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c ****   }
+ 200:DSP/Source/ComplexMathFunctions/arm_cmplx_mag_squared_f32.c **** }
+ 201              		.loc 1 200 1 is_stmt 0 view .LVU84
+ 202 0098 7047     		bx	lr
+ 203              		.cfi_endproc
+ 204              	.LFE139:
+ 206              		.text
+ 207              	.Letext0:
+ 208              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 209              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 210              		.file 4 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_cmplx_mag_squared_f32.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s:21     .text.arm_cmplx_mag_squared_f32:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccYVbajR.s:27     .text.arm_cmplx_mag_squared_f32:00000000 arm_cmplx_mag_squared_f32
+
+NO UNDEFINED SYMBOLS

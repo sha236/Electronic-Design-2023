@@ -1,0 +1,245 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_fill_f32.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/SupportFunctions/arm_fill_f32.c"
+  20              		.section	.text.arm_fill_f32,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_fill_f32
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_fill_f32:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/SupportFunctions/arm_fill_f32.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Title:        arm_fill_f32.c
+   4:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Description:  Fills a constant value into a floating-point vector
+   5:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+   6:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * $Date:        27. January 2017
+   7:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+   9:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/SupportFunctions/arm_fill_f32.c **** /*
+  12:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  14:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  16:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  20:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  22:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * limitations under the License.
+  27:DSP/Source/SupportFunctions/arm_fill_f32.c ****  */
+  28:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  29:DSP/Source/SupportFunctions/arm_fill_f32.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s 			page 2
+
+
+  30:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  31:DSP/Source/SupportFunctions/arm_fill_f32.c **** /**
+  32:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @ingroup groupSupport
+  33:DSP/Source/SupportFunctions/arm_fill_f32.c ****  */
+  34:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  35:DSP/Source/SupportFunctions/arm_fill_f32.c **** /**
+  36:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @defgroup Fill Vector Fill
+  37:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  38:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * Fills the destination vector with a constant value.
+  39:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  40:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * <pre>
+  41:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * 	pDst[n] = value;   0 <= n < blockSize.
+  42:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * </pre>
+  43:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  44:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * There are separate functions for floating point, Q31, Q15, and Q7 data types.
+  45:DSP/Source/SupportFunctions/arm_fill_f32.c ****  */
+  46:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  47:DSP/Source/SupportFunctions/arm_fill_f32.c **** /**
+  48:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @addtogroup Fill
+  49:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @{
+  50:DSP/Source/SupportFunctions/arm_fill_f32.c ****  */
+  51:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  52:DSP/Source/SupportFunctions/arm_fill_f32.c **** /**
+  53:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @brief Fills a constant value into a floating-point vector.
+  54:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @param[in]       value input value to be filled
+  55:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @param[out]      *pDst points to output vector
+  56:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @param[in]       blockSize length of the output vector
+  57:DSP/Source/SupportFunctions/arm_fill_f32.c ****  * @return none.
+  58:DSP/Source/SupportFunctions/arm_fill_f32.c ****  *
+  59:DSP/Source/SupportFunctions/arm_fill_f32.c ****  */
+  60:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  61:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  62:DSP/Source/SupportFunctions/arm_fill_f32.c **** void arm_fill_f32(
+  63:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t value,
+  64:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t * pDst,
+  65:DSP/Source/SupportFunctions/arm_fill_f32.c ****   uint32_t blockSize)
+  66:DSP/Source/SupportFunctions/arm_fill_f32.c **** {
+  30              		.loc 1 66 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  67:DSP/Source/SupportFunctions/arm_fill_f32.c ****   uint32_t blkCnt;                               /* loop counter */
+  35              		.loc 1 67 3 view .LVU1
+  68:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  69:DSP/Source/SupportFunctions/arm_fill_f32.c **** #if defined (ARM_MATH_DSP)
+  70:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  71:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+  72:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t in1 = value;
+  36              		.loc 1 72 3 view .LVU2
+  73:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t in2 = value;
+  37              		.loc 1 73 3 view .LVU3
+  74:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t in3 = value;
+  38              		.loc 1 74 3 view .LVU4
+  75:DSP/Source/SupportFunctions/arm_fill_f32.c ****   float32_t in4 = value;
+  39              		.loc 1 75 3 view .LVU5
+  76:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s 			page 3
+
+
+  77:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /*loop Unrolling */
+  78:DSP/Source/SupportFunctions/arm_fill_f32.c ****   blkCnt = blockSize >> 2U;
+  40              		.loc 1 78 3 view .LVU6
+  41              		.loc 1 78 10 is_stmt 0 view .LVU7
+  42 0000 8B08     		lsrs	r3, r1, #2
+  43              	.LVL1:
+  79:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  80:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+  81:DSP/Source/SupportFunctions/arm_fill_f32.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+  82:DSP/Source/SupportFunctions/arm_fill_f32.c ****   while (blkCnt > 0U)
+  44              		.loc 1 82 3 is_stmt 1 view .LVU8
+  45              		.loc 1 82 9 is_stmt 0 view .LVU9
+  46 0002 09E0     		b	.L2
+  47              	.L3:
+  83:DSP/Source/SupportFunctions/arm_fill_f32.c ****   {
+  84:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* C = value */
+  85:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* Fill the value in the destination buffer */
+  86:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = in1;
+  48              		.loc 1 86 5 is_stmt 1 view .LVU10
+  49              	.LVL2:
+  50              		.loc 1 86 13 is_stmt 0 view .LVU11
+  51 0004 80ED000A 		vstr.32	s0, [r0]
+  87:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = in2;
+  52              		.loc 1 87 5 is_stmt 1 view .LVU12
+  53              	.LVL3:
+  54              		.loc 1 87 13 is_stmt 0 view .LVU13
+  55 0008 80ED010A 		vstr.32	s0, [r0, #4]
+  88:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = in3;
+  56              		.loc 1 88 5 is_stmt 1 view .LVU14
+  57              	.LVL4:
+  58              		.loc 1 88 13 is_stmt 0 view .LVU15
+  59 000c 80ED020A 		vstr.32	s0, [r0, #8]
+  89:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = in4;
+  60              		.loc 1 89 5 is_stmt 1 view .LVU16
+  61              	.LVL5:
+  62              		.loc 1 89 13 is_stmt 0 view .LVU17
+  63 0010 80ED030A 		vstr.32	s0, [r0, #12]
+  90:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  91:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* Decrement the loop counter */
+  92:DSP/Source/SupportFunctions/arm_fill_f32.c ****     blkCnt--;
+  64              		.loc 1 92 5 is_stmt 1 view .LVU18
+  65              		.loc 1 92 11 is_stmt 0 view .LVU19
+  66 0014 013B     		subs	r3, r3, #1
+  67              	.LVL6:
+  89:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = in4;
+  68              		.loc 1 89 10 view .LVU20
+  69 0016 1030     		adds	r0, r0, #16
+  70              	.LVL7:
+  71              	.L2:
+  82:DSP/Source/SupportFunctions/arm_fill_f32.c ****   {
+  72              		.loc 1 82 17 is_stmt 1 view .LVU21
+  73 0018 002B     		cmp	r3, #0
+  74 001a F3D1     		bne	.L3
+  93:DSP/Source/SupportFunctions/arm_fill_f32.c ****   }
+  94:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  95:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+  96:DSP/Source/SupportFunctions/arm_fill_f32.c ****    ** No loop unrolling is used. */
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s 			page 4
+
+
+  97:DSP/Source/SupportFunctions/arm_fill_f32.c ****   blkCnt = blockSize % 0x4U;
+  75              		.loc 1 97 3 view .LVU22
+  76              		.loc 1 97 10 is_stmt 0 view .LVU23
+  77 001c 01F00301 		and	r1, r1, #3
+  78              	.LVL8:
+  98:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+  99:DSP/Source/SupportFunctions/arm_fill_f32.c **** #else
+ 100:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 101:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /* Run the below code for Cortex-M0 */
+ 102:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 103:DSP/Source/SupportFunctions/arm_fill_f32.c ****   /* Loop over blockSize number of values */
+ 104:DSP/Source/SupportFunctions/arm_fill_f32.c ****   blkCnt = blockSize;
+ 105:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 106:DSP/Source/SupportFunctions/arm_fill_f32.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 107:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 108:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 109:DSP/Source/SupportFunctions/arm_fill_f32.c ****   while (blkCnt > 0U)
+  79              		.loc 1 109 3 is_stmt 1 view .LVU24
+  80              		.loc 1 109 9 is_stmt 0 view .LVU25
+  81 0020 02E0     		b	.L4
+  82              	.L5:
+ 110:DSP/Source/SupportFunctions/arm_fill_f32.c ****   {
+ 111:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* C = value */
+ 112:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* Fill the value in the destination buffer */
+ 113:DSP/Source/SupportFunctions/arm_fill_f32.c ****     *pDst++ = value;
+  83              		.loc 1 113 5 is_stmt 1 view .LVU26
+  84              	.LVL9:
+  85              		.loc 1 113 13 is_stmt 0 view .LVU27
+  86 0022 A0EC010A 		vstmia.32	r0!, {s0}
+  87              	.LVL10:
+ 114:DSP/Source/SupportFunctions/arm_fill_f32.c **** 
+ 115:DSP/Source/SupportFunctions/arm_fill_f32.c ****     /* Decrement the loop counter */
+ 116:DSP/Source/SupportFunctions/arm_fill_f32.c ****     blkCnt--;
+  88              		.loc 1 116 5 is_stmt 1 view .LVU28
+  89              		.loc 1 116 11 is_stmt 0 view .LVU29
+  90 0026 0139     		subs	r1, r1, #1
+  91              	.LVL11:
+  92              	.L4:
+ 109:DSP/Source/SupportFunctions/arm_fill_f32.c ****   {
+  93              		.loc 1 109 17 is_stmt 1 view .LVU30
+  94 0028 0029     		cmp	r1, #0
+  95 002a FAD1     		bne	.L5
+ 117:DSP/Source/SupportFunctions/arm_fill_f32.c ****   }
+ 118:DSP/Source/SupportFunctions/arm_fill_f32.c **** }
+  96              		.loc 1 118 1 is_stmt 0 view .LVU31
+  97 002c 7047     		bx	lr
+  98              		.cfi_endproc
+  99              	.LFE139:
+ 101              		.text
+ 102              	.Letext0:
+ 103              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 104              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 105              		.file 4 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_fill_f32.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s:21     .text.arm_fill_f32:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//ccketaok.s:27     .text.arm_fill_f32:00000000 arm_fill_f32
+
+NO UNDEFINED SYMBOLS

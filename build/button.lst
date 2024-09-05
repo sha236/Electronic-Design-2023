@@ -1,0 +1,4193 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"button.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "BUTTON/Src/button.c"
+  20              		.global	__aeabi_i2d
+  21              		.global	__aeabi_dmul
+  22              		.global	__aeabi_dadd
+  23              		.global	__aeabi_d2f
+  24              		.section	.text.PID_CONVERT,"ax",%progbits
+  25              		.align	1
+  26              		.global	PID_CONVERT
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  31              	PID_CONVERT:
+  32              	.LVL0:
+  33              	.LFB239:
+   1:BUTTON/Src/button.c **** #include "button.h"
+   2:BUTTON/Src/button.c **** #include "main.h"
+   3:BUTTON/Src/button.c **** #include "oled.h"
+   4:BUTTON/Src/button.c **** 
+   5:BUTTON/Src/button.c **** 
+   6:BUTTON/Src/button.c **** //B组按键管脚逻辑映射
+   7:BUTTON/Src/button.c **** #define RESET_BR1() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET)
+   8:BUTTON/Src/button.c **** #define SET_BR1() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET)
+   9:BUTTON/Src/button.c **** #define RESET_BR2() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET)
+  10:BUTTON/Src/button.c **** #define SET_BR2() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET)
+  11:BUTTON/Src/button.c **** #define RESET_BR3() HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET)
+  12:BUTTON/Src/button.c **** #define SET_BR3() HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET)
+  13:BUTTON/Src/button.c **** #define RESET_BR4() HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_RESET)
+  14:BUTTON/Src/button.c **** #define SET_BR4() HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_SET)
+  15:BUTTON/Src/button.c **** 
+  16:BUTTON/Src/button.c **** #define READ_BC1() HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9)
+  17:BUTTON/Src/button.c **** #define READ_BC2() HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11)
+  18:BUTTON/Src/button.c **** #define READ_BC3() HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_15)
+  19:BUTTON/Src/button.c **** #define READ_BC4() HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_11)
+  20:BUTTON/Src/button.c **** 
+  21:BUTTON/Src/button.c **** //A组按键管脚逻辑映射
+  22:BUTTON/Src/button.c **** #define RESET_AR1() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_RESET)
+  23:BUTTON/Src/button.c **** #define SET_AR1() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET)
+  24:BUTTON/Src/button.c **** #define RESET_AR2() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET)
+  25:BUTTON/Src/button.c **** #define SET_AR2() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET)
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 2
+
+
+  26:BUTTON/Src/button.c **** #define RESET_AR3() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_RESET)
+  27:BUTTON/Src/button.c **** #define SET_AR3() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_4, GPIO_PIN_SET)
+  28:BUTTON/Src/button.c **** #define RESET_AR4() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_RESET)
+  29:BUTTON/Src/button.c **** #define SET_AR4() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_6, GPIO_PIN_SET)
+  30:BUTTON/Src/button.c **** 
+  31:BUTTON/Src/button.c **** #define READ_AC1() HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3)
+  32:BUTTON/Src/button.c **** #define READ_AC2() HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6)
+  33:BUTTON/Src/button.c **** #define READ_AC3() HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8)
+  34:BUTTON/Src/button.c **** #define READ_AC4() HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_0)
+  35:BUTTON/Src/button.c **** 
+  36:BUTTON/Src/button.c **** //要求是新状态X_state减去原来的状态temp_state
+  37:BUTTON/Src/button.c **** #define DOWN -1
+  38:BUTTON/Src/button.c **** #define UP 1
+  39:BUTTON/Src/button.c **** 
+  40:BUTTON/Src/button.c **** #define u8 uint8_t
+  41:BUTTON/Src/button.c **** #define u16 uint16_t
+  42:BUTTON/Src/button.c **** #define u32 uint32_t
+  43:BUTTON/Src/button.c **** 
+  44:BUTTON/Src/button.c **** 
+  45:BUTTON/Src/button.c **** int temp_state = 0;//存储读取前按键状态的Buffer
+  46:BUTTON/Src/button.c **** int A_state[4][4] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+  47:BUTTON/Src/button.c **** int B_state[4][4] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+  48:BUTTON/Src/button.c **** 
+  49:BUTTON/Src/button.c **** //PID控制
+  50:BUTTON/Src/button.c **** u32 pid_1[3][5] = {0}; //kp:pid_1[0]999.99~0.01, ki:pid_1[1]99.999~0.001, kd:pid_1[2]9.9999~0.0001
+  51:BUTTON/Src/button.c **** u32 pid_2[3][5] = {0};
+  52:BUTTON/Src/button.c **** u32 pid_3[3][5] = {0};
+  53:BUTTON/Src/button.c **** u32 pid_4[3][5] = {0};
+  54:BUTTON/Src/button.c **** u32 pid_5[3][5] = {0};
+  55:BUTTON/Src/button.c **** u32 pid_6[3][5] = {0};
+  56:BUTTON/Src/button.c **** 
+  57:BUTTON/Src/button.c **** u8 ctrl_pid[6] = {0};
+  58:BUTTON/Src/button.c **** u8 ctrl_num[6] = {0};
+  59:BUTTON/Src/button.c **** u32 ctrl_display = 3;
+  60:BUTTON/Src/button.c **** u32 mode_select = 2;    //0:Single 1:Double 2:单环 3:PR控制
+  61:BUTTON/Src/button.c **** u32 current_num_select = 0; //0~5:检测
+  62:BUTTON/Src/button.c **** u32 current_num[5] = {2,0,0,0,0};
+  63:BUTTON/Src/button.c **** u32 rato_num_select = 0; //0~3:检测
+  64:BUTTON/Src/button.c **** u32 rato_num[3] = {1,0,0};
+  65:BUTTON/Src/button.c **** u32 chip_select = 0; //0: Chip A, 1: Chip B
+  66:BUTTON/Src/button.c **** u32 chip_b_mode = 0; //0: RL, 1: Network
+  67:BUTTON/Src/button.c **** 
+  68:BUTTON/Src/button.c **** float kp_1 = 0;
+  69:BUTTON/Src/button.c **** float ki_1 = 0;
+  70:BUTTON/Src/button.c **** float kd_1 = 0;
+  71:BUTTON/Src/button.c **** 
+  72:BUTTON/Src/button.c **** float kp_2 = 0;
+  73:BUTTON/Src/button.c **** float ki_2 = 0;
+  74:BUTTON/Src/button.c **** float kd_2 = 0;
+  75:BUTTON/Src/button.c **** 
+  76:BUTTON/Src/button.c **** float kp_3 = 0;
+  77:BUTTON/Src/button.c **** float ki_3 = 0;
+  78:BUTTON/Src/button.c **** float kd_3 = 0;
+  79:BUTTON/Src/button.c **** 
+  80:BUTTON/Src/button.c **** float kp_4 = 0;
+  81:BUTTON/Src/button.c **** float ki_4 = 0;
+  82:BUTTON/Src/button.c **** float kd_4 = 0;
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 3
+
+
+  83:BUTTON/Src/button.c **** 
+  84:BUTTON/Src/button.c **** void PID_CONVERT(int pid[3][5], float *kp, float *ki, float *kd)
+  85:BUTTON/Src/button.c **** {
+  34              		.loc 1 85 1 view -0
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 0
+  37              		@ frame_needed = 0, uses_anonymous_args = 0
+  38              		.loc 1 85 1 is_stmt 0 view .LVU1
+  39 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+  40              	.LCFI0:
+  41              		.cfi_def_cfa_offset 32
+  42              		.cfi_offset 4, -32
+  43              		.cfi_offset 5, -28
+  44              		.cfi_offset 6, -24
+  45              		.cfi_offset 7, -20
+  46              		.cfi_offset 8, -16
+  47              		.cfi_offset 9, -12
+  48              		.cfi_offset 10, -8
+  49              		.cfi_offset 14, -4
+  50 0004 0446     		mov	r4, r0
+  51 0006 0F46     		mov	r7, r1
+  52 0008 1646     		mov	r6, r2
+  53 000a 1D46     		mov	r5, r3
+  86:BUTTON/Src/button.c ****     *kp = pid[0][0]*100+pid[0][1]*10+pid[0][2]+pid[0][3]*0.1+pid[0][4]*0.01;
+  54              		.loc 1 86 5 is_stmt 1 view .LVU2
+  55              		.loc 1 86 17 is_stmt 0 view .LVU3
+  56 000c 0268     		ldr	r2, [r0]
+  57              	.LVL1:
+  58              		.loc 1 86 31 view .LVU4
+  59 000e 4368     		ldr	r3, [r0, #4]
+  60              	.LVL2:
+  61              		.loc 1 86 34 view .LVU5
+  62 0010 03EB830A 		add	r10, r3, r3, lsl #2
+  63 0014 4FEA4A0A 		lsl	r10, r10, #1
+  64              		.loc 1 86 24 view .LVU6
+  65 0018 6423     		movs	r3, #100
+  66 001a 03FB02AA 		mla	r10, r3, r2, r10
+  67              		.loc 1 86 44 view .LVU7
+  68 001e 8368     		ldr	r3, [r0, #8]
+  69              		.loc 1 86 37 view .LVU8
+  70 0020 9A44     		add	r10, r10, r3
+  71              		.loc 1 86 57 view .LVU9
+  72 0022 C068     		ldr	r0, [r0, #12]
+  73              	.LVL3:
+  74              		.loc 1 86 57 view .LVU10
+  75 0024 FFF7FEFF 		bl	__aeabi_i2d
+  76              	.LVL4:
+  77              		.loc 1 86 57 view .LVU11
+  78 0028 51A3     		adr	r3, .L3
+  79 002a D3E90023 		ldrd	r2, [r3]
+  80 002e FFF7FEFF 		bl	__aeabi_dmul
+  81              	.LVL5:
+  82 0032 8046     		mov	r8, r0
+  83 0034 8946     		mov	r9, r1
+  84              		.loc 1 86 47 view .LVU12
+  85 0036 5046     		mov	r0, r10
+  86 0038 FFF7FEFF 		bl	__aeabi_i2d
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 4
+
+
+  87              	.LVL6:
+  88 003c 4246     		mov	r2, r8
+  89 003e 4B46     		mov	r3, r9
+  90 0040 FFF7FEFF 		bl	__aeabi_dadd
+  91              	.LVL7:
+  92 0044 8046     		mov	r8, r0
+  93 0046 8946     		mov	r9, r1
+  94              		.loc 1 86 71 view .LVU13
+  95 0048 2069     		ldr	r0, [r4, #16]
+  96 004a FFF7FEFF 		bl	__aeabi_i2d
+  97              	.LVL8:
+  98 004e 4AA3     		adr	r3, .L3+8
+  99 0050 D3E90023 		ldrd	r2, [r3]
+ 100 0054 FFF7FEFF 		bl	__aeabi_dmul
+ 101              	.LVL9:
+ 102 0058 0246     		mov	r2, r0
+ 103 005a 0B46     		mov	r3, r1
+ 104              		.loc 1 86 61 view .LVU14
+ 105 005c 4046     		mov	r0, r8
+ 106 005e 4946     		mov	r1, r9
+ 107 0060 FFF7FEFF 		bl	__aeabi_dadd
+ 108              	.LVL10:
+ 109 0064 FFF7FEFF 		bl	__aeabi_d2f
+ 110              	.LVL11:
+ 111              		.loc 1 86 9 view .LVU15
+ 112 0068 3860     		str	r0, [r7]	@ float
+  87:BUTTON/Src/button.c ****     *ki = pid[1][0]*10+pid[1][1]+pid[1][2]*0.1+pid[1][3]*0.01+pid[1][4]*0.001;
+ 113              		.loc 1 87 5 is_stmt 1 view .LVU16
+ 114              		.loc 1 87 17 is_stmt 0 view .LVU17
+ 115 006a 6069     		ldr	r0, [r4, #20]
+ 116              		.loc 1 87 20 view .LVU18
+ 117 006c 00EB8000 		add	r0, r0, r0, lsl #2
+ 118              		.loc 1 87 30 view .LVU19
+ 119 0070 A769     		ldr	r7, [r4, #24]
+ 120              	.LVL12:
+ 121              		.loc 1 87 23 view .LVU20
+ 122 0072 07EB4007 		add	r7, r7, r0, lsl #1
+ 123              		.loc 1 87 43 view .LVU21
+ 124 0076 E069     		ldr	r0, [r4, #28]
+ 125 0078 FFF7FEFF 		bl	__aeabi_i2d
+ 126              	.LVL13:
+ 127 007c 3CA3     		adr	r3, .L3
+ 128 007e D3E90023 		ldrd	r2, [r3]
+ 129 0082 FFF7FEFF 		bl	__aeabi_dmul
+ 130              	.LVL14:
+ 131 0086 8046     		mov	r8, r0
+ 132 0088 8946     		mov	r9, r1
+ 133              		.loc 1 87 33 view .LVU22
+ 134 008a 3846     		mov	r0, r7
+ 135 008c FFF7FEFF 		bl	__aeabi_i2d
+ 136              	.LVL15:
+ 137 0090 4246     		mov	r2, r8
+ 138 0092 4B46     		mov	r3, r9
+ 139 0094 FFF7FEFF 		bl	__aeabi_dadd
+ 140              	.LVL16:
+ 141 0098 8046     		mov	r8, r0
+ 142 009a 8946     		mov	r9, r1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 5
+
+
+ 143              		.loc 1 87 57 view .LVU23
+ 144 009c 206A     		ldr	r0, [r4, #32]
+ 145 009e FFF7FEFF 		bl	__aeabi_i2d
+ 146              	.LVL17:
+ 147 00a2 35A3     		adr	r3, .L3+8
+ 148 00a4 D3E90023 		ldrd	r2, [r3]
+ 149 00a8 FFF7FEFF 		bl	__aeabi_dmul
+ 150              	.LVL18:
+ 151 00ac 0246     		mov	r2, r0
+ 152 00ae 0B46     		mov	r3, r1
+ 153              		.loc 1 87 47 view .LVU24
+ 154 00b0 4046     		mov	r0, r8
+ 155 00b2 4946     		mov	r1, r9
+ 156 00b4 FFF7FEFF 		bl	__aeabi_dadd
+ 157              	.LVL19:
+ 158 00b8 8046     		mov	r8, r0
+ 159 00ba 8946     		mov	r9, r1
+ 160              		.loc 1 87 72 view .LVU25
+ 161 00bc 606A     		ldr	r0, [r4, #36]
+ 162 00be FFF7FEFF 		bl	__aeabi_i2d
+ 163              	.LVL20:
+ 164 00c2 2FA3     		adr	r3, .L3+16
+ 165 00c4 D3E90023 		ldrd	r2, [r3]
+ 166 00c8 FFF7FEFF 		bl	__aeabi_dmul
+ 167              	.LVL21:
+ 168 00cc 0246     		mov	r2, r0
+ 169 00ce 0B46     		mov	r3, r1
+ 170              		.loc 1 87 62 view .LVU26
+ 171 00d0 4046     		mov	r0, r8
+ 172 00d2 4946     		mov	r1, r9
+ 173 00d4 FFF7FEFF 		bl	__aeabi_dadd
+ 174              	.LVL22:
+ 175 00d8 FFF7FEFF 		bl	__aeabi_d2f
+ 176              	.LVL23:
+ 177              		.loc 1 87 9 view .LVU27
+ 178 00dc 3060     		str	r0, [r6]	@ float
+  88:BUTTON/Src/button.c ****     *kd = pid[2][0]+pid[2][1]*0.1+pid[2][2]*0.01+pid[2][3]*0.001+pid[2][4]*0.0001;
+ 179              		.loc 1 88 5 is_stmt 1 view .LVU28
+ 180              		.loc 1 88 17 is_stmt 0 view .LVU29
+ 181 00de D4F82880 		ldr	r8, [r4, #40]
+ 182              		.loc 1 88 30 view .LVU30
+ 183 00e2 E06A     		ldr	r0, [r4, #44]
+ 184 00e4 FFF7FEFF 		bl	__aeabi_i2d
+ 185              	.LVL24:
+ 186 00e8 21A3     		adr	r3, .L3
+ 187 00ea D3E90023 		ldrd	r2, [r3]
+ 188 00ee FFF7FEFF 		bl	__aeabi_dmul
+ 189              	.LVL25:
+ 190 00f2 0646     		mov	r6, r0
+ 191              	.LVL26:
+ 192              		.loc 1 88 30 view .LVU31
+ 193 00f4 0F46     		mov	r7, r1
+ 194              		.loc 1 88 20 view .LVU32
+ 195 00f6 4046     		mov	r0, r8
+ 196 00f8 FFF7FEFF 		bl	__aeabi_i2d
+ 197              	.LVL27:
+ 198 00fc 3246     		mov	r2, r6
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 6
+
+
+ 199 00fe 3B46     		mov	r3, r7
+ 200 0100 FFF7FEFF 		bl	__aeabi_dadd
+ 201              	.LVL28:
+ 202 0104 0646     		mov	r6, r0
+ 203 0106 0F46     		mov	r7, r1
+ 204              		.loc 1 88 44 view .LVU33
+ 205 0108 206B     		ldr	r0, [r4, #48]
+ 206 010a FFF7FEFF 		bl	__aeabi_i2d
+ 207              	.LVL29:
+ 208 010e 1AA3     		adr	r3, .L3+8
+ 209 0110 D3E90023 		ldrd	r2, [r3]
+ 210 0114 FFF7FEFF 		bl	__aeabi_dmul
+ 211              	.LVL30:
+ 212 0118 0246     		mov	r2, r0
+ 213 011a 0B46     		mov	r3, r1
+ 214              		.loc 1 88 34 view .LVU34
+ 215 011c 3046     		mov	r0, r6
+ 216 011e 3946     		mov	r1, r7
+ 217 0120 FFF7FEFF 		bl	__aeabi_dadd
+ 218              	.LVL31:
+ 219 0124 0646     		mov	r6, r0
+ 220 0126 0F46     		mov	r7, r1
+ 221              		.loc 1 88 59 view .LVU35
+ 222 0128 606B     		ldr	r0, [r4, #52]
+ 223 012a FFF7FEFF 		bl	__aeabi_i2d
+ 224              	.LVL32:
+ 225 012e 14A3     		adr	r3, .L3+16
+ 226 0130 D3E90023 		ldrd	r2, [r3]
+ 227 0134 FFF7FEFF 		bl	__aeabi_dmul
+ 228              	.LVL33:
+ 229 0138 0246     		mov	r2, r0
+ 230 013a 0B46     		mov	r3, r1
+ 231              		.loc 1 88 49 view .LVU36
+ 232 013c 3046     		mov	r0, r6
+ 233 013e 3946     		mov	r1, r7
+ 234 0140 FFF7FEFF 		bl	__aeabi_dadd
+ 235              	.LVL34:
+ 236 0144 0646     		mov	r6, r0
+ 237 0146 0F46     		mov	r7, r1
+ 238              		.loc 1 88 75 view .LVU37
+ 239 0148 A06B     		ldr	r0, [r4, #56]
+ 240 014a FFF7FEFF 		bl	__aeabi_i2d
+ 241              	.LVL35:
+ 242 014e 0EA3     		adr	r3, .L3+24
+ 243 0150 D3E90023 		ldrd	r2, [r3]
+ 244 0154 FFF7FEFF 		bl	__aeabi_dmul
+ 245              	.LVL36:
+ 246 0158 0246     		mov	r2, r0
+ 247 015a 0B46     		mov	r3, r1
+ 248              		.loc 1 88 65 view .LVU38
+ 249 015c 3046     		mov	r0, r6
+ 250 015e 3946     		mov	r1, r7
+ 251 0160 FFF7FEFF 		bl	__aeabi_dadd
+ 252              	.LVL37:
+ 253 0164 FFF7FEFF 		bl	__aeabi_d2f
+ 254              	.LVL38:
+ 255              		.loc 1 88 9 view .LVU39
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 7
+
+
+ 256 0168 2860     		str	r0, [r5]	@ float
+  89:BUTTON/Src/button.c **** }
+ 257              		.loc 1 89 1 view .LVU40
+ 258 016a BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 259              	.LVL39:
+ 260              	.L4:
+ 261              		.loc 1 89 1 view .LVU41
+ 262 016e 00BF     		.align	3
+ 263              	.L3:
+ 264 0170 9A999999 		.word	-1717986918
+ 265 0174 9999B93F 		.word	1069128089
+ 266 0178 7B14AE47 		.word	1202590843
+ 267 017c E17A843F 		.word	1065646817
+ 268 0180 FCA9F1D2 		.word	-755914244
+ 269 0184 4D62503F 		.word	1062232653
+ 270 0188 2D431CEB 		.word	-350469331
+ 271 018c E2361A3F 		.word	1058682594
+ 272              		.cfi_endproc
+ 273              	.LFE239:
+ 275              		.section	.text.AR1_AC1,"ax",%progbits
+ 276              		.align	1
+ 277              		.global	AR1_AC1
+ 278              		.syntax unified
+ 279              		.thumb
+ 280              		.thumb_func
+ 282              	AR1_AC1:
+ 283              	.LFB240:
+  90:BUTTON/Src/button.c **** 
+  91:BUTTON/Src/button.c **** 
+  92:BUTTON/Src/button.c **** 
+  93:BUTTON/Src/button.c **** 
+  94:BUTTON/Src/button.c **** //按键按下后触发的回调函数
+  95:BUTTON/Src/button.c **** 
+  96:BUTTON/Src/button.c ****     //AR1
+  97:BUTTON/Src/button.c ****     void AR1_AC1(void)
+  98:BUTTON/Src/button.c ****     {
+ 284              		.loc 1 98 5 is_stmt 1 view -0
+ 285              		.cfi_startproc
+ 286              		@ args = 0, pretend = 0, frame = 0
+ 287              		@ frame_needed = 0, uses_anonymous_args = 0
+ 288              		@ link register save eliminated.
+  99:BUTTON/Src/button.c ****         if(ctrl_pid[ctrl_display]!=0) ctrl_pid[ctrl_display]--;        
+ 289              		.loc 1 99 9 view .LVU43
+ 290              		.loc 1 99 20 is_stmt 0 view .LVU44
+ 291 0000 044B     		ldr	r3, .L7
+ 292 0002 1A68     		ldr	r2, [r3]
+ 293 0004 044B     		ldr	r3, .L7+4
+ 294 0006 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 295              		.loc 1 99 11 view .LVU45
+ 296 0008 13B1     		cbz	r3, .L5
+ 297              		.loc 1 99 39 is_stmt 1 discriminator 1 view .LVU46
+ 298              		.loc 1 99 61 is_stmt 0 discriminator 1 view .LVU47
+ 299 000a 013B     		subs	r3, r3, #1
+ 300 000c 0249     		ldr	r1, .L7+4
+ 301 000e 8B54     		strb	r3, [r1, r2]
+ 302              	.L5:
+ 100:BUTTON/Src/button.c ****     }
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 8
+
+
+ 303              		.loc 1 100 5 view .LVU48
+ 304 0010 7047     		bx	lr
+ 305              	.L8:
+ 306 0012 00BF     		.align	2
+ 307              	.L7:
+ 308 0014 00000000 		.word	ctrl_display
+ 309 0018 00000000 		.word	ctrl_pid
+ 310              		.cfi_endproc
+ 311              	.LFE240:
+ 313              		.section	.text.AR1_AC2,"ax",%progbits
+ 314              		.align	1
+ 315              		.global	AR1_AC2
+ 316              		.syntax unified
+ 317              		.thumb
+ 318              		.thumb_func
+ 320              	AR1_AC2:
+ 321              	.LFB241:
+ 101:BUTTON/Src/button.c **** 
+ 102:BUTTON/Src/button.c ****     void AR1_AC2(void)
+ 103:BUTTON/Src/button.c ****     {
+ 322              		.loc 1 103 5 is_stmt 1 view -0
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 0
+ 325              		@ frame_needed = 0, uses_anonymous_args = 0
+ 326              		@ link register save eliminated.
+ 104:BUTTON/Src/button.c ****         if(ctrl_num[ctrl_display]!=5) ctrl_num[ctrl_display]++;         
+ 327              		.loc 1 104 9 view .LVU50
+ 328              		.loc 1 104 20 is_stmt 0 view .LVU51
+ 329 0000 044B     		ldr	r3, .L11
+ 330 0002 1A68     		ldr	r2, [r3]
+ 331 0004 044B     		ldr	r3, .L11+4
+ 332 0006 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 333              		.loc 1 104 11 view .LVU52
+ 334 0008 052B     		cmp	r3, #5
+ 335 000a 02D0     		beq	.L9
+ 336              		.loc 1 104 39 is_stmt 1 discriminator 1 view .LVU53
+ 337              		.loc 1 104 61 is_stmt 0 discriminator 1 view .LVU54
+ 338 000c 0133     		adds	r3, r3, #1
+ 339 000e 0249     		ldr	r1, .L11+4
+ 340 0010 8B54     		strb	r3, [r1, r2]
+ 341              	.L9:
+ 105:BUTTON/Src/button.c ****     }
+ 342              		.loc 1 105 5 view .LVU55
+ 343 0012 7047     		bx	lr
+ 344              	.L12:
+ 345              		.align	2
+ 346              	.L11:
+ 347 0014 00000000 		.word	ctrl_display
+ 348 0018 00000000 		.word	ctrl_num
+ 349              		.cfi_endproc
+ 350              	.LFE241:
+ 352              		.section	.text.AR1_AC3,"ax",%progbits
+ 353              		.align	1
+ 354              		.global	AR1_AC3
+ 355              		.syntax unified
+ 356              		.thumb
+ 357              		.thumb_func
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 9
+
+
+ 359              	AR1_AC3:
+ 360              	.LFB242:
+ 106:BUTTON/Src/button.c **** 
+ 107:BUTTON/Src/button.c ****     void AR1_AC3(void)
+ 108:BUTTON/Src/button.c ****     {
+ 361              		.loc 1 108 5 is_stmt 1 view -0
+ 362              		.cfi_startproc
+ 363              		@ args = 0, pretend = 0, frame = 0
+ 364              		@ frame_needed = 0, uses_anonymous_args = 0
+ 365              		@ link register save eliminated.
+ 109:BUTTON/Src/button.c ****         switch (ctrl_display)
+ 366              		.loc 1 109 9 view .LVU57
+ 367 0000 3D4B     		ldr	r3, .L23
+ 368 0002 1B68     		ldr	r3, [r3]
+ 369 0004 052B     		cmp	r3, #5
+ 370 0006 75D8     		bhi	.L13
+ 371 0008 DFE803F0 		tbb	[pc, r3]
+ 372              	.L16:
+ 373 000c 03       		.byte	(.L21-.L16)/2
+ 374 000d 16       		.byte	(.L20-.L16)/2
+ 375 000e 29       		.byte	(.L19-.L16)/2
+ 376 000f 3C       		.byte	(.L18-.L16)/2
+ 377 0010 4F       		.byte	(.L17-.L16)/2
+ 378 0011 62       		.byte	(.L15-.L16)/2
+ 379              		.p2align 1
+ 380              	.L21:
+ 110:BUTTON/Src/button.c ****         {
+ 111:BUTTON/Src/button.c ****         case 0:
+ 112:BUTTON/Src/button.c ****             if(pid_1[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_1[ctrl_pid[ctrl_displa
+ 381              		.loc 1 112 13 view .LVU58
+ 382              		.loc 1 112 30 is_stmt 0 view .LVU59
+ 383 0012 3A4A     		ldr	r2, .L23+4
+ 384 0014 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 385              		.loc 1 112 54 view .LVU60
+ 386 0016 3A49     		ldr	r1, .L23+8
+ 387 0018 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 388              		.loc 1 112 45 view .LVU61
+ 389 001a 02EB8203 		add	r3, r2, r2, lsl #2
+ 390 001e 0B44     		add	r3, r3, r1
+ 391 0020 3848     		ldr	r0, .L23+12
+ 392 0022 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 393              		.loc 1 112 15 view .LVU62
+ 394 0026 092B     		cmp	r3, #9
+ 395 0028 64D0     		beq	.L13
+ 396              		.loc 1 112 74 is_stmt 1 discriminator 1 view .LVU63
+ 397              		.loc 1 112 127 is_stmt 0 discriminator 1 view .LVU64
+ 398 002a 02EB8202 		add	r2, r2, r2, lsl #2
+ 399 002e 0A44     		add	r2, r2, r1
+ 400 0030 0133     		adds	r3, r3, #1
+ 401 0032 40F82230 		str	r3, [r0, r2, lsl #2]
+ 402 0036 7047     		bx	lr
+ 403              	.L20:
+ 113:BUTTON/Src/button.c ****             break;
+ 114:BUTTON/Src/button.c ****         case 1:
+ 115:BUTTON/Src/button.c ****             if(pid_2[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_2[ctrl_pid[ctrl_displa
+ 404              		.loc 1 115 13 is_stmt 1 view .LVU65
+ 405              		.loc 1 115 30 is_stmt 0 view .LVU66
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 10
+
+
+ 406 0038 304A     		ldr	r2, .L23+4
+ 407 003a D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 408              		.loc 1 115 54 view .LVU67
+ 409 003c 3049     		ldr	r1, .L23+8
+ 410 003e C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 411              		.loc 1 115 45 view .LVU68
+ 412 0040 02EB8203 		add	r3, r2, r2, lsl #2
+ 413 0044 0B44     		add	r3, r3, r1
+ 414 0046 3048     		ldr	r0, .L23+16
+ 415 0048 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 416              		.loc 1 115 15 view .LVU69
+ 417 004c 092B     		cmp	r3, #9
+ 418 004e 51D0     		beq	.L13
+ 419              		.loc 1 115 74 is_stmt 1 discriminator 1 view .LVU70
+ 420              		.loc 1 115 127 is_stmt 0 discriminator 1 view .LVU71
+ 421 0050 02EB8202 		add	r2, r2, r2, lsl #2
+ 422 0054 0A44     		add	r2, r2, r1
+ 423 0056 0133     		adds	r3, r3, #1
+ 424 0058 40F82230 		str	r3, [r0, r2, lsl #2]
+ 425 005c 7047     		bx	lr
+ 426              	.L19:
+ 116:BUTTON/Src/button.c ****             break;
+ 117:BUTTON/Src/button.c ****         case 2:
+ 118:BUTTON/Src/button.c ****             if(pid_3[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_3[ctrl_pid[ctrl_displa
+ 427              		.loc 1 118 13 is_stmt 1 view .LVU72
+ 428              		.loc 1 118 30 is_stmt 0 view .LVU73
+ 429 005e 274A     		ldr	r2, .L23+4
+ 430 0060 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 431              		.loc 1 118 54 view .LVU74
+ 432 0062 2749     		ldr	r1, .L23+8
+ 433 0064 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 434              		.loc 1 118 45 view .LVU75
+ 435 0066 02EB8203 		add	r3, r2, r2, lsl #2
+ 436 006a 0B44     		add	r3, r3, r1
+ 437 006c 2748     		ldr	r0, .L23+20
+ 438 006e 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 439              		.loc 1 118 15 view .LVU76
+ 440 0072 092B     		cmp	r3, #9
+ 441 0074 3ED0     		beq	.L13
+ 442              		.loc 1 118 74 is_stmt 1 discriminator 1 view .LVU77
+ 443              		.loc 1 118 127 is_stmt 0 discriminator 1 view .LVU78
+ 444 0076 02EB8202 		add	r2, r2, r2, lsl #2
+ 445 007a 0A44     		add	r2, r2, r1
+ 446 007c 0133     		adds	r3, r3, #1
+ 447 007e 40F82230 		str	r3, [r0, r2, lsl #2]
+ 448 0082 7047     		bx	lr
+ 449              	.L18:
+ 119:BUTTON/Src/button.c ****             break;
+ 120:BUTTON/Src/button.c ****         case 3:
+ 121:BUTTON/Src/button.c ****             if(pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_4[ctrl_pid[ctrl_displa
+ 450              		.loc 1 121 13 is_stmt 1 view .LVU79
+ 451              		.loc 1 121 30 is_stmt 0 view .LVU80
+ 452 0084 1D4A     		ldr	r2, .L23+4
+ 453 0086 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 454              		.loc 1 121 54 view .LVU81
+ 455 0088 1D49     		ldr	r1, .L23+8
+ 456 008a C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 11
+
+
+ 457              		.loc 1 121 45 view .LVU82
+ 458 008c 02EB8203 		add	r3, r2, r2, lsl #2
+ 459 0090 0B44     		add	r3, r3, r1
+ 460 0092 1F48     		ldr	r0, .L23+24
+ 461 0094 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 462              		.loc 1 121 15 view .LVU83
+ 463 0098 092B     		cmp	r3, #9
+ 464 009a 2BD0     		beq	.L13
+ 465              		.loc 1 121 74 is_stmt 1 discriminator 1 view .LVU84
+ 466              		.loc 1 121 127 is_stmt 0 discriminator 1 view .LVU85
+ 467 009c 02EB8202 		add	r2, r2, r2, lsl #2
+ 468 00a0 0A44     		add	r2, r2, r1
+ 469 00a2 0133     		adds	r3, r3, #1
+ 470 00a4 40F82230 		str	r3, [r0, r2, lsl #2]
+ 471 00a8 7047     		bx	lr
+ 472              	.L17:
+ 122:BUTTON/Src/button.c ****             break;
+ 123:BUTTON/Src/button.c ****         case 4:
+ 124:BUTTON/Src/button.c ****             if(pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_5[ctrl_pid[ctrl_displa
+ 473              		.loc 1 124 13 is_stmt 1 view .LVU86
+ 474              		.loc 1 124 30 is_stmt 0 view .LVU87
+ 475 00aa 144A     		ldr	r2, .L23+4
+ 476 00ac D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 477              		.loc 1 124 54 view .LVU88
+ 478 00ae 1449     		ldr	r1, .L23+8
+ 479 00b0 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 480              		.loc 1 124 45 view .LVU89
+ 481 00b2 02EB8203 		add	r3, r2, r2, lsl #2
+ 482 00b6 0B44     		add	r3, r3, r1
+ 483 00b8 1648     		ldr	r0, .L23+28
+ 484 00ba 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 485              		.loc 1 124 15 view .LVU90
+ 486 00be 092B     		cmp	r3, #9
+ 487 00c0 18D0     		beq	.L13
+ 488              		.loc 1 124 74 is_stmt 1 discriminator 1 view .LVU91
+ 489              		.loc 1 124 127 is_stmt 0 discriminator 1 view .LVU92
+ 490 00c2 02EB8202 		add	r2, r2, r2, lsl #2
+ 491 00c6 0A44     		add	r2, r2, r1
+ 492 00c8 0133     		adds	r3, r3, #1
+ 493 00ca 40F82230 		str	r3, [r0, r2, lsl #2]
+ 494 00ce 7047     		bx	lr
+ 495              	.L15:
+ 125:BUTTON/Src/button.c ****             break;
+ 126:BUTTON/Src/button.c ****         case 5:
+ 127:BUTTON/Src/button.c ****             if(pid_6[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=9) pid_6[ctrl_pid[ctrl_displa
+ 496              		.loc 1 127 13 is_stmt 1 view .LVU93
+ 497              		.loc 1 127 30 is_stmt 0 view .LVU94
+ 498 00d0 0A4A     		ldr	r2, .L23+4
+ 499 00d2 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 500              		.loc 1 127 54 view .LVU95
+ 501 00d4 0A49     		ldr	r1, .L23+8
+ 502 00d6 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 503              		.loc 1 127 45 view .LVU96
+ 504 00d8 02EB8203 		add	r3, r2, r2, lsl #2
+ 505 00dc 0B44     		add	r3, r3, r1
+ 506 00de 0E48     		ldr	r0, .L23+32
+ 507 00e0 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 12
+
+
+ 508              		.loc 1 127 15 view .LVU97
+ 509 00e4 092B     		cmp	r3, #9
+ 510 00e6 05D0     		beq	.L13
+ 511              		.loc 1 127 74 is_stmt 1 discriminator 1 view .LVU98
+ 512              		.loc 1 127 127 is_stmt 0 discriminator 1 view .LVU99
+ 513 00e8 02EB8202 		add	r2, r2, r2, lsl #2
+ 514 00ec 0A44     		add	r2, r2, r1
+ 515 00ee 0133     		adds	r3, r3, #1
+ 516 00f0 40F82230 		str	r3, [r0, r2, lsl #2]
+ 517              	.L13:
+ 128:BUTTON/Src/button.c ****             break;
+ 129:BUTTON/Src/button.c ****         }
+ 130:BUTTON/Src/button.c ****         
+ 131:BUTTON/Src/button.c ****     }
+ 518              		.loc 1 131 5 view .LVU100
+ 519 00f4 7047     		bx	lr
+ 520              	.L24:
+ 521 00f6 00BF     		.align	2
+ 522              	.L23:
+ 523 00f8 00000000 		.word	ctrl_display
+ 524 00fc 00000000 		.word	ctrl_pid
+ 525 0100 00000000 		.word	ctrl_num
+ 526 0104 00000000 		.word	pid_1
+ 527 0108 00000000 		.word	pid_2
+ 528 010c 00000000 		.word	pid_3
+ 529 0110 00000000 		.word	pid_4
+ 530 0114 00000000 		.word	pid_5
+ 531 0118 00000000 		.word	pid_6
+ 532              		.cfi_endproc
+ 533              	.LFE242:
+ 535              		.section	.text.AR1_AC4,"ax",%progbits
+ 536              		.align	1
+ 537              		.global	AR1_AC4
+ 538              		.syntax unified
+ 539              		.thumb
+ 540              		.thumb_func
+ 542              	AR1_AC4:
+ 543              	.LFB243:
+ 132:BUTTON/Src/button.c **** 
+ 133:BUTTON/Src/button.c ****     void AR1_AC4(void)
+ 134:BUTTON/Src/button.c ****     {
+ 544              		.loc 1 134 5 is_stmt 1 view -0
+ 545              		.cfi_startproc
+ 546              		@ args = 0, pretend = 0, frame = 0
+ 547              		@ frame_needed = 0, uses_anonymous_args = 0
+ 548              		@ link register save eliminated.
+ 135:BUTTON/Src/button.c ****         if(ctrl_display!=5) ctrl_display++;         
+ 549              		.loc 1 135 9 view .LVU102
+ 550              		.loc 1 135 24 is_stmt 0 view .LVU103
+ 551 0000 034B     		ldr	r3, .L27
+ 552 0002 1B68     		ldr	r3, [r3]
+ 553              		.loc 1 135 11 view .LVU104
+ 554 0004 052B     		cmp	r3, #5
+ 555 0006 02D0     		beq	.L25
+ 556              		.loc 1 135 29 is_stmt 1 discriminator 1 view .LVU105
+ 557              		.loc 1 135 41 is_stmt 0 discriminator 1 view .LVU106
+ 558 0008 0133     		adds	r3, r3, #1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 13
+
+
+ 559 000a 014A     		ldr	r2, .L27
+ 560 000c 1360     		str	r3, [r2]
+ 561              	.L25:
+ 136:BUTTON/Src/button.c ****     }
+ 562              		.loc 1 136 5 view .LVU107
+ 563 000e 7047     		bx	lr
+ 564              	.L28:
+ 565              		.align	2
+ 566              	.L27:
+ 567 0010 00000000 		.word	ctrl_display
+ 568              		.cfi_endproc
+ 569              	.LFE243:
+ 571              		.section	.text.AR2_AC1,"ax",%progbits
+ 572              		.align	1
+ 573              		.global	AR2_AC1
+ 574              		.syntax unified
+ 575              		.thumb
+ 576              		.thumb_func
+ 578              	AR2_AC1:
+ 579              	.LFB244:
+ 137:BUTTON/Src/button.c **** 
+ 138:BUTTON/Src/button.c ****     //AR2
+ 139:BUTTON/Src/button.c ****     void AR2_AC1(void)
+ 140:BUTTON/Src/button.c ****     {
+ 580              		.loc 1 140 5 is_stmt 1 view -0
+ 581              		.cfi_startproc
+ 582              		@ args = 0, pretend = 0, frame = 0
+ 583              		@ frame_needed = 0, uses_anonymous_args = 0
+ 584              		@ link register save eliminated.
+ 141:BUTTON/Src/button.c ****         if(ctrl_pid[ctrl_display]!=2) ctrl_pid[ctrl_display]++;        
+ 585              		.loc 1 141 9 view .LVU109
+ 586              		.loc 1 141 20 is_stmt 0 view .LVU110
+ 587 0000 044B     		ldr	r3, .L31
+ 588 0002 1A68     		ldr	r2, [r3]
+ 589 0004 044B     		ldr	r3, .L31+4
+ 590 0006 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 591              		.loc 1 141 11 view .LVU111
+ 592 0008 022B     		cmp	r3, #2
+ 593 000a 02D0     		beq	.L29
+ 594              		.loc 1 141 39 is_stmt 1 discriminator 1 view .LVU112
+ 595              		.loc 1 141 61 is_stmt 0 discriminator 1 view .LVU113
+ 596 000c 0133     		adds	r3, r3, #1
+ 597 000e 0249     		ldr	r1, .L31+4
+ 598 0010 8B54     		strb	r3, [r1, r2]
+ 599              	.L29:
+ 142:BUTTON/Src/button.c ****     }
+ 600              		.loc 1 142 5 view .LVU114
+ 601 0012 7047     		bx	lr
+ 602              	.L32:
+ 603              		.align	2
+ 604              	.L31:
+ 605 0014 00000000 		.word	ctrl_display
+ 606 0018 00000000 		.word	ctrl_pid
+ 607              		.cfi_endproc
+ 608              	.LFE244:
+ 610              		.section	.text.AR2_AC2,"ax",%progbits
+ 611              		.align	1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 14
+
+
+ 612              		.global	AR2_AC2
+ 613              		.syntax unified
+ 614              		.thumb
+ 615              		.thumb_func
+ 617              	AR2_AC2:
+ 618              	.LFB245:
+ 143:BUTTON/Src/button.c **** 
+ 144:BUTTON/Src/button.c ****     void AR2_AC2(void)
+ 145:BUTTON/Src/button.c ****     {
+ 619              		.loc 1 145 5 is_stmt 1 view -0
+ 620              		.cfi_startproc
+ 621              		@ args = 0, pretend = 0, frame = 0
+ 622              		@ frame_needed = 0, uses_anonymous_args = 0
+ 623              		@ link register save eliminated.
+ 146:BUTTON/Src/button.c ****         if(ctrl_num[ctrl_display]!=0) ctrl_num[ctrl_display]--;        
+ 624              		.loc 1 146 9 view .LVU116
+ 625              		.loc 1 146 20 is_stmt 0 view .LVU117
+ 626 0000 044B     		ldr	r3, .L35
+ 627 0002 1A68     		ldr	r2, [r3]
+ 628 0004 044B     		ldr	r3, .L35+4
+ 629 0006 9B5C     		ldrb	r3, [r3, r2]	@ zero_extendqisi2
+ 630              		.loc 1 146 11 view .LVU118
+ 631 0008 13B1     		cbz	r3, .L33
+ 632              		.loc 1 146 39 is_stmt 1 discriminator 1 view .LVU119
+ 633              		.loc 1 146 61 is_stmt 0 discriminator 1 view .LVU120
+ 634 000a 013B     		subs	r3, r3, #1
+ 635 000c 0249     		ldr	r1, .L35+4
+ 636 000e 8B54     		strb	r3, [r1, r2]
+ 637              	.L33:
+ 147:BUTTON/Src/button.c ****     }
+ 638              		.loc 1 147 5 view .LVU121
+ 639 0010 7047     		bx	lr
+ 640              	.L36:
+ 641 0012 00BF     		.align	2
+ 642              	.L35:
+ 643 0014 00000000 		.word	ctrl_display
+ 644 0018 00000000 		.word	ctrl_num
+ 645              		.cfi_endproc
+ 646              	.LFE245:
+ 648              		.section	.text.AR2_AC3,"ax",%progbits
+ 649              		.align	1
+ 650              		.global	AR2_AC3
+ 651              		.syntax unified
+ 652              		.thumb
+ 653              		.thumb_func
+ 655              	AR2_AC3:
+ 656              	.LFB246:
+ 148:BUTTON/Src/button.c **** 
+ 149:BUTTON/Src/button.c ****     void AR2_AC3(void)
+ 150:BUTTON/Src/button.c ****     {
+ 657              		.loc 1 150 5 is_stmt 1 view -0
+ 658              		.cfi_startproc
+ 659              		@ args = 0, pretend = 0, frame = 0
+ 660              		@ frame_needed = 0, uses_anonymous_args = 0
+ 661              		@ link register save eliminated.
+ 151:BUTTON/Src/button.c ****         switch (ctrl_display)
+ 662              		.loc 1 151 9 view .LVU123
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 15
+
+
+ 663 0000 3B4B     		ldr	r3, .L47
+ 664 0002 1B68     		ldr	r3, [r3]
+ 665 0004 052B     		cmp	r3, #5
+ 666 0006 72D8     		bhi	.L37
+ 667 0008 DFE803F0 		tbb	[pc, r3]
+ 668              	.L40:
+ 669 000c 03       		.byte	(.L45-.L40)/2
+ 670 000d 16       		.byte	(.L44-.L40)/2
+ 671 000e 29       		.byte	(.L43-.L40)/2
+ 672 000f 3C       		.byte	(.L42-.L40)/2
+ 673 0010 4E       		.byte	(.L41-.L40)/2
+ 674 0011 60       		.byte	(.L39-.L40)/2
+ 675              		.p2align 1
+ 676              	.L45:
+ 152:BUTTON/Src/button.c ****         {
+ 153:BUTTON/Src/button.c ****         case 0:
+ 154:BUTTON/Src/button.c ****             if(pid_1[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_1[ctrl_pid[ctrl_displa
+ 677              		.loc 1 154 13 view .LVU124
+ 678              		.loc 1 154 30 is_stmt 0 view .LVU125
+ 679 0012 384A     		ldr	r2, .L47+4
+ 680 0014 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 681              		.loc 1 154 54 view .LVU126
+ 682 0016 3849     		ldr	r1, .L47+8
+ 683 0018 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 684              		.loc 1 154 45 view .LVU127
+ 685 001a 02EB8203 		add	r3, r2, r2, lsl #2
+ 686 001e 0B44     		add	r3, r3, r1
+ 687 0020 3648     		ldr	r0, .L47+12
+ 688 0022 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 689              		.loc 1 154 15 view .LVU128
+ 690 0026 002B     		cmp	r3, #0
+ 691 0028 61D0     		beq	.L37
+ 692              		.loc 1 154 74 is_stmt 1 discriminator 1 view .LVU129
+ 693              		.loc 1 154 127 is_stmt 0 discriminator 1 view .LVU130
+ 694 002a 02EB8202 		add	r2, r2, r2, lsl #2
+ 695 002e 0A44     		add	r2, r2, r1
+ 696 0030 013B     		subs	r3, r3, #1
+ 697 0032 40F82230 		str	r3, [r0, r2, lsl #2]
+ 698 0036 7047     		bx	lr
+ 699              	.L44:
+ 155:BUTTON/Src/button.c ****             break;
+ 156:BUTTON/Src/button.c ****         case 1:
+ 157:BUTTON/Src/button.c ****             if(pid_2[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_2[ctrl_pid[ctrl_displa
+ 700              		.loc 1 157 13 is_stmt 1 view .LVU131
+ 701              		.loc 1 157 30 is_stmt 0 view .LVU132
+ 702 0038 2E4A     		ldr	r2, .L47+4
+ 703 003a D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 704              		.loc 1 157 54 view .LVU133
+ 705 003c 2E49     		ldr	r1, .L47+8
+ 706 003e C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 707              		.loc 1 157 45 view .LVU134
+ 708 0040 02EB8203 		add	r3, r2, r2, lsl #2
+ 709 0044 0B44     		add	r3, r3, r1
+ 710 0046 2E48     		ldr	r0, .L47+16
+ 711 0048 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 712              		.loc 1 157 15 view .LVU135
+ 713 004c 002B     		cmp	r3, #0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 16
+
+
+ 714 004e 4ED0     		beq	.L37
+ 715              		.loc 1 157 74 is_stmt 1 discriminator 1 view .LVU136
+ 716              		.loc 1 157 127 is_stmt 0 discriminator 1 view .LVU137
+ 717 0050 02EB8202 		add	r2, r2, r2, lsl #2
+ 718 0054 0A44     		add	r2, r2, r1
+ 719 0056 013B     		subs	r3, r3, #1
+ 720 0058 40F82230 		str	r3, [r0, r2, lsl #2]
+ 721 005c 7047     		bx	lr
+ 722              	.L43:
+ 158:BUTTON/Src/button.c ****             break;
+ 159:BUTTON/Src/button.c ****         case 2:
+ 160:BUTTON/Src/button.c ****             if(pid_3[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_3[ctrl_pid[ctrl_displa
+ 723              		.loc 1 160 13 is_stmt 1 view .LVU138
+ 724              		.loc 1 160 30 is_stmt 0 view .LVU139
+ 725 005e 254A     		ldr	r2, .L47+4
+ 726 0060 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 727              		.loc 1 160 54 view .LVU140
+ 728 0062 2549     		ldr	r1, .L47+8
+ 729 0064 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 730              		.loc 1 160 45 view .LVU141
+ 731 0066 02EB8203 		add	r3, r2, r2, lsl #2
+ 732 006a 0B44     		add	r3, r3, r1
+ 733 006c 2548     		ldr	r0, .L47+20
+ 734 006e 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 735              		.loc 1 160 15 view .LVU142
+ 736 0072 002B     		cmp	r3, #0
+ 737 0074 3BD0     		beq	.L37
+ 738              		.loc 1 160 74 is_stmt 1 discriminator 1 view .LVU143
+ 739              		.loc 1 160 127 is_stmt 0 discriminator 1 view .LVU144
+ 740 0076 02EB8202 		add	r2, r2, r2, lsl #2
+ 741 007a 0A44     		add	r2, r2, r1
+ 742 007c 013B     		subs	r3, r3, #1
+ 743 007e 40F82230 		str	r3, [r0, r2, lsl #2]
+ 744 0082 7047     		bx	lr
+ 745              	.L42:
+ 161:BUTTON/Src/button.c ****             break;
+ 162:BUTTON/Src/button.c ****         case 3:
+ 163:BUTTON/Src/button.c ****             if(pid_4[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_4[ctrl_pid[ctrl_displa
+ 746              		.loc 1 163 13 is_stmt 1 view .LVU145
+ 747              		.loc 1 163 30 is_stmt 0 view .LVU146
+ 748 0084 1B4A     		ldr	r2, .L47+4
+ 749 0086 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 750              		.loc 1 163 54 view .LVU147
+ 751 0088 1B49     		ldr	r1, .L47+8
+ 752 008a C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 753              		.loc 1 163 45 view .LVU148
+ 754 008c 02EB8203 		add	r3, r2, r2, lsl #2
+ 755 0090 0B44     		add	r3, r3, r1
+ 756 0092 1D48     		ldr	r0, .L47+24
+ 757 0094 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 758              		.loc 1 163 15 view .LVU149
+ 759 0098 4BB3     		cbz	r3, .L37
+ 760              		.loc 1 163 74 is_stmt 1 discriminator 1 view .LVU150
+ 761              		.loc 1 163 127 is_stmt 0 discriminator 1 view .LVU151
+ 762 009a 02EB8202 		add	r2, r2, r2, lsl #2
+ 763 009e 0A44     		add	r2, r2, r1
+ 764 00a0 013B     		subs	r3, r3, #1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 17
+
+
+ 765 00a2 40F82230 		str	r3, [r0, r2, lsl #2]
+ 766 00a6 7047     		bx	lr
+ 767              	.L41:
+ 164:BUTTON/Src/button.c ****             break;
+ 165:BUTTON/Src/button.c ****         case 4:
+ 166:BUTTON/Src/button.c ****             if(pid_5[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_5[ctrl_pid[ctrl_displa
+ 768              		.loc 1 166 13 is_stmt 1 view .LVU152
+ 769              		.loc 1 166 30 is_stmt 0 view .LVU153
+ 770 00a8 124A     		ldr	r2, .L47+4
+ 771 00aa D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 772              		.loc 1 166 54 view .LVU154
+ 773 00ac 1249     		ldr	r1, .L47+8
+ 774 00ae C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 775              		.loc 1 166 45 view .LVU155
+ 776 00b0 02EB8203 		add	r3, r2, r2, lsl #2
+ 777 00b4 0B44     		add	r3, r3, r1
+ 778 00b6 1548     		ldr	r0, .L47+28
+ 779 00b8 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 780              		.loc 1 166 15 view .LVU156
+ 781 00bc BBB1     		cbz	r3, .L37
+ 782              		.loc 1 166 74 is_stmt 1 discriminator 1 view .LVU157
+ 783              		.loc 1 166 127 is_stmt 0 discriminator 1 view .LVU158
+ 784 00be 02EB8202 		add	r2, r2, r2, lsl #2
+ 785 00c2 0A44     		add	r2, r2, r1
+ 786 00c4 013B     		subs	r3, r3, #1
+ 787 00c6 40F82230 		str	r3, [r0, r2, lsl #2]
+ 788 00ca 7047     		bx	lr
+ 789              	.L39:
+ 167:BUTTON/Src/button.c ****             break;
+ 168:BUTTON/Src/button.c ****         case 5:
+ 169:BUTTON/Src/button.c ****             if(pid_6[ctrl_pid[ctrl_display]][ctrl_num[ctrl_display]]!=0) pid_6[ctrl_pid[ctrl_displa
+ 790              		.loc 1 169 13 is_stmt 1 view .LVU159
+ 791              		.loc 1 169 30 is_stmt 0 view .LVU160
+ 792 00cc 094A     		ldr	r2, .L47+4
+ 793 00ce D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 794              		.loc 1 169 54 view .LVU161
+ 795 00d0 0949     		ldr	r1, .L47+8
+ 796 00d2 C95C     		ldrb	r1, [r1, r3]	@ zero_extendqisi2
+ 797              		.loc 1 169 45 view .LVU162
+ 798 00d4 02EB8203 		add	r3, r2, r2, lsl #2
+ 799 00d8 0B44     		add	r3, r3, r1
+ 800 00da 0D48     		ldr	r0, .L47+32
+ 801 00dc 50F82330 		ldr	r3, [r0, r3, lsl #2]
+ 802              		.loc 1 169 15 view .LVU163
+ 803 00e0 2BB1     		cbz	r3, .L37
+ 804              		.loc 1 169 74 is_stmt 1 discriminator 1 view .LVU164
+ 805              		.loc 1 169 127 is_stmt 0 discriminator 1 view .LVU165
+ 806 00e2 02EB8202 		add	r2, r2, r2, lsl #2
+ 807 00e6 0A44     		add	r2, r2, r1
+ 808 00e8 013B     		subs	r3, r3, #1
+ 809 00ea 40F82230 		str	r3, [r0, r2, lsl #2]
+ 810              	.L37:
+ 170:BUTTON/Src/button.c ****             break;
+ 171:BUTTON/Src/button.c ****         }    
+ 172:BUTTON/Src/button.c ****     }
+ 811              		.loc 1 172 5 view .LVU166
+ 812 00ee 7047     		bx	lr
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 18
+
+
+ 813              	.L48:
+ 814              		.align	2
+ 815              	.L47:
+ 816 00f0 00000000 		.word	ctrl_display
+ 817 00f4 00000000 		.word	ctrl_pid
+ 818 00f8 00000000 		.word	ctrl_num
+ 819 00fc 00000000 		.word	pid_1
+ 820 0100 00000000 		.word	pid_2
+ 821 0104 00000000 		.word	pid_3
+ 822 0108 00000000 		.word	pid_4
+ 823 010c 00000000 		.word	pid_5
+ 824 0110 00000000 		.word	pid_6
+ 825              		.cfi_endproc
+ 826              	.LFE246:
+ 828              		.section	.text.AR2_AC4,"ax",%progbits
+ 829              		.align	1
+ 830              		.global	AR2_AC4
+ 831              		.syntax unified
+ 832              		.thumb
+ 833              		.thumb_func
+ 835              	AR2_AC4:
+ 836              	.LFB247:
+ 173:BUTTON/Src/button.c **** 
+ 174:BUTTON/Src/button.c ****     void AR2_AC4(void)
+ 175:BUTTON/Src/button.c ****     {
+ 837              		.loc 1 175 5 is_stmt 1 view -0
+ 838              		.cfi_startproc
+ 839              		@ args = 0, pretend = 0, frame = 0
+ 840              		@ frame_needed = 0, uses_anonymous_args = 0
+ 841              		@ link register save eliminated.
+ 176:BUTTON/Src/button.c ****         if(ctrl_display!=0) ctrl_display--;
+ 842              		.loc 1 176 9 view .LVU168
+ 843              		.loc 1 176 24 is_stmt 0 view .LVU169
+ 844 0000 034B     		ldr	r3, .L51
+ 845 0002 1B68     		ldr	r3, [r3]
+ 846              		.loc 1 176 11 view .LVU170
+ 847 0004 13B1     		cbz	r3, .L49
+ 848              		.loc 1 176 29 is_stmt 1 discriminator 1 view .LVU171
+ 849              		.loc 1 176 41 is_stmt 0 discriminator 1 view .LVU172
+ 850 0006 013B     		subs	r3, r3, #1
+ 851 0008 014A     		ldr	r2, .L51
+ 852 000a 1360     		str	r3, [r2]
+ 853              	.L49:
+ 177:BUTTON/Src/button.c ****        
+ 178:BUTTON/Src/button.c ****     }
+ 854              		.loc 1 178 5 view .LVU173
+ 855 000c 7047     		bx	lr
+ 856              	.L52:
+ 857 000e 00BF     		.align	2
+ 858              	.L51:
+ 859 0010 00000000 		.word	ctrl_display
+ 860              		.cfi_endproc
+ 861              	.LFE247:
+ 863              		.section	.text.AR3_AC1,"ax",%progbits
+ 864              		.align	1
+ 865              		.global	AR3_AC1
+ 866              		.syntax unified
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 19
+
+
+ 867              		.thumb
+ 868              		.thumb_func
+ 870              	AR3_AC1:
+ 871              	.LFB248:
+ 179:BUTTON/Src/button.c **** 
+ 180:BUTTON/Src/button.c ****     //AR3
+ 181:BUTTON/Src/button.c ****     void AR3_AC1(void)
+ 182:BUTTON/Src/button.c ****     {
+ 872              		.loc 1 182 5 is_stmt 1 view -0
+ 873              		.cfi_startproc
+ 874              		@ args = 0, pretend = 0, frame = 0
+ 875              		@ frame_needed = 0, uses_anonymous_args = 0
+ 876              		@ link register save eliminated.
+ 183:BUTTON/Src/button.c ****         if(mode_select!=3) mode_select++;
+ 877              		.loc 1 183 9 view .LVU175
+ 878              		.loc 1 183 23 is_stmt 0 view .LVU176
+ 879 0000 034B     		ldr	r3, .L55
+ 880 0002 1B68     		ldr	r3, [r3]
+ 881              		.loc 1 183 11 view .LVU177
+ 882 0004 032B     		cmp	r3, #3
+ 883 0006 02D0     		beq	.L53
+ 884              		.loc 1 183 28 is_stmt 1 discriminator 1 view .LVU178
+ 885              		.loc 1 183 39 is_stmt 0 discriminator 1 view .LVU179
+ 886 0008 0133     		adds	r3, r3, #1
+ 887 000a 014A     		ldr	r2, .L55
+ 888 000c 1360     		str	r3, [r2]
+ 889              	.L53:
+ 184:BUTTON/Src/button.c ****     }
+ 890              		.loc 1 184 5 view .LVU180
+ 891 000e 7047     		bx	lr
+ 892              	.L56:
+ 893              		.align	2
+ 894              	.L55:
+ 895 0010 00000000 		.word	mode_select
+ 896              		.cfi_endproc
+ 897              	.LFE248:
+ 899              		.section	.text.AR3_AC2,"ax",%progbits
+ 900              		.align	1
+ 901              		.global	AR3_AC2
+ 902              		.syntax unified
+ 903              		.thumb
+ 904              		.thumb_func
+ 906              	AR3_AC2:
+ 907              	.LFB249:
+ 185:BUTTON/Src/button.c **** 
+ 186:BUTTON/Src/button.c ****     void AR3_AC2(void)
+ 187:BUTTON/Src/button.c ****     {
+ 908              		.loc 1 187 5 is_stmt 1 view -0
+ 909              		.cfi_startproc
+ 910              		@ args = 0, pretend = 0, frame = 0
+ 911              		@ frame_needed = 0, uses_anonymous_args = 0
+ 912              		@ link register save eliminated.
+ 188:BUTTON/Src/button.c ****         if(current_num_select!=4) current_num_select++;
+ 913              		.loc 1 188 9 view .LVU182
+ 914              		.loc 1 188 30 is_stmt 0 view .LVU183
+ 915 0000 034B     		ldr	r3, .L59
+ 916 0002 1B68     		ldr	r3, [r3]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 20
+
+
+ 917              		.loc 1 188 11 view .LVU184
+ 918 0004 042B     		cmp	r3, #4
+ 919 0006 02D0     		beq	.L57
+ 920              		.loc 1 188 35 is_stmt 1 discriminator 1 view .LVU185
+ 921              		.loc 1 188 53 is_stmt 0 discriminator 1 view .LVU186
+ 922 0008 0133     		adds	r3, r3, #1
+ 923 000a 014A     		ldr	r2, .L59
+ 924 000c 1360     		str	r3, [r2]
+ 925              	.L57:
+ 189:BUTTON/Src/button.c ****                 
+ 190:BUTTON/Src/button.c ****     }
+ 926              		.loc 1 190 5 view .LVU187
+ 927 000e 7047     		bx	lr
+ 928              	.L60:
+ 929              		.align	2
+ 930              	.L59:
+ 931 0010 00000000 		.word	current_num_select
+ 932              		.cfi_endproc
+ 933              	.LFE249:
+ 935              		.section	.text.AR3_AC3,"ax",%progbits
+ 936              		.align	1
+ 937              		.global	AR3_AC3
+ 938              		.syntax unified
+ 939              		.thumb
+ 940              		.thumb_func
+ 942              	AR3_AC3:
+ 943              	.LFB250:
+ 191:BUTTON/Src/button.c **** 
+ 192:BUTTON/Src/button.c ****     void AR3_AC3(void)
+ 193:BUTTON/Src/button.c ****     {
+ 944              		.loc 1 193 5 is_stmt 1 view -0
+ 945              		.cfi_startproc
+ 946              		@ args = 0, pretend = 0, frame = 0
+ 947              		@ frame_needed = 0, uses_anonymous_args = 0
+ 948              		@ link register save eliminated.
+ 194:BUTTON/Src/button.c ****         if(current_num[current_num_select]!=9) current_num[current_num_select]++;
+ 949              		.loc 1 194 9 view .LVU189
+ 950              		.loc 1 194 23 is_stmt 0 view .LVU190
+ 951 0000 054B     		ldr	r3, .L63
+ 952 0002 1A68     		ldr	r2, [r3]
+ 953 0004 054B     		ldr	r3, .L63+4
+ 954 0006 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 955              		.loc 1 194 11 view .LVU191
+ 956 000a 092B     		cmp	r3, #9
+ 957 000c 03D0     		beq	.L61
+ 958              		.loc 1 194 48 is_stmt 1 discriminator 1 view .LVU192
+ 959              		.loc 1 194 79 is_stmt 0 discriminator 1 view .LVU193
+ 960 000e 0133     		adds	r3, r3, #1
+ 961 0010 0249     		ldr	r1, .L63+4
+ 962 0012 41F82230 		str	r3, [r1, r2, lsl #2]
+ 963              	.L61:
+ 195:BUTTON/Src/button.c ****                 
+ 196:BUTTON/Src/button.c ****     }
+ 964              		.loc 1 196 5 view .LVU194
+ 965 0016 7047     		bx	lr
+ 966              	.L64:
+ 967              		.align	2
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 21
+
+
+ 968              	.L63:
+ 969 0018 00000000 		.word	current_num_select
+ 970 001c 00000000 		.word	current_num
+ 971              		.cfi_endproc
+ 972              	.LFE250:
+ 974              		.section	.text.AR3_AC4,"ax",%progbits
+ 975              		.align	1
+ 976              		.global	AR3_AC4
+ 977              		.syntax unified
+ 978              		.thumb
+ 979              		.thumb_func
+ 981              	AR3_AC4:
+ 982              	.LFB251:
+ 197:BUTTON/Src/button.c **** 
+ 198:BUTTON/Src/button.c ****     void AR3_AC4(void)
+ 199:BUTTON/Src/button.c ****     {
+ 983              		.loc 1 199 5 is_stmt 1 view -0
+ 984              		.cfi_startproc
+ 985              		@ args = 0, pretend = 0, frame = 0
+ 986              		@ frame_needed = 0, uses_anonymous_args = 0
+ 987              		@ link register save eliminated.
+ 200:BUTTON/Src/button.c ****         if(rato_num_select!=2) rato_num_select++;
+ 988              		.loc 1 200 9 view .LVU196
+ 989              		.loc 1 200 27 is_stmt 0 view .LVU197
+ 990 0000 034B     		ldr	r3, .L67
+ 991 0002 1B68     		ldr	r3, [r3]
+ 992              		.loc 1 200 11 view .LVU198
+ 993 0004 022B     		cmp	r3, #2
+ 994 0006 02D0     		beq	.L65
+ 995              		.loc 1 200 32 is_stmt 1 discriminator 1 view .LVU199
+ 996              		.loc 1 200 47 is_stmt 0 discriminator 1 view .LVU200
+ 997 0008 0133     		adds	r3, r3, #1
+ 998 000a 014A     		ldr	r2, .L67
+ 999 000c 1360     		str	r3, [r2]
+ 1000              	.L65:
+ 201:BUTTON/Src/button.c ****         
+ 202:BUTTON/Src/button.c ****     }
+ 1001              		.loc 1 202 5 view .LVU201
+ 1002 000e 7047     		bx	lr
+ 1003              	.L68:
+ 1004              		.align	2
+ 1005              	.L67:
+ 1006 0010 00000000 		.word	rato_num_select
+ 1007              		.cfi_endproc
+ 1008              	.LFE251:
+ 1010              		.section	.text.AR4_AC1,"ax",%progbits
+ 1011              		.align	1
+ 1012              		.global	AR4_AC1
+ 1013              		.syntax unified
+ 1014              		.thumb
+ 1015              		.thumb_func
+ 1017              	AR4_AC1:
+ 1018              	.LFB252:
+ 203:BUTTON/Src/button.c **** 
+ 204:BUTTON/Src/button.c ****     //AR4
+ 205:BUTTON/Src/button.c ****     void AR4_AC1(void)
+ 206:BUTTON/Src/button.c ****     {
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 22
+
+
+ 1019              		.loc 1 206 5 is_stmt 1 view -0
+ 1020              		.cfi_startproc
+ 1021              		@ args = 0, pretend = 0, frame = 0
+ 1022              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1023              		@ link register save eliminated.
+ 207:BUTTON/Src/button.c ****         if(mode_select!=0) mode_select--;
+ 1024              		.loc 1 207 9 view .LVU203
+ 1025              		.loc 1 207 23 is_stmt 0 view .LVU204
+ 1026 0000 034B     		ldr	r3, .L71
+ 1027 0002 1B68     		ldr	r3, [r3]
+ 1028              		.loc 1 207 11 view .LVU205
+ 1029 0004 13B1     		cbz	r3, .L69
+ 1030              		.loc 1 207 28 is_stmt 1 discriminator 1 view .LVU206
+ 1031              		.loc 1 207 39 is_stmt 0 discriminator 1 view .LVU207
+ 1032 0006 013B     		subs	r3, r3, #1
+ 1033 0008 014A     		ldr	r2, .L71
+ 1034 000a 1360     		str	r3, [r2]
+ 1035              	.L69:
+ 208:BUTTON/Src/button.c ****     }
+ 1036              		.loc 1 208 5 view .LVU208
+ 1037 000c 7047     		bx	lr
+ 1038              	.L72:
+ 1039 000e 00BF     		.align	2
+ 1040              	.L71:
+ 1041 0010 00000000 		.word	mode_select
+ 1042              		.cfi_endproc
+ 1043              	.LFE252:
+ 1045              		.section	.text.AR4_AC2,"ax",%progbits
+ 1046              		.align	1
+ 1047              		.global	AR4_AC2
+ 1048              		.syntax unified
+ 1049              		.thumb
+ 1050              		.thumb_func
+ 1052              	AR4_AC2:
+ 1053              	.LFB253:
+ 209:BUTTON/Src/button.c **** 
+ 210:BUTTON/Src/button.c ****     void AR4_AC2(void)
+ 211:BUTTON/Src/button.c ****     {
+ 1054              		.loc 1 211 5 is_stmt 1 view -0
+ 1055              		.cfi_startproc
+ 1056              		@ args = 0, pretend = 0, frame = 0
+ 1057              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1058              		@ link register save eliminated.
+ 212:BUTTON/Src/button.c ****         if(current_num_select!=0) current_num_select--; 
+ 1059              		.loc 1 212 9 view .LVU210
+ 1060              		.loc 1 212 30 is_stmt 0 view .LVU211
+ 1061 0000 034B     		ldr	r3, .L75
+ 1062 0002 1B68     		ldr	r3, [r3]
+ 1063              		.loc 1 212 11 view .LVU212
+ 1064 0004 13B1     		cbz	r3, .L73
+ 1065              		.loc 1 212 35 is_stmt 1 discriminator 1 view .LVU213
+ 1066              		.loc 1 212 53 is_stmt 0 discriminator 1 view .LVU214
+ 1067 0006 013B     		subs	r3, r3, #1
+ 1068 0008 014A     		ldr	r2, .L75
+ 1069 000a 1360     		str	r3, [r2]
+ 1070              	.L73:
+ 213:BUTTON/Src/button.c ****     }
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 23
+
+
+ 1071              		.loc 1 213 5 view .LVU215
+ 1072 000c 7047     		bx	lr
+ 1073              	.L76:
+ 1074 000e 00BF     		.align	2
+ 1075              	.L75:
+ 1076 0010 00000000 		.word	current_num_select
+ 1077              		.cfi_endproc
+ 1078              	.LFE253:
+ 1080              		.section	.text.AR4_AC3,"ax",%progbits
+ 1081              		.align	1
+ 1082              		.global	AR4_AC3
+ 1083              		.syntax unified
+ 1084              		.thumb
+ 1085              		.thumb_func
+ 1087              	AR4_AC3:
+ 1088              	.LFB254:
+ 214:BUTTON/Src/button.c **** 
+ 215:BUTTON/Src/button.c ****     void AR4_AC3(void)
+ 216:BUTTON/Src/button.c ****     {
+ 1089              		.loc 1 216 5 is_stmt 1 view -0
+ 1090              		.cfi_startproc
+ 1091              		@ args = 0, pretend = 0, frame = 0
+ 1092              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1093              		@ link register save eliminated.
+ 217:BUTTON/Src/button.c ****         if(current_num[current_num_select]!=0) current_num[current_num_select]--;
+ 1094              		.loc 1 217 9 view .LVU217
+ 1095              		.loc 1 217 23 is_stmt 0 view .LVU218
+ 1096 0000 054B     		ldr	r3, .L79
+ 1097 0002 1A68     		ldr	r2, [r3]
+ 1098 0004 054B     		ldr	r3, .L79+4
+ 1099 0006 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 1100              		.loc 1 217 11 view .LVU219
+ 1101 000a 1BB1     		cbz	r3, .L77
+ 1102              		.loc 1 217 48 is_stmt 1 discriminator 1 view .LVU220
+ 1103              		.loc 1 217 79 is_stmt 0 discriminator 1 view .LVU221
+ 1104 000c 013B     		subs	r3, r3, #1
+ 1105 000e 0349     		ldr	r1, .L79+4
+ 1106 0010 41F82230 		str	r3, [r1, r2, lsl #2]
+ 1107              	.L77:
+ 218:BUTTON/Src/button.c ****        
+ 219:BUTTON/Src/button.c ****     }
+ 1108              		.loc 1 219 5 view .LVU222
+ 1109 0014 7047     		bx	lr
+ 1110              	.L80:
+ 1111 0016 00BF     		.align	2
+ 1112              	.L79:
+ 1113 0018 00000000 		.word	current_num_select
+ 1114 001c 00000000 		.word	current_num
+ 1115              		.cfi_endproc
+ 1116              	.LFE254:
+ 1118              		.section	.text.AR4_AC4,"ax",%progbits
+ 1119              		.align	1
+ 1120              		.global	AR4_AC4
+ 1121              		.syntax unified
+ 1122              		.thumb
+ 1123              		.thumb_func
+ 1125              	AR4_AC4:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 24
+
+
+ 1126              	.LFB255:
+ 220:BUTTON/Src/button.c **** 
+ 221:BUTTON/Src/button.c ****     void AR4_AC4(void)
+ 222:BUTTON/Src/button.c ****     {
+ 1127              		.loc 1 222 5 is_stmt 1 view -0
+ 1128              		.cfi_startproc
+ 1129              		@ args = 0, pretend = 0, frame = 0
+ 1130              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1131              		@ link register save eliminated.
+ 223:BUTTON/Src/button.c ****         if(rato_num_select!=2) rato_num_select--;
+ 1132              		.loc 1 223 9 view .LVU224
+ 1133              		.loc 1 223 27 is_stmt 0 view .LVU225
+ 1134 0000 034B     		ldr	r3, .L83
+ 1135 0002 1B68     		ldr	r3, [r3]
+ 1136              		.loc 1 223 11 view .LVU226
+ 1137 0004 022B     		cmp	r3, #2
+ 1138 0006 02D0     		beq	.L81
+ 1139              		.loc 1 223 32 is_stmt 1 discriminator 1 view .LVU227
+ 1140              		.loc 1 223 47 is_stmt 0 discriminator 1 view .LVU228
+ 1141 0008 013B     		subs	r3, r3, #1
+ 1142 000a 014A     		ldr	r2, .L83
+ 1143 000c 1360     		str	r3, [r2]
+ 1144              	.L81:
+ 224:BUTTON/Src/button.c ****        
+ 225:BUTTON/Src/button.c ****     }
+ 1145              		.loc 1 225 5 view .LVU229
+ 1146 000e 7047     		bx	lr
+ 1147              	.L84:
+ 1148              		.align	2
+ 1149              	.L83:
+ 1150 0010 00000000 		.word	rato_num_select
+ 1151              		.cfi_endproc
+ 1152              	.LFE255:
+ 1154              		.section	.text.READ_BUTTON_A_R1,"ax",%progbits
+ 1155              		.align	1
+ 1156              		.global	READ_BUTTON_A_R1
+ 1157              		.syntax unified
+ 1158              		.thumb
+ 1159              		.thumb_func
+ 1161              	READ_BUTTON_A_R1:
+ 1162              	.LFB256:
+ 226:BUTTON/Src/button.c **** 
+ 227:BUTTON/Src/button.c **** void READ_BUTTON_A_R1(void)
+ 228:BUTTON/Src/button.c **** {
+ 1163              		.loc 1 228 1 is_stmt 1 view -0
+ 1164              		.cfi_startproc
+ 1165              		@ args = 0, pretend = 0, frame = 0
+ 1166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1167 0000 38B5     		push	{r3, r4, r5, lr}
+ 1168              	.LCFI1:
+ 1169              		.cfi_def_cfa_offset 16
+ 1170              		.cfi_offset 3, -16
+ 1171              		.cfi_offset 4, -12
+ 1172              		.cfi_offset 5, -8
+ 1173              		.cfi_offset 14, -4
+ 229:BUTTON/Src/button.c ****     RESET_AR1();
+ 1174              		.loc 1 229 5 view .LVU231
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 25
+
+
+ 1175 0002 0022     		movs	r2, #0
+ 1176 0004 0121     		movs	r1, #1
+ 1177 0006 2548     		ldr	r0, .L95
+ 1178 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1179              	.LVL40:
+ 230:BUTTON/Src/button.c ****     temp_state = A_state[0][0];
+ 1180              		.loc 1 230 5 view .LVU232
+ 1181              		.loc 1 230 28 is_stmt 0 view .LVU233
+ 1182 000c 244D     		ldr	r5, .L95+4
+ 1183 000e 2B68     		ldr	r3, [r5]
+ 1184              		.loc 1 230 16 view .LVU234
+ 1185 0010 244C     		ldr	r4, .L95+8
+ 1186 0012 2360     		str	r3, [r4]
+ 231:BUTTON/Src/button.c ****     A_state[0][0] = READ_AC1();
+ 1187              		.loc 1 231 5 is_stmt 1 view .LVU235
+ 1188              		.loc 1 231 21 is_stmt 0 view .LVU236
+ 1189 0014 0821     		movs	r1, #8
+ 1190 0016 2448     		ldr	r0, .L95+12
+ 1191 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1192              	.LVL41:
+ 1193              		.loc 1 231 19 discriminator 1 view .LVU237
+ 1194 001c 2860     		str	r0, [r5]
+ 232:BUTTON/Src/button.c ****     if(A_state[0][0] - temp_state == UP) AR1_AC1();
+ 1195              		.loc 1 232 5 is_stmt 1 view .LVU238
+ 1196              		.loc 1 232 22 is_stmt 0 view .LVU239
+ 1197 001e 2368     		ldr	r3, [r4]
+ 1198 0020 C01A     		subs	r0, r0, r3
+ 1199              		.loc 1 232 7 view .LVU240
+ 1200 0022 0128     		cmp	r0, #1
+ 1201 0024 2DD0     		beq	.L91
+ 1202              	.L86:
+ 233:BUTTON/Src/button.c **** 
+ 234:BUTTON/Src/button.c ****     temp_state = A_state[0][1];
+ 1203              		.loc 1 234 5 is_stmt 1 view .LVU241
+ 1204              		.loc 1 234 28 is_stmt 0 view .LVU242
+ 1205 0026 1E4D     		ldr	r5, .L95+4
+ 1206 0028 6B68     		ldr	r3, [r5, #4]
+ 1207              		.loc 1 234 16 view .LVU243
+ 1208 002a 1E4C     		ldr	r4, .L95+8
+ 1209 002c 2360     		str	r3, [r4]
+ 235:BUTTON/Src/button.c ****     A_state[0][1] = READ_AC2();
+ 1210              		.loc 1 235 5 is_stmt 1 view .LVU244
+ 1211              		.loc 1 235 21 is_stmt 0 view .LVU245
+ 1212 002e 4021     		movs	r1, #64
+ 1213 0030 1D48     		ldr	r0, .L95+12
+ 1214 0032 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1215              	.LVL42:
+ 1216              		.loc 1 235 19 discriminator 1 view .LVU246
+ 1217 0036 6860     		str	r0, [r5, #4]
+ 236:BUTTON/Src/button.c ****     if(A_state[0][1] - temp_state == UP) AR1_AC2();
+ 1218              		.loc 1 236 5 is_stmt 1 view .LVU247
+ 1219              		.loc 1 236 22 is_stmt 0 view .LVU248
+ 1220 0038 2368     		ldr	r3, [r4]
+ 1221 003a C01A     		subs	r0, r0, r3
+ 1222              		.loc 1 236 7 view .LVU249
+ 1223 003c 0128     		cmp	r0, #1
+ 1224 003e 23D0     		beq	.L92
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 26
+
+
+ 1225              	.L87:
+ 237:BUTTON/Src/button.c **** 
+ 238:BUTTON/Src/button.c ****     temp_state = A_state[0][2];
+ 1226              		.loc 1 238 5 is_stmt 1 view .LVU250
+ 1227              		.loc 1 238 28 is_stmt 0 view .LVU251
+ 1228 0040 174D     		ldr	r5, .L95+4
+ 1229 0042 AB68     		ldr	r3, [r5, #8]
+ 1230              		.loc 1 238 16 view .LVU252
+ 1231 0044 174C     		ldr	r4, .L95+8
+ 1232 0046 2360     		str	r3, [r4]
+ 239:BUTTON/Src/button.c ****     A_state[0][2] = READ_AC3();
+ 1233              		.loc 1 239 5 is_stmt 1 view .LVU253
+ 1234              		.loc 1 239 21 is_stmt 0 view .LVU254
+ 1235 0048 4FF48071 		mov	r1, #256
+ 1236 004c 1648     		ldr	r0, .L95+12
+ 1237 004e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1238              	.LVL43:
+ 1239              		.loc 1 239 19 discriminator 1 view .LVU255
+ 1240 0052 A860     		str	r0, [r5, #8]
+ 240:BUTTON/Src/button.c ****     if(A_state[0][2] - temp_state == UP) AR1_AC3();
+ 1241              		.loc 1 240 5 is_stmt 1 view .LVU256
+ 1242              		.loc 1 240 22 is_stmt 0 view .LVU257
+ 1243 0054 2368     		ldr	r3, [r4]
+ 1244 0056 C01A     		subs	r0, r0, r3
+ 1245              		.loc 1 240 7 view .LVU258
+ 1246 0058 0128     		cmp	r0, #1
+ 1247 005a 18D0     		beq	.L93
+ 1248              	.L88:
+ 241:BUTTON/Src/button.c **** 
+ 242:BUTTON/Src/button.c ****     temp_state = A_state[0][3];
+ 1249              		.loc 1 242 5 is_stmt 1 view .LVU259
+ 1250              		.loc 1 242 28 is_stmt 0 view .LVU260
+ 1251 005c 104D     		ldr	r5, .L95+4
+ 1252 005e EB68     		ldr	r3, [r5, #12]
+ 1253              		.loc 1 242 16 view .LVU261
+ 1254 0060 104C     		ldr	r4, .L95+8
+ 1255 0062 2360     		str	r3, [r4]
+ 243:BUTTON/Src/button.c ****     A_state[0][3] = READ_AC4();
+ 1256              		.loc 1 243 5 is_stmt 1 view .LVU262
+ 1257              		.loc 1 243 21 is_stmt 0 view .LVU263
+ 1258 0064 0121     		movs	r1, #1
+ 1259 0066 1148     		ldr	r0, .L95+16
+ 1260 0068 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1261              	.LVL44:
+ 1262              		.loc 1 243 19 discriminator 1 view .LVU264
+ 1263 006c E860     		str	r0, [r5, #12]
+ 244:BUTTON/Src/button.c ****     if(A_state[0][3] - temp_state == UP) AR1_AC4();
+ 1264              		.loc 1 244 5 is_stmt 1 view .LVU265
+ 1265              		.loc 1 244 22 is_stmt 0 view .LVU266
+ 1266 006e 2368     		ldr	r3, [r4]
+ 1267 0070 C01A     		subs	r0, r0, r3
+ 1268              		.loc 1 244 7 view .LVU267
+ 1269 0072 0128     		cmp	r0, #1
+ 1270 0074 0ED0     		beq	.L94
+ 1271              	.L89:
+ 245:BUTTON/Src/button.c ****     SET_AR1();
+ 1272              		.loc 1 245 5 is_stmt 1 view .LVU268
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 27
+
+
+ 1273 0076 0122     		movs	r2, #1
+ 1274 0078 1146     		mov	r1, r2
+ 1275 007a 0848     		ldr	r0, .L95
+ 1276 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1277              	.LVL45:
+ 246:BUTTON/Src/button.c **** 
+ 247:BUTTON/Src/button.c **** 
+ 248:BUTTON/Src/button.c **** }
+ 1278              		.loc 1 248 1 is_stmt 0 view .LVU269
+ 1279 0080 38BD     		pop	{r3, r4, r5, pc}
+ 1280              	.L91:
+ 232:BUTTON/Src/button.c **** 
+ 1281              		.loc 1 232 42 is_stmt 1 discriminator 1 view .LVU270
+ 1282 0082 FFF7FEFF 		bl	AR1_AC1
+ 1283              	.LVL46:
+ 1284 0086 CEE7     		b	.L86
+ 1285              	.L92:
+ 236:BUTTON/Src/button.c **** 
+ 1286              		.loc 1 236 42 discriminator 1 view .LVU271
+ 1287 0088 FFF7FEFF 		bl	AR1_AC2
+ 1288              	.LVL47:
+ 1289 008c D8E7     		b	.L87
+ 1290              	.L93:
+ 240:BUTTON/Src/button.c **** 
+ 1291              		.loc 1 240 42 discriminator 1 view .LVU272
+ 1292 008e FFF7FEFF 		bl	AR1_AC3
+ 1293              	.LVL48:
+ 1294 0092 E3E7     		b	.L88
+ 1295              	.L94:
+ 244:BUTTON/Src/button.c ****     SET_AR1();
+ 1296              		.loc 1 244 42 discriminator 1 view .LVU273
+ 1297 0094 FFF7FEFF 		bl	AR1_AC4
+ 1298              	.LVL49:
+ 1299 0098 EDE7     		b	.L89
+ 1300              	.L96:
+ 1301 009a 00BF     		.align	2
+ 1302              	.L95:
+ 1303 009c 000C0240 		.word	1073875968
+ 1304 00a0 00000000 		.word	A_state
+ 1305 00a4 00000000 		.word	temp_state
+ 1306 00a8 00040240 		.word	1073873920
+ 1307 00ac 00100240 		.word	1073876992
+ 1308              		.cfi_endproc
+ 1309              	.LFE256:
+ 1311              		.section	.text.READ_BUTTON_A_R2,"ax",%progbits
+ 1312              		.align	1
+ 1313              		.global	READ_BUTTON_A_R2
+ 1314              		.syntax unified
+ 1315              		.thumb
+ 1316              		.thumb_func
+ 1318              	READ_BUTTON_A_R2:
+ 1319              	.LFB257:
+ 249:BUTTON/Src/button.c **** 
+ 250:BUTTON/Src/button.c **** void READ_BUTTON_A_R2(void)
+ 251:BUTTON/Src/button.c **** {
+ 1320              		.loc 1 251 1 view -0
+ 1321              		.cfi_startproc
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 28
+
+
+ 1322              		@ args = 0, pretend = 0, frame = 0
+ 1323              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1324 0000 38B5     		push	{r3, r4, r5, lr}
+ 1325              	.LCFI2:
+ 1326              		.cfi_def_cfa_offset 16
+ 1327              		.cfi_offset 3, -16
+ 1328              		.cfi_offset 4, -12
+ 1329              		.cfi_offset 5, -8
+ 1330              		.cfi_offset 14, -4
+ 252:BUTTON/Src/button.c ****     RESET_AR2();
+ 1331              		.loc 1 252 5 view .LVU275
+ 1332 0002 0022     		movs	r2, #0
+ 1333 0004 0421     		movs	r1, #4
+ 1334 0006 2548     		ldr	r0, .L107
+ 1335 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1336              	.LVL50:
+ 253:BUTTON/Src/button.c ****     temp_state = A_state[1][0];
+ 1337              		.loc 1 253 5 view .LVU276
+ 1338              		.loc 1 253 28 is_stmt 0 view .LVU277
+ 1339 000c 244D     		ldr	r5, .L107+4
+ 1340 000e 2B69     		ldr	r3, [r5, #16]
+ 1341              		.loc 1 253 16 view .LVU278
+ 1342 0010 244C     		ldr	r4, .L107+8
+ 1343 0012 2360     		str	r3, [r4]
+ 254:BUTTON/Src/button.c ****     A_state[1][0] = READ_AC1();
+ 1344              		.loc 1 254 5 is_stmt 1 view .LVU279
+ 1345              		.loc 1 254 21 is_stmt 0 view .LVU280
+ 1346 0014 0821     		movs	r1, #8
+ 1347 0016 2448     		ldr	r0, .L107+12
+ 1348 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1349              	.LVL51:
+ 1350              		.loc 1 254 19 discriminator 1 view .LVU281
+ 1351 001c 2861     		str	r0, [r5, #16]
+ 255:BUTTON/Src/button.c ****     if(A_state[1][0] - temp_state == UP) AR2_AC1();
+ 1352              		.loc 1 255 5 is_stmt 1 view .LVU282
+ 1353              		.loc 1 255 22 is_stmt 0 view .LVU283
+ 1354 001e 2368     		ldr	r3, [r4]
+ 1355 0020 C01A     		subs	r0, r0, r3
+ 1356              		.loc 1 255 7 view .LVU284
+ 1357 0022 0128     		cmp	r0, #1
+ 1358 0024 2DD0     		beq	.L103
+ 1359              	.L98:
+ 256:BUTTON/Src/button.c **** 
+ 257:BUTTON/Src/button.c ****     temp_state = A_state[1][1];
+ 1360              		.loc 1 257 5 is_stmt 1 view .LVU285
+ 1361              		.loc 1 257 28 is_stmt 0 view .LVU286
+ 1362 0026 1E4D     		ldr	r5, .L107+4
+ 1363 0028 6B69     		ldr	r3, [r5, #20]
+ 1364              		.loc 1 257 16 view .LVU287
+ 1365 002a 1E4C     		ldr	r4, .L107+8
+ 1366 002c 2360     		str	r3, [r4]
+ 258:BUTTON/Src/button.c ****     A_state[1][1] = READ_AC2();
+ 1367              		.loc 1 258 5 is_stmt 1 view .LVU288
+ 1368              		.loc 1 258 21 is_stmt 0 view .LVU289
+ 1369 002e 4021     		movs	r1, #64
+ 1370 0030 1D48     		ldr	r0, .L107+12
+ 1371 0032 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 29
+
+
+ 1372              	.LVL52:
+ 1373              		.loc 1 258 19 discriminator 1 view .LVU290
+ 1374 0036 6861     		str	r0, [r5, #20]
+ 259:BUTTON/Src/button.c ****     if(A_state[1][1] - temp_state == UP) AR2_AC2();
+ 1375              		.loc 1 259 5 is_stmt 1 view .LVU291
+ 1376              		.loc 1 259 22 is_stmt 0 view .LVU292
+ 1377 0038 2368     		ldr	r3, [r4]
+ 1378 003a C01A     		subs	r0, r0, r3
+ 1379              		.loc 1 259 7 view .LVU293
+ 1380 003c 0128     		cmp	r0, #1
+ 1381 003e 23D0     		beq	.L104
+ 1382              	.L99:
+ 260:BUTTON/Src/button.c **** 
+ 261:BUTTON/Src/button.c ****     temp_state = A_state[1][2];
+ 1383              		.loc 1 261 5 is_stmt 1 view .LVU294
+ 1384              		.loc 1 261 28 is_stmt 0 view .LVU295
+ 1385 0040 174D     		ldr	r5, .L107+4
+ 1386 0042 AB69     		ldr	r3, [r5, #24]
+ 1387              		.loc 1 261 16 view .LVU296
+ 1388 0044 174C     		ldr	r4, .L107+8
+ 1389 0046 2360     		str	r3, [r4]
+ 262:BUTTON/Src/button.c ****     A_state[1][2] = READ_AC3();
+ 1390              		.loc 1 262 5 is_stmt 1 view .LVU297
+ 1391              		.loc 1 262 21 is_stmt 0 view .LVU298
+ 1392 0048 4FF48071 		mov	r1, #256
+ 1393 004c 1648     		ldr	r0, .L107+12
+ 1394 004e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1395              	.LVL53:
+ 1396              		.loc 1 262 19 discriminator 1 view .LVU299
+ 1397 0052 A861     		str	r0, [r5, #24]
+ 263:BUTTON/Src/button.c ****     if(A_state[1][2] - temp_state == UP) AR2_AC3();
+ 1398              		.loc 1 263 5 is_stmt 1 view .LVU300
+ 1399              		.loc 1 263 22 is_stmt 0 view .LVU301
+ 1400 0054 2368     		ldr	r3, [r4]
+ 1401 0056 C01A     		subs	r0, r0, r3
+ 1402              		.loc 1 263 7 view .LVU302
+ 1403 0058 0128     		cmp	r0, #1
+ 1404 005a 18D0     		beq	.L105
+ 1405              	.L100:
+ 264:BUTTON/Src/button.c **** 
+ 265:BUTTON/Src/button.c ****     temp_state = A_state[1][3];
+ 1406              		.loc 1 265 5 is_stmt 1 view .LVU303
+ 1407              		.loc 1 265 28 is_stmt 0 view .LVU304
+ 1408 005c 104D     		ldr	r5, .L107+4
+ 1409 005e EB69     		ldr	r3, [r5, #28]
+ 1410              		.loc 1 265 16 view .LVU305
+ 1411 0060 104C     		ldr	r4, .L107+8
+ 1412 0062 2360     		str	r3, [r4]
+ 266:BUTTON/Src/button.c ****     A_state[1][3] = READ_AC4();
+ 1413              		.loc 1 266 5 is_stmt 1 view .LVU306
+ 1414              		.loc 1 266 21 is_stmt 0 view .LVU307
+ 1415 0064 0121     		movs	r1, #1
+ 1416 0066 1148     		ldr	r0, .L107+16
+ 1417 0068 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1418              	.LVL54:
+ 1419              		.loc 1 266 19 discriminator 1 view .LVU308
+ 1420 006c E861     		str	r0, [r5, #28]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 30
+
+
+ 267:BUTTON/Src/button.c ****     if(A_state[1][3] - temp_state == UP) AR2_AC4();
+ 1421              		.loc 1 267 5 is_stmt 1 view .LVU309
+ 1422              		.loc 1 267 22 is_stmt 0 view .LVU310
+ 1423 006e 2368     		ldr	r3, [r4]
+ 1424 0070 C01A     		subs	r0, r0, r3
+ 1425              		.loc 1 267 7 view .LVU311
+ 1426 0072 0128     		cmp	r0, #1
+ 1427 0074 0ED0     		beq	.L106
+ 1428              	.L101:
+ 268:BUTTON/Src/button.c ****     SET_AR2();
+ 1429              		.loc 1 268 5 is_stmt 1 view .LVU312
+ 1430 0076 0122     		movs	r2, #1
+ 1431 0078 0421     		movs	r1, #4
+ 1432 007a 0848     		ldr	r0, .L107
+ 1433 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1434              	.LVL55:
+ 269:BUTTON/Src/button.c **** }
+ 1435              		.loc 1 269 1 is_stmt 0 view .LVU313
+ 1436 0080 38BD     		pop	{r3, r4, r5, pc}
+ 1437              	.L103:
+ 255:BUTTON/Src/button.c **** 
+ 1438              		.loc 1 255 42 is_stmt 1 discriminator 1 view .LVU314
+ 1439 0082 FFF7FEFF 		bl	AR2_AC1
+ 1440              	.LVL56:
+ 1441 0086 CEE7     		b	.L98
+ 1442              	.L104:
+ 259:BUTTON/Src/button.c **** 
+ 1443              		.loc 1 259 42 discriminator 1 view .LVU315
+ 1444 0088 FFF7FEFF 		bl	AR2_AC2
+ 1445              	.LVL57:
+ 1446 008c D8E7     		b	.L99
+ 1447              	.L105:
+ 263:BUTTON/Src/button.c **** 
+ 1448              		.loc 1 263 42 discriminator 1 view .LVU316
+ 1449 008e FFF7FEFF 		bl	AR2_AC3
+ 1450              	.LVL58:
+ 1451 0092 E3E7     		b	.L100
+ 1452              	.L106:
+ 267:BUTTON/Src/button.c ****     SET_AR2();
+ 1453              		.loc 1 267 42 discriminator 1 view .LVU317
+ 1454 0094 FFF7FEFF 		bl	AR2_AC4
+ 1455              	.LVL59:
+ 1456 0098 EDE7     		b	.L101
+ 1457              	.L108:
+ 1458 009a 00BF     		.align	2
+ 1459              	.L107:
+ 1460 009c 000C0240 		.word	1073875968
+ 1461 00a0 00000000 		.word	A_state
+ 1462 00a4 00000000 		.word	temp_state
+ 1463 00a8 00040240 		.word	1073873920
+ 1464 00ac 00100240 		.word	1073876992
+ 1465              		.cfi_endproc
+ 1466              	.LFE257:
+ 1468              		.section	.text.READ_BUTTON_A_R3,"ax",%progbits
+ 1469              		.align	1
+ 1470              		.global	READ_BUTTON_A_R3
+ 1471              		.syntax unified
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 31
+
+
+ 1472              		.thumb
+ 1473              		.thumb_func
+ 1475              	READ_BUTTON_A_R3:
+ 1476              	.LFB258:
+ 270:BUTTON/Src/button.c **** 
+ 271:BUTTON/Src/button.c **** void READ_BUTTON_A_R3(void)
+ 272:BUTTON/Src/button.c **** {
+ 1477              		.loc 1 272 1 view -0
+ 1478              		.cfi_startproc
+ 1479              		@ args = 0, pretend = 0, frame = 0
+ 1480              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1481 0000 38B5     		push	{r3, r4, r5, lr}
+ 1482              	.LCFI3:
+ 1483              		.cfi_def_cfa_offset 16
+ 1484              		.cfi_offset 3, -16
+ 1485              		.cfi_offset 4, -12
+ 1486              		.cfi_offset 5, -8
+ 1487              		.cfi_offset 14, -4
+ 273:BUTTON/Src/button.c ****     RESET_AR3();
+ 1488              		.loc 1 273 5 view .LVU319
+ 1489 0002 0022     		movs	r2, #0
+ 1490 0004 1021     		movs	r1, #16
+ 1491 0006 2548     		ldr	r0, .L119
+ 1492 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1493              	.LVL60:
+ 274:BUTTON/Src/button.c ****     temp_state = A_state[2][0];
+ 1494              		.loc 1 274 5 view .LVU320
+ 1495              		.loc 1 274 28 is_stmt 0 view .LVU321
+ 1496 000c 244D     		ldr	r5, .L119+4
+ 1497 000e 2B6A     		ldr	r3, [r5, #32]
+ 1498              		.loc 1 274 16 view .LVU322
+ 1499 0010 244C     		ldr	r4, .L119+8
+ 1500 0012 2360     		str	r3, [r4]
+ 275:BUTTON/Src/button.c ****     A_state[2][0] = READ_AC1();
+ 1501              		.loc 1 275 5 is_stmt 1 view .LVU323
+ 1502              		.loc 1 275 21 is_stmt 0 view .LVU324
+ 1503 0014 0821     		movs	r1, #8
+ 1504 0016 2448     		ldr	r0, .L119+12
+ 1505 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1506              	.LVL61:
+ 1507              		.loc 1 275 19 discriminator 1 view .LVU325
+ 1508 001c 2862     		str	r0, [r5, #32]
+ 276:BUTTON/Src/button.c ****     if(A_state[2][0] - temp_state == UP) AR3_AC1();
+ 1509              		.loc 1 276 5 is_stmt 1 view .LVU326
+ 1510              		.loc 1 276 22 is_stmt 0 view .LVU327
+ 1511 001e 2368     		ldr	r3, [r4]
+ 1512 0020 C01A     		subs	r0, r0, r3
+ 1513              		.loc 1 276 7 view .LVU328
+ 1514 0022 0128     		cmp	r0, #1
+ 1515 0024 2DD0     		beq	.L115
+ 1516              	.L110:
+ 277:BUTTON/Src/button.c **** 
+ 278:BUTTON/Src/button.c ****     temp_state = A_state[2][1];
+ 1517              		.loc 1 278 5 is_stmt 1 view .LVU329
+ 1518              		.loc 1 278 28 is_stmt 0 view .LVU330
+ 1519 0026 1E4D     		ldr	r5, .L119+4
+ 1520 0028 6B6A     		ldr	r3, [r5, #36]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 32
+
+
+ 1521              		.loc 1 278 16 view .LVU331
+ 1522 002a 1E4C     		ldr	r4, .L119+8
+ 1523 002c 2360     		str	r3, [r4]
+ 279:BUTTON/Src/button.c ****     A_state[2][1] = READ_AC2();
+ 1524              		.loc 1 279 5 is_stmt 1 view .LVU332
+ 1525              		.loc 1 279 21 is_stmt 0 view .LVU333
+ 1526 002e 4021     		movs	r1, #64
+ 1527 0030 1D48     		ldr	r0, .L119+12
+ 1528 0032 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1529              	.LVL62:
+ 1530              		.loc 1 279 19 discriminator 1 view .LVU334
+ 1531 0036 6862     		str	r0, [r5, #36]
+ 280:BUTTON/Src/button.c ****     if(A_state[2][1] - temp_state == UP) AR3_AC2();
+ 1532              		.loc 1 280 5 is_stmt 1 view .LVU335
+ 1533              		.loc 1 280 22 is_stmt 0 view .LVU336
+ 1534 0038 2368     		ldr	r3, [r4]
+ 1535 003a C01A     		subs	r0, r0, r3
+ 1536              		.loc 1 280 7 view .LVU337
+ 1537 003c 0128     		cmp	r0, #1
+ 1538 003e 23D0     		beq	.L116
+ 1539              	.L111:
+ 281:BUTTON/Src/button.c **** 
+ 282:BUTTON/Src/button.c ****     temp_state = A_state[2][2];
+ 1540              		.loc 1 282 5 is_stmt 1 view .LVU338
+ 1541              		.loc 1 282 28 is_stmt 0 view .LVU339
+ 1542 0040 174D     		ldr	r5, .L119+4
+ 1543 0042 AB6A     		ldr	r3, [r5, #40]
+ 1544              		.loc 1 282 16 view .LVU340
+ 1545 0044 174C     		ldr	r4, .L119+8
+ 1546 0046 2360     		str	r3, [r4]
+ 283:BUTTON/Src/button.c ****     A_state[2][2] = READ_AC3();
+ 1547              		.loc 1 283 5 is_stmt 1 view .LVU341
+ 1548              		.loc 1 283 21 is_stmt 0 view .LVU342
+ 1549 0048 4FF48071 		mov	r1, #256
+ 1550 004c 1648     		ldr	r0, .L119+12
+ 1551 004e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1552              	.LVL63:
+ 1553              		.loc 1 283 19 discriminator 1 view .LVU343
+ 1554 0052 A862     		str	r0, [r5, #40]
+ 284:BUTTON/Src/button.c ****     if(A_state[2][2] - temp_state == UP) AR3_AC3();
+ 1555              		.loc 1 284 5 is_stmt 1 view .LVU344
+ 1556              		.loc 1 284 22 is_stmt 0 view .LVU345
+ 1557 0054 2368     		ldr	r3, [r4]
+ 1558 0056 C01A     		subs	r0, r0, r3
+ 1559              		.loc 1 284 7 view .LVU346
+ 1560 0058 0128     		cmp	r0, #1
+ 1561 005a 18D0     		beq	.L117
+ 1562              	.L112:
+ 285:BUTTON/Src/button.c **** 
+ 286:BUTTON/Src/button.c ****     temp_state = A_state[2][3];
+ 1563              		.loc 1 286 5 is_stmt 1 view .LVU347
+ 1564              		.loc 1 286 28 is_stmt 0 view .LVU348
+ 1565 005c 104D     		ldr	r5, .L119+4
+ 1566 005e EB6A     		ldr	r3, [r5, #44]
+ 1567              		.loc 1 286 16 view .LVU349
+ 1568 0060 104C     		ldr	r4, .L119+8
+ 1569 0062 2360     		str	r3, [r4]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 33
+
+
+ 287:BUTTON/Src/button.c ****     A_state[2][3] = READ_AC4();
+ 1570              		.loc 1 287 5 is_stmt 1 view .LVU350
+ 1571              		.loc 1 287 21 is_stmt 0 view .LVU351
+ 1572 0064 0121     		movs	r1, #1
+ 1573 0066 1148     		ldr	r0, .L119+16
+ 1574 0068 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1575              	.LVL64:
+ 1576              		.loc 1 287 19 discriminator 1 view .LVU352
+ 1577 006c E862     		str	r0, [r5, #44]
+ 288:BUTTON/Src/button.c ****     if(A_state[2][3] - temp_state == UP) AR3_AC4();
+ 1578              		.loc 1 288 5 is_stmt 1 view .LVU353
+ 1579              		.loc 1 288 22 is_stmt 0 view .LVU354
+ 1580 006e 2368     		ldr	r3, [r4]
+ 1581 0070 C01A     		subs	r0, r0, r3
+ 1582              		.loc 1 288 7 view .LVU355
+ 1583 0072 0128     		cmp	r0, #1
+ 1584 0074 0ED0     		beq	.L118
+ 1585              	.L113:
+ 289:BUTTON/Src/button.c ****     SET_AR3();
+ 1586              		.loc 1 289 5 is_stmt 1 view .LVU356
+ 1587 0076 0122     		movs	r2, #1
+ 1588 0078 1021     		movs	r1, #16
+ 1589 007a 0848     		ldr	r0, .L119
+ 1590 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1591              	.LVL65:
+ 290:BUTTON/Src/button.c **** }
+ 1592              		.loc 1 290 1 is_stmt 0 view .LVU357
+ 1593 0080 38BD     		pop	{r3, r4, r5, pc}
+ 1594              	.L115:
+ 276:BUTTON/Src/button.c **** 
+ 1595              		.loc 1 276 42 is_stmt 1 discriminator 1 view .LVU358
+ 1596 0082 FFF7FEFF 		bl	AR3_AC1
+ 1597              	.LVL66:
+ 1598 0086 CEE7     		b	.L110
+ 1599              	.L116:
+ 280:BUTTON/Src/button.c **** 
+ 1600              		.loc 1 280 42 discriminator 1 view .LVU359
+ 1601 0088 FFF7FEFF 		bl	AR3_AC2
+ 1602              	.LVL67:
+ 1603 008c D8E7     		b	.L111
+ 1604              	.L117:
+ 284:BUTTON/Src/button.c **** 
+ 1605              		.loc 1 284 42 discriminator 1 view .LVU360
+ 1606 008e FFF7FEFF 		bl	AR3_AC3
+ 1607              	.LVL68:
+ 1608 0092 E3E7     		b	.L112
+ 1609              	.L118:
+ 288:BUTTON/Src/button.c ****     SET_AR3();
+ 1610              		.loc 1 288 42 discriminator 1 view .LVU361
+ 1611 0094 FFF7FEFF 		bl	AR3_AC4
+ 1612              	.LVL69:
+ 1613 0098 EDE7     		b	.L113
+ 1614              	.L120:
+ 1615 009a 00BF     		.align	2
+ 1616              	.L119:
+ 1617 009c 000C0240 		.word	1073875968
+ 1618 00a0 00000000 		.word	A_state
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 34
+
+
+ 1619 00a4 00000000 		.word	temp_state
+ 1620 00a8 00040240 		.word	1073873920
+ 1621 00ac 00100240 		.word	1073876992
+ 1622              		.cfi_endproc
+ 1623              	.LFE258:
+ 1625              		.section	.text.READ_BUTTON_A_R4,"ax",%progbits
+ 1626              		.align	1
+ 1627              		.global	READ_BUTTON_A_R4
+ 1628              		.syntax unified
+ 1629              		.thumb
+ 1630              		.thumb_func
+ 1632              	READ_BUTTON_A_R4:
+ 1633              	.LFB259:
+ 291:BUTTON/Src/button.c **** 
+ 292:BUTTON/Src/button.c **** void READ_BUTTON_A_R4(void)
+ 293:BUTTON/Src/button.c **** {
+ 1634              		.loc 1 293 1 view -0
+ 1635              		.cfi_startproc
+ 1636              		@ args = 0, pretend = 0, frame = 0
+ 1637              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1638 0000 38B5     		push	{r3, r4, r5, lr}
+ 1639              	.LCFI4:
+ 1640              		.cfi_def_cfa_offset 16
+ 1641              		.cfi_offset 3, -16
+ 1642              		.cfi_offset 4, -12
+ 1643              		.cfi_offset 5, -8
+ 1644              		.cfi_offset 14, -4
+ 294:BUTTON/Src/button.c ****     RESET_AR4();
+ 1645              		.loc 1 294 5 view .LVU363
+ 1646 0002 0022     		movs	r2, #0
+ 1647 0004 4021     		movs	r1, #64
+ 1648 0006 2548     		ldr	r0, .L131
+ 1649 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1650              	.LVL70:
+ 295:BUTTON/Src/button.c ****     temp_state = A_state[3][0];
+ 1651              		.loc 1 295 5 view .LVU364
+ 1652              		.loc 1 295 28 is_stmt 0 view .LVU365
+ 1653 000c 244D     		ldr	r5, .L131+4
+ 1654 000e 2B6B     		ldr	r3, [r5, #48]
+ 1655              		.loc 1 295 16 view .LVU366
+ 1656 0010 244C     		ldr	r4, .L131+8
+ 1657 0012 2360     		str	r3, [r4]
+ 296:BUTTON/Src/button.c ****     A_state[3][0] = READ_AC1();
+ 1658              		.loc 1 296 5 is_stmt 1 view .LVU367
+ 1659              		.loc 1 296 21 is_stmt 0 view .LVU368
+ 1660 0014 0821     		movs	r1, #8
+ 1661 0016 2448     		ldr	r0, .L131+12
+ 1662 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1663              	.LVL71:
+ 1664              		.loc 1 296 19 discriminator 1 view .LVU369
+ 1665 001c 2863     		str	r0, [r5, #48]
+ 297:BUTTON/Src/button.c ****     if(A_state[3][0] - temp_state == UP) AR4_AC1();
+ 1666              		.loc 1 297 5 is_stmt 1 view .LVU370
+ 1667              		.loc 1 297 22 is_stmt 0 view .LVU371
+ 1668 001e 2368     		ldr	r3, [r4]
+ 1669 0020 C01A     		subs	r0, r0, r3
+ 1670              		.loc 1 297 7 view .LVU372
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 35
+
+
+ 1671 0022 0128     		cmp	r0, #1
+ 1672 0024 2DD0     		beq	.L127
+ 1673              	.L122:
+ 298:BUTTON/Src/button.c **** 
+ 299:BUTTON/Src/button.c ****     temp_state = A_state[3][1];
+ 1674              		.loc 1 299 5 is_stmt 1 view .LVU373
+ 1675              		.loc 1 299 28 is_stmt 0 view .LVU374
+ 1676 0026 1E4D     		ldr	r5, .L131+4
+ 1677 0028 6B6B     		ldr	r3, [r5, #52]
+ 1678              		.loc 1 299 16 view .LVU375
+ 1679 002a 1E4C     		ldr	r4, .L131+8
+ 1680 002c 2360     		str	r3, [r4]
+ 300:BUTTON/Src/button.c ****     A_state[3][1] = READ_AC2();
+ 1681              		.loc 1 300 5 is_stmt 1 view .LVU376
+ 1682              		.loc 1 300 21 is_stmt 0 view .LVU377
+ 1683 002e 4021     		movs	r1, #64
+ 1684 0030 1D48     		ldr	r0, .L131+12
+ 1685 0032 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1686              	.LVL72:
+ 1687              		.loc 1 300 19 discriminator 1 view .LVU378
+ 1688 0036 6863     		str	r0, [r5, #52]
+ 301:BUTTON/Src/button.c ****     if(A_state[3][1] - temp_state == UP) AR4_AC2();
+ 1689              		.loc 1 301 5 is_stmt 1 view .LVU379
+ 1690              		.loc 1 301 22 is_stmt 0 view .LVU380
+ 1691 0038 2368     		ldr	r3, [r4]
+ 1692 003a C01A     		subs	r0, r0, r3
+ 1693              		.loc 1 301 7 view .LVU381
+ 1694 003c 0128     		cmp	r0, #1
+ 1695 003e 23D0     		beq	.L128
+ 1696              	.L123:
+ 302:BUTTON/Src/button.c **** 
+ 303:BUTTON/Src/button.c ****     temp_state = A_state[3][2];
+ 1697              		.loc 1 303 5 is_stmt 1 view .LVU382
+ 1698              		.loc 1 303 28 is_stmt 0 view .LVU383
+ 1699 0040 174D     		ldr	r5, .L131+4
+ 1700 0042 AB6B     		ldr	r3, [r5, #56]
+ 1701              		.loc 1 303 16 view .LVU384
+ 1702 0044 174C     		ldr	r4, .L131+8
+ 1703 0046 2360     		str	r3, [r4]
+ 304:BUTTON/Src/button.c ****     A_state[3][2] = READ_AC3();
+ 1704              		.loc 1 304 5 is_stmt 1 view .LVU385
+ 1705              		.loc 1 304 21 is_stmt 0 view .LVU386
+ 1706 0048 4FF48071 		mov	r1, #256
+ 1707 004c 1648     		ldr	r0, .L131+12
+ 1708 004e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1709              	.LVL73:
+ 1710              		.loc 1 304 19 discriminator 1 view .LVU387
+ 1711 0052 A863     		str	r0, [r5, #56]
+ 305:BUTTON/Src/button.c ****     if(A_state[3][2] - temp_state == UP) AR4_AC3();
+ 1712              		.loc 1 305 5 is_stmt 1 view .LVU388
+ 1713              		.loc 1 305 22 is_stmt 0 view .LVU389
+ 1714 0054 2368     		ldr	r3, [r4]
+ 1715 0056 C01A     		subs	r0, r0, r3
+ 1716              		.loc 1 305 7 view .LVU390
+ 1717 0058 0128     		cmp	r0, #1
+ 1718 005a 18D0     		beq	.L129
+ 1719              	.L124:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 36
+
+
+ 306:BUTTON/Src/button.c **** 
+ 307:BUTTON/Src/button.c ****     temp_state = A_state[3][3];
+ 1720              		.loc 1 307 5 is_stmt 1 view .LVU391
+ 1721              		.loc 1 307 28 is_stmt 0 view .LVU392
+ 1722 005c 104D     		ldr	r5, .L131+4
+ 1723 005e EB6B     		ldr	r3, [r5, #60]
+ 1724              		.loc 1 307 16 view .LVU393
+ 1725 0060 104C     		ldr	r4, .L131+8
+ 1726 0062 2360     		str	r3, [r4]
+ 308:BUTTON/Src/button.c ****     A_state[3][3] = READ_AC4();
+ 1727              		.loc 1 308 5 is_stmt 1 view .LVU394
+ 1728              		.loc 1 308 21 is_stmt 0 view .LVU395
+ 1729 0064 0121     		movs	r1, #1
+ 1730 0066 1148     		ldr	r0, .L131+16
+ 1731 0068 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1732              	.LVL74:
+ 1733              		.loc 1 308 19 discriminator 1 view .LVU396
+ 1734 006c E863     		str	r0, [r5, #60]
+ 309:BUTTON/Src/button.c ****     if(A_state[3][3] - temp_state == UP) AR4_AC4();
+ 1735              		.loc 1 309 5 is_stmt 1 view .LVU397
+ 1736              		.loc 1 309 22 is_stmt 0 view .LVU398
+ 1737 006e 2368     		ldr	r3, [r4]
+ 1738 0070 C01A     		subs	r0, r0, r3
+ 1739              		.loc 1 309 7 view .LVU399
+ 1740 0072 0128     		cmp	r0, #1
+ 1741 0074 0ED0     		beq	.L130
+ 1742              	.L125:
+ 310:BUTTON/Src/button.c ****     SET_AR4();
+ 1743              		.loc 1 310 5 is_stmt 1 view .LVU400
+ 1744 0076 0122     		movs	r2, #1
+ 1745 0078 4021     		movs	r1, #64
+ 1746 007a 0848     		ldr	r0, .L131
+ 1747 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1748              	.LVL75:
+ 311:BUTTON/Src/button.c **** }
+ 1749              		.loc 1 311 1 is_stmt 0 view .LVU401
+ 1750 0080 38BD     		pop	{r3, r4, r5, pc}
+ 1751              	.L127:
+ 297:BUTTON/Src/button.c **** 
+ 1752              		.loc 1 297 42 is_stmt 1 discriminator 1 view .LVU402
+ 1753 0082 FFF7FEFF 		bl	AR4_AC1
+ 1754              	.LVL76:
+ 1755 0086 CEE7     		b	.L122
+ 1756              	.L128:
+ 301:BUTTON/Src/button.c **** 
+ 1757              		.loc 1 301 42 discriminator 1 view .LVU403
+ 1758 0088 FFF7FEFF 		bl	AR4_AC2
+ 1759              	.LVL77:
+ 1760 008c D8E7     		b	.L123
+ 1761              	.L129:
+ 305:BUTTON/Src/button.c **** 
+ 1762              		.loc 1 305 42 discriminator 1 view .LVU404
+ 1763 008e FFF7FEFF 		bl	AR4_AC3
+ 1764              	.LVL78:
+ 1765 0092 E3E7     		b	.L124
+ 1766              	.L130:
+ 309:BUTTON/Src/button.c ****     SET_AR4();
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 37
+
+
+ 1767              		.loc 1 309 42 discriminator 1 view .LVU405
+ 1768 0094 FFF7FEFF 		bl	AR4_AC4
+ 1769              	.LVL79:
+ 1770 0098 EDE7     		b	.L125
+ 1771              	.L132:
+ 1772 009a 00BF     		.align	2
+ 1773              	.L131:
+ 1774 009c 000C0240 		.word	1073875968
+ 1775 00a0 00000000 		.word	A_state
+ 1776 00a4 00000000 		.word	temp_state
+ 1777 00a8 00040240 		.word	1073873920
+ 1778 00ac 00100240 		.word	1073876992
+ 1779              		.cfi_endproc
+ 1780              	.LFE259:
+ 1782              		.section	.text.READ_BUTTON_A,"ax",%progbits
+ 1783              		.align	1
+ 1784              		.global	READ_BUTTON_A
+ 1785              		.syntax unified
+ 1786              		.thumb
+ 1787              		.thumb_func
+ 1789              	READ_BUTTON_A:
+ 1790              	.LFB260:
+ 312:BUTTON/Src/button.c **** 
+ 313:BUTTON/Src/button.c **** void READ_BUTTON_A(void)
+ 314:BUTTON/Src/button.c **** {
+ 1791              		.loc 1 314 1 view -0
+ 1792              		.cfi_startproc
+ 1793              		@ args = 0, pretend = 0, frame = 0
+ 1794              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1795 0000 08B5     		push	{r3, lr}
+ 1796              	.LCFI5:
+ 1797              		.cfi_def_cfa_offset 8
+ 1798              		.cfi_offset 3, -8
+ 1799              		.cfi_offset 14, -4
+ 315:BUTTON/Src/button.c ****     READ_BUTTON_A_R1();
+ 1800              		.loc 1 315 5 view .LVU407
+ 1801 0002 FFF7FEFF 		bl	READ_BUTTON_A_R1
+ 1802              	.LVL80:
+ 316:BUTTON/Src/button.c ****     READ_BUTTON_A_R2();
+ 1803              		.loc 1 316 5 view .LVU408
+ 1804 0006 FFF7FEFF 		bl	READ_BUTTON_A_R2
+ 1805              	.LVL81:
+ 317:BUTTON/Src/button.c ****     READ_BUTTON_A_R3();
+ 1806              		.loc 1 317 5 view .LVU409
+ 1807 000a FFF7FEFF 		bl	READ_BUTTON_A_R3
+ 1808              	.LVL82:
+ 318:BUTTON/Src/button.c ****     READ_BUTTON_A_R4();
+ 1809              		.loc 1 318 5 view .LVU410
+ 1810 000e FFF7FEFF 		bl	READ_BUTTON_A_R4
+ 1811              	.LVL83:
+ 319:BUTTON/Src/button.c **** }
+ 1812              		.loc 1 319 1 is_stmt 0 view .LVU411
+ 1813 0012 08BD     		pop	{r3, pc}
+ 1814              		.cfi_endproc
+ 1815              	.LFE260:
+ 1817              		.section	.text.BR1_BC1,"ax",%progbits
+ 1818              		.align	1
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 38
+
+
+ 1819              		.global	BR1_BC1
+ 1820              		.syntax unified
+ 1821              		.thumb
+ 1822              		.thumb_func
+ 1824              	BR1_BC1:
+ 1825              	.LFB261:
+ 320:BUTTON/Src/button.c **** 
+ 321:BUTTON/Src/button.c **** //按键按下后触发的回调函数
+ 322:BUTTON/Src/button.c ****     //BR1
+ 323:BUTTON/Src/button.c ****     void BR1_BC1(void)
+ 324:BUTTON/Src/button.c ****     {
+ 1826              		.loc 1 324 5 is_stmt 1 view -0
+ 1827              		.cfi_startproc
+ 1828              		@ args = 0, pretend = 0, frame = 0
+ 1829              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1830              		@ link register save eliminated.
+ 325:BUTTON/Src/button.c ****         if(rato_num[rato_num_select]!=9) rato_num[rato_num_select]++;
+ 1831              		.loc 1 325 9 view .LVU413
+ 1832              		.loc 1 325 20 is_stmt 0 view .LVU414
+ 1833 0000 054B     		ldr	r3, .L137
+ 1834 0002 1A68     		ldr	r2, [r3]
+ 1835 0004 054B     		ldr	r3, .L137+4
+ 1836 0006 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 1837              		.loc 1 325 11 view .LVU415
+ 1838 000a 092B     		cmp	r3, #9
+ 1839 000c 03D0     		beq	.L135
+ 1840              		.loc 1 325 42 is_stmt 1 discriminator 1 view .LVU416
+ 1841              		.loc 1 325 67 is_stmt 0 discriminator 1 view .LVU417
+ 1842 000e 0133     		adds	r3, r3, #1
+ 1843 0010 0249     		ldr	r1, .L137+4
+ 1844 0012 41F82230 		str	r3, [r1, r2, lsl #2]
+ 1845              	.L135:
+ 326:BUTTON/Src/button.c ****        
+ 327:BUTTON/Src/button.c ****     }
+ 1846              		.loc 1 327 5 view .LVU418
+ 1847 0016 7047     		bx	lr
+ 1848              	.L138:
+ 1849              		.align	2
+ 1850              	.L137:
+ 1851 0018 00000000 		.word	rato_num_select
+ 1852 001c 00000000 		.word	rato_num
+ 1853              		.cfi_endproc
+ 1854              	.LFE261:
+ 1856              		.section	.text.BR1_BC2,"ax",%progbits
+ 1857              		.align	1
+ 1858              		.global	BR1_BC2
+ 1859              		.syntax unified
+ 1860              		.thumb
+ 1861              		.thumb_func
+ 1863              	BR1_BC2:
+ 1864              	.LFB262:
+ 328:BUTTON/Src/button.c **** 
+ 329:BUTTON/Src/button.c ****     void BR1_BC2(void)
+ 330:BUTTON/Src/button.c ****     {
+ 1865              		.loc 1 330 5 is_stmt 1 view -0
+ 1866              		.cfi_startproc
+ 1867              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 39
+
+
+ 1868              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1869              		@ link register save eliminated.
+ 331:BUTTON/Src/button.c ****         if(chip_select!=1) chip_select++;
+ 1870              		.loc 1 331 9 view .LVU420
+ 1871              		.loc 1 331 23 is_stmt 0 view .LVU421
+ 1872 0000 034B     		ldr	r3, .L141
+ 1873 0002 1B68     		ldr	r3, [r3]
+ 1874              		.loc 1 331 11 view .LVU422
+ 1875 0004 012B     		cmp	r3, #1
+ 1876 0006 02D0     		beq	.L139
+ 1877              		.loc 1 331 28 is_stmt 1 discriminator 1 view .LVU423
+ 1878              		.loc 1 331 39 is_stmt 0 discriminator 1 view .LVU424
+ 1879 0008 0133     		adds	r3, r3, #1
+ 1880 000a 014A     		ldr	r2, .L141
+ 1881 000c 1360     		str	r3, [r2]
+ 1882              	.L139:
+ 332:BUTTON/Src/button.c ****         
+ 333:BUTTON/Src/button.c ****     }
+ 1883              		.loc 1 333 5 view .LVU425
+ 1884 000e 7047     		bx	lr
+ 1885              	.L142:
+ 1886              		.align	2
+ 1887              	.L141:
+ 1888 0010 00000000 		.word	chip_select
+ 1889              		.cfi_endproc
+ 1890              	.LFE262:
+ 1892              		.section	.text.BR1_BC3,"ax",%progbits
+ 1893              		.align	1
+ 1894              		.global	BR1_BC3
+ 1895              		.syntax unified
+ 1896              		.thumb
+ 1897              		.thumb_func
+ 1899              	BR1_BC3:
+ 1900              	.LFB263:
+ 334:BUTTON/Src/button.c **** 
+ 335:BUTTON/Src/button.c ****     void BR1_BC3(void)
+ 336:BUTTON/Src/button.c ****     {
+ 1901              		.loc 1 336 5 is_stmt 1 view -0
+ 1902              		.cfi_startproc
+ 1903              		@ args = 0, pretend = 0, frame = 0
+ 1904              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1905              		@ link register save eliminated.
+ 337:BUTTON/Src/button.c ****         if(chip_b_mode!=1) chip_b_mode++;
+ 1906              		.loc 1 337 9 view .LVU427
+ 1907              		.loc 1 337 23 is_stmt 0 view .LVU428
+ 1908 0000 034B     		ldr	r3, .L145
+ 1909 0002 1B68     		ldr	r3, [r3]
+ 1910              		.loc 1 337 11 view .LVU429
+ 1911 0004 012B     		cmp	r3, #1
+ 1912 0006 02D0     		beq	.L143
+ 1913              		.loc 1 337 28 is_stmt 1 discriminator 1 view .LVU430
+ 1914              		.loc 1 337 39 is_stmt 0 discriminator 1 view .LVU431
+ 1915 0008 0133     		adds	r3, r3, #1
+ 1916 000a 014A     		ldr	r2, .L145
+ 1917 000c 1360     		str	r3, [r2]
+ 1918              	.L143:
+ 338:BUTTON/Src/button.c ****         
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 40
+
+
+ 339:BUTTON/Src/button.c ****     }
+ 1919              		.loc 1 339 5 view .LVU432
+ 1920 000e 7047     		bx	lr
+ 1921              	.L146:
+ 1922              		.align	2
+ 1923              	.L145:
+ 1924 0010 00000000 		.word	chip_b_mode
+ 1925              		.cfi_endproc
+ 1926              	.LFE263:
+ 1928              		.section	.rodata.BR1_BC4.str1.4,"aMS",%progbits,1
+ 1929              		.align	2
+ 1930              	.LC0:
+ 1931 0000 4252315F 		.ascii	"BR1_BC4\000"
+ 1931      42433400 
+ 1932              		.section	.text.BR1_BC4,"ax",%progbits
+ 1933              		.align	1
+ 1934              		.global	BR1_BC4
+ 1935              		.syntax unified
+ 1936              		.thumb
+ 1937              		.thumb_func
+ 1939              	BR1_BC4:
+ 1940              	.LFB264:
+ 340:BUTTON/Src/button.c **** 
+ 341:BUTTON/Src/button.c ****     void BR1_BC4(void)
+ 342:BUTTON/Src/button.c ****     {
+ 1941              		.loc 1 342 5 is_stmt 1 view -0
+ 1942              		.cfi_startproc
+ 1943              		@ args = 0, pretend = 0, frame = 0
+ 1944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1945 0000 08B5     		push	{r3, lr}
+ 1946              	.LCFI6:
+ 1947              		.cfi_def_cfa_offset 8
+ 1948              		.cfi_offset 3, -8
+ 1949              		.cfi_offset 14, -4
+ 343:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR1_BC4",16);         
+ 1950              		.loc 1 343 9 view .LVU434
+ 1951 0002 1023     		movs	r3, #16
+ 1952 0004 024A     		ldr	r2, .L149
+ 1953 0006 0021     		movs	r1, #0
+ 1954 0008 0846     		mov	r0, r1
+ 1955 000a FFF7FEFF 		bl	OLED_ShowString
+ 1956              	.LVL84:
+ 344:BUTTON/Src/button.c ****     }
+ 1957              		.loc 1 344 5 is_stmt 0 view .LVU435
+ 1958 000e 08BD     		pop	{r3, pc}
+ 1959              	.L150:
+ 1960              		.align	2
+ 1961              	.L149:
+ 1962 0010 00000000 		.word	.LC0
+ 1963              		.cfi_endproc
+ 1964              	.LFE264:
+ 1966              		.section	.text.BR2_BC1,"ax",%progbits
+ 1967              		.align	1
+ 1968              		.global	BR2_BC1
+ 1969              		.syntax unified
+ 1970              		.thumb
+ 1971              		.thumb_func
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 41
+
+
+ 1973              	BR2_BC1:
+ 1974              	.LFB265:
+ 345:BUTTON/Src/button.c **** 
+ 346:BUTTON/Src/button.c ****     //BR2
+ 347:BUTTON/Src/button.c ****     void BR2_BC1(void)
+ 348:BUTTON/Src/button.c ****     {
+ 1975              		.loc 1 348 5 is_stmt 1 view -0
+ 1976              		.cfi_startproc
+ 1977              		@ args = 0, pretend = 0, frame = 0
+ 1978              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1979              		@ link register save eliminated.
+ 349:BUTTON/Src/button.c ****         if(rato_num[rato_num_select]!=0) rato_num[rato_num_select]--;
+ 1980              		.loc 1 349 9 view .LVU437
+ 1981              		.loc 1 349 20 is_stmt 0 view .LVU438
+ 1982 0000 054B     		ldr	r3, .L153
+ 1983 0002 1A68     		ldr	r2, [r3]
+ 1984 0004 054B     		ldr	r3, .L153+4
+ 1985 0006 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 1986              		.loc 1 349 11 view .LVU439
+ 1987 000a 1BB1     		cbz	r3, .L151
+ 1988              		.loc 1 349 42 is_stmt 1 discriminator 1 view .LVU440
+ 1989              		.loc 1 349 67 is_stmt 0 discriminator 1 view .LVU441
+ 1990 000c 013B     		subs	r3, r3, #1
+ 1991 000e 0349     		ldr	r1, .L153+4
+ 1992 0010 41F82230 		str	r3, [r1, r2, lsl #2]
+ 1993              	.L151:
+ 350:BUTTON/Src/button.c ****         
+ 351:BUTTON/Src/button.c ****     }
+ 1994              		.loc 1 351 5 view .LVU442
+ 1995 0014 7047     		bx	lr
+ 1996              	.L154:
+ 1997 0016 00BF     		.align	2
+ 1998              	.L153:
+ 1999 0018 00000000 		.word	rato_num_select
+ 2000 001c 00000000 		.word	rato_num
+ 2001              		.cfi_endproc
+ 2002              	.LFE265:
+ 2004              		.section	.text.BR2_BC2,"ax",%progbits
+ 2005              		.align	1
+ 2006              		.global	BR2_BC2
+ 2007              		.syntax unified
+ 2008              		.thumb
+ 2009              		.thumb_func
+ 2011              	BR2_BC2:
+ 2012              	.LFB266:
+ 352:BUTTON/Src/button.c **** 
+ 353:BUTTON/Src/button.c ****     void BR2_BC2(void)
+ 354:BUTTON/Src/button.c ****     {
+ 2013              		.loc 1 354 5 is_stmt 1 view -0
+ 2014              		.cfi_startproc
+ 2015              		@ args = 0, pretend = 0, frame = 0
+ 2016              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2017              		@ link register save eliminated.
+ 355:BUTTON/Src/button.c ****         if(chip_select!=0) chip_select--;
+ 2018              		.loc 1 355 9 view .LVU444
+ 2019              		.loc 1 355 23 is_stmt 0 view .LVU445
+ 2020 0000 034B     		ldr	r3, .L157
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 42
+
+
+ 2021 0002 1B68     		ldr	r3, [r3]
+ 2022              		.loc 1 355 11 view .LVU446
+ 2023 0004 13B1     		cbz	r3, .L155
+ 2024              		.loc 1 355 28 is_stmt 1 discriminator 1 view .LVU447
+ 2025              		.loc 1 355 39 is_stmt 0 discriminator 1 view .LVU448
+ 2026 0006 013B     		subs	r3, r3, #1
+ 2027 0008 014A     		ldr	r2, .L157
+ 2028 000a 1360     		str	r3, [r2]
+ 2029              	.L155:
+ 356:BUTTON/Src/button.c ****         
+ 357:BUTTON/Src/button.c ****     }
+ 2030              		.loc 1 357 5 view .LVU449
+ 2031 000c 7047     		bx	lr
+ 2032              	.L158:
+ 2033 000e 00BF     		.align	2
+ 2034              	.L157:
+ 2035 0010 00000000 		.word	chip_select
+ 2036              		.cfi_endproc
+ 2037              	.LFE266:
+ 2039              		.section	.text.BR2_BC3,"ax",%progbits
+ 2040              		.align	1
+ 2041              		.global	BR2_BC3
+ 2042              		.syntax unified
+ 2043              		.thumb
+ 2044              		.thumb_func
+ 2046              	BR2_BC3:
+ 2047              	.LFB267:
+ 358:BUTTON/Src/button.c **** 
+ 359:BUTTON/Src/button.c ****     void BR2_BC3(void)
+ 360:BUTTON/Src/button.c ****     {
+ 2048              		.loc 1 360 5 is_stmt 1 view -0
+ 2049              		.cfi_startproc
+ 2050              		@ args = 0, pretend = 0, frame = 0
+ 2051              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2052              		@ link register save eliminated.
+ 361:BUTTON/Src/button.c ****         if(chip_b_mode!=0) chip_b_mode--;
+ 2053              		.loc 1 361 9 view .LVU451
+ 2054              		.loc 1 361 23 is_stmt 0 view .LVU452
+ 2055 0000 034B     		ldr	r3, .L161
+ 2056 0002 1B68     		ldr	r3, [r3]
+ 2057              		.loc 1 361 11 view .LVU453
+ 2058 0004 13B1     		cbz	r3, .L159
+ 2059              		.loc 1 361 28 is_stmt 1 discriminator 1 view .LVU454
+ 2060              		.loc 1 361 39 is_stmt 0 discriminator 1 view .LVU455
+ 2061 0006 013B     		subs	r3, r3, #1
+ 2062 0008 014A     		ldr	r2, .L161
+ 2063 000a 1360     		str	r3, [r2]
+ 2064              	.L159:
+ 362:BUTTON/Src/button.c ****              
+ 363:BUTTON/Src/button.c ****     }
+ 2065              		.loc 1 363 5 view .LVU456
+ 2066 000c 7047     		bx	lr
+ 2067              	.L162:
+ 2068 000e 00BF     		.align	2
+ 2069              	.L161:
+ 2070 0010 00000000 		.word	chip_b_mode
+ 2071              		.cfi_endproc
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 43
+
+
+ 2072              	.LFE267:
+ 2074              		.section	.rodata.BR2_BC4.str1.4,"aMS",%progbits,1
+ 2075              		.align	2
+ 2076              	.LC1:
+ 2077 0000 4252325F 		.ascii	"BR2_BC4\000"
+ 2077      42433400 
+ 2078              		.section	.text.BR2_BC4,"ax",%progbits
+ 2079              		.align	1
+ 2080              		.global	BR2_BC4
+ 2081              		.syntax unified
+ 2082              		.thumb
+ 2083              		.thumb_func
+ 2085              	BR2_BC4:
+ 2086              	.LFB268:
+ 364:BUTTON/Src/button.c **** 
+ 365:BUTTON/Src/button.c ****     void BR2_BC4(void)
+ 366:BUTTON/Src/button.c ****     {
+ 2087              		.loc 1 366 5 is_stmt 1 view -0
+ 2088              		.cfi_startproc
+ 2089              		@ args = 0, pretend = 0, frame = 0
+ 2090              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2091 0000 08B5     		push	{r3, lr}
+ 2092              	.LCFI7:
+ 2093              		.cfi_def_cfa_offset 8
+ 2094              		.cfi_offset 3, -8
+ 2095              		.cfi_offset 14, -4
+ 367:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR2_BC4",16);       
+ 2096              		.loc 1 367 9 view .LVU458
+ 2097 0002 1023     		movs	r3, #16
+ 2098 0004 024A     		ldr	r2, .L165
+ 2099 0006 0021     		movs	r1, #0
+ 2100 0008 0846     		mov	r0, r1
+ 2101 000a FFF7FEFF 		bl	OLED_ShowString
+ 2102              	.LVL85:
+ 368:BUTTON/Src/button.c ****     }
+ 2103              		.loc 1 368 5 is_stmt 0 view .LVU459
+ 2104 000e 08BD     		pop	{r3, pc}
+ 2105              	.L166:
+ 2106              		.align	2
+ 2107              	.L165:
+ 2108 0010 00000000 		.word	.LC1
+ 2109              		.cfi_endproc
+ 2110              	.LFE268:
+ 2112              		.section	.rodata.BR3_BC1.str1.4,"aMS",%progbits,1
+ 2113              		.align	2
+ 2114              	.LC2:
+ 2115 0000 4252335F 		.ascii	"BR3_BC1\000"
+ 2115      42433100 
+ 2116              		.section	.text.BR3_BC1,"ax",%progbits
+ 2117              		.align	1
+ 2118              		.global	BR3_BC1
+ 2119              		.syntax unified
+ 2120              		.thumb
+ 2121              		.thumb_func
+ 2123              	BR3_BC1:
+ 2124              	.LFB269:
+ 369:BUTTON/Src/button.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 44
+
+
+ 370:BUTTON/Src/button.c ****     //BR3
+ 371:BUTTON/Src/button.c ****     void BR3_BC1(void)
+ 372:BUTTON/Src/button.c ****     {
+ 2125              		.loc 1 372 5 is_stmt 1 view -0
+ 2126              		.cfi_startproc
+ 2127              		@ args = 0, pretend = 0, frame = 0
+ 2128              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2129 0000 08B5     		push	{r3, lr}
+ 2130              	.LCFI8:
+ 2131              		.cfi_def_cfa_offset 8
+ 2132              		.cfi_offset 3, -8
+ 2133              		.cfi_offset 14, -4
+ 373:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR3_BC1",16);
+ 2134              		.loc 1 373 9 view .LVU461
+ 2135 0002 1023     		movs	r3, #16
+ 2136 0004 024A     		ldr	r2, .L169
+ 2137 0006 0021     		movs	r1, #0
+ 2138 0008 0846     		mov	r0, r1
+ 2139 000a FFF7FEFF 		bl	OLED_ShowString
+ 2140              	.LVL86:
+ 374:BUTTON/Src/button.c ****         
+ 375:BUTTON/Src/button.c ****     }
+ 2141              		.loc 1 375 5 is_stmt 0 view .LVU462
+ 2142 000e 08BD     		pop	{r3, pc}
+ 2143              	.L170:
+ 2144              		.align	2
+ 2145              	.L169:
+ 2146 0010 00000000 		.word	.LC2
+ 2147              		.cfi_endproc
+ 2148              	.LFE269:
+ 2150              		.section	.rodata.BR3_BC2.str1.4,"aMS",%progbits,1
+ 2151              		.align	2
+ 2152              	.LC3:
+ 2153 0000 4252335F 		.ascii	"BR3_BC2\000"
+ 2153      42433200 
+ 2154              		.section	.text.BR3_BC2,"ax",%progbits
+ 2155              		.align	1
+ 2156              		.global	BR3_BC2
+ 2157              		.syntax unified
+ 2158              		.thumb
+ 2159              		.thumb_func
+ 2161              	BR3_BC2:
+ 2162              	.LFB270:
+ 376:BUTTON/Src/button.c **** 
+ 377:BUTTON/Src/button.c ****     void BR3_BC2(void)
+ 378:BUTTON/Src/button.c ****     {
+ 2163              		.loc 1 378 5 is_stmt 1 view -0
+ 2164              		.cfi_startproc
+ 2165              		@ args = 0, pretend = 0, frame = 0
+ 2166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2167 0000 08B5     		push	{r3, lr}
+ 2168              	.LCFI9:
+ 2169              		.cfi_def_cfa_offset 8
+ 2170              		.cfi_offset 3, -8
+ 2171              		.cfi_offset 14, -4
+ 379:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR3_BC2",16);
+ 2172              		.loc 1 379 9 view .LVU464
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 45
+
+
+ 2173 0002 1023     		movs	r3, #16
+ 2174 0004 024A     		ldr	r2, .L173
+ 2175 0006 0021     		movs	r1, #0
+ 2176 0008 0846     		mov	r0, r1
+ 2177 000a FFF7FEFF 		bl	OLED_ShowString
+ 2178              	.LVL87:
+ 380:BUTTON/Src/button.c ****         
+ 381:BUTTON/Src/button.c ****     }
+ 2179              		.loc 1 381 5 is_stmt 0 view .LVU465
+ 2180 000e 08BD     		pop	{r3, pc}
+ 2181              	.L174:
+ 2182              		.align	2
+ 2183              	.L173:
+ 2184 0010 00000000 		.word	.LC3
+ 2185              		.cfi_endproc
+ 2186              	.LFE270:
+ 2188              		.section	.rodata.BR3_BC3.str1.4,"aMS",%progbits,1
+ 2189              		.align	2
+ 2190              	.LC4:
+ 2191 0000 4252335F 		.ascii	"BR3_BC3\000"
+ 2191      42433300 
+ 2192              		.section	.text.BR3_BC3,"ax",%progbits
+ 2193              		.align	1
+ 2194              		.global	BR3_BC3
+ 2195              		.syntax unified
+ 2196              		.thumb
+ 2197              		.thumb_func
+ 2199              	BR3_BC3:
+ 2200              	.LFB271:
+ 382:BUTTON/Src/button.c **** 
+ 383:BUTTON/Src/button.c ****     void BR3_BC3(void)
+ 384:BUTTON/Src/button.c ****     {
+ 2201              		.loc 1 384 5 is_stmt 1 view -0
+ 2202              		.cfi_startproc
+ 2203              		@ args = 0, pretend = 0, frame = 0
+ 2204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2205 0000 08B5     		push	{r3, lr}
+ 2206              	.LCFI10:
+ 2207              		.cfi_def_cfa_offset 8
+ 2208              		.cfi_offset 3, -8
+ 2209              		.cfi_offset 14, -4
+ 385:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR3_BC3",16);
+ 2210              		.loc 1 385 9 view .LVU467
+ 2211 0002 1023     		movs	r3, #16
+ 2212 0004 024A     		ldr	r2, .L177
+ 2213 0006 0021     		movs	r1, #0
+ 2214 0008 0846     		mov	r0, r1
+ 2215 000a FFF7FEFF 		bl	OLED_ShowString
+ 2216              	.LVL88:
+ 386:BUTTON/Src/button.c ****         
+ 387:BUTTON/Src/button.c ****     }
+ 2217              		.loc 1 387 5 is_stmt 0 view .LVU468
+ 2218 000e 08BD     		pop	{r3, pc}
+ 2219              	.L178:
+ 2220              		.align	2
+ 2221              	.L177:
+ 2222 0010 00000000 		.word	.LC4
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 46
+
+
+ 2223              		.cfi_endproc
+ 2224              	.LFE271:
+ 2226              		.section	.rodata.BR3_BC4.str1.4,"aMS",%progbits,1
+ 2227              		.align	2
+ 2228              	.LC5:
+ 2229 0000 4252335F 		.ascii	"BR3_BC4\000"
+ 2229      42433400 
+ 2230              		.section	.text.BR3_BC4,"ax",%progbits
+ 2231              		.align	1
+ 2232              		.global	BR3_BC4
+ 2233              		.syntax unified
+ 2234              		.thumb
+ 2235              		.thumb_func
+ 2237              	BR3_BC4:
+ 2238              	.LFB272:
+ 388:BUTTON/Src/button.c **** 
+ 389:BUTTON/Src/button.c ****     void BR3_BC4(void)
+ 390:BUTTON/Src/button.c ****     {
+ 2239              		.loc 1 390 5 is_stmt 1 view -0
+ 2240              		.cfi_startproc
+ 2241              		@ args = 0, pretend = 0, frame = 0
+ 2242              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2243 0000 08B5     		push	{r3, lr}
+ 2244              	.LCFI11:
+ 2245              		.cfi_def_cfa_offset 8
+ 2246              		.cfi_offset 3, -8
+ 2247              		.cfi_offset 14, -4
+ 391:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR3_BC4",16);         
+ 2248              		.loc 1 391 9 view .LVU470
+ 2249 0002 1023     		movs	r3, #16
+ 2250 0004 024A     		ldr	r2, .L181
+ 2251 0006 0021     		movs	r1, #0
+ 2252 0008 0846     		mov	r0, r1
+ 2253 000a FFF7FEFF 		bl	OLED_ShowString
+ 2254              	.LVL89:
+ 392:BUTTON/Src/button.c ****     }
+ 2255              		.loc 1 392 5 is_stmt 0 view .LVU471
+ 2256 000e 08BD     		pop	{r3, pc}
+ 2257              	.L182:
+ 2258              		.align	2
+ 2259              	.L181:
+ 2260 0010 00000000 		.word	.LC5
+ 2261              		.cfi_endproc
+ 2262              	.LFE272:
+ 2264              		.section	.rodata.BR4_BC1.str1.4,"aMS",%progbits,1
+ 2265              		.align	2
+ 2266              	.LC6:
+ 2267 0000 4252345F 		.ascii	"BR4_BC1\000"
+ 2267      42433100 
+ 2268              		.section	.text.BR4_BC1,"ax",%progbits
+ 2269              		.align	1
+ 2270              		.global	BR4_BC1
+ 2271              		.syntax unified
+ 2272              		.thumb
+ 2273              		.thumb_func
+ 2275              	BR4_BC1:
+ 2276              	.LFB273:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 47
+
+
+ 393:BUTTON/Src/button.c **** 
+ 394:BUTTON/Src/button.c ****     //BR4
+ 395:BUTTON/Src/button.c ****     void BR4_BC1(void)
+ 396:BUTTON/Src/button.c ****     {
+ 2277              		.loc 1 396 5 is_stmt 1 view -0
+ 2278              		.cfi_startproc
+ 2279              		@ args = 0, pretend = 0, frame = 0
+ 2280              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2281 0000 08B5     		push	{r3, lr}
+ 2282              	.LCFI12:
+ 2283              		.cfi_def_cfa_offset 8
+ 2284              		.cfi_offset 3, -8
+ 2285              		.cfi_offset 14, -4
+ 397:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR4_BC1",16);
+ 2286              		.loc 1 397 9 view .LVU473
+ 2287 0002 1023     		movs	r3, #16
+ 2288 0004 024A     		ldr	r2, .L185
+ 2289 0006 0021     		movs	r1, #0
+ 2290 0008 0846     		mov	r0, r1
+ 2291 000a FFF7FEFF 		bl	OLED_ShowString
+ 2292              	.LVL90:
+ 398:BUTTON/Src/button.c ****        
+ 399:BUTTON/Src/button.c ****     }
+ 2293              		.loc 1 399 5 is_stmt 0 view .LVU474
+ 2294 000e 08BD     		pop	{r3, pc}
+ 2295              	.L186:
+ 2296              		.align	2
+ 2297              	.L185:
+ 2298 0010 00000000 		.word	.LC6
+ 2299              		.cfi_endproc
+ 2300              	.LFE273:
+ 2302              		.section	.rodata.BR4_BC2.str1.4,"aMS",%progbits,1
+ 2303              		.align	2
+ 2304              	.LC7:
+ 2305 0000 4252345F 		.ascii	"BR4_BC2\000"
+ 2305      42433200 
+ 2306              		.section	.text.BR4_BC2,"ax",%progbits
+ 2307              		.align	1
+ 2308              		.global	BR4_BC2
+ 2309              		.syntax unified
+ 2310              		.thumb
+ 2311              		.thumb_func
+ 2313              	BR4_BC2:
+ 2314              	.LFB274:
+ 400:BUTTON/Src/button.c **** 
+ 401:BUTTON/Src/button.c ****     void BR4_BC2(void)
+ 402:BUTTON/Src/button.c ****     {
+ 2315              		.loc 1 402 5 is_stmt 1 view -0
+ 2316              		.cfi_startproc
+ 2317              		@ args = 0, pretend = 0, frame = 0
+ 2318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2319 0000 08B5     		push	{r3, lr}
+ 2320              	.LCFI13:
+ 2321              		.cfi_def_cfa_offset 8
+ 2322              		.cfi_offset 3, -8
+ 2323              		.cfi_offset 14, -4
+ 403:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR4_BC2",16);
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 48
+
+
+ 2324              		.loc 1 403 9 view .LVU476
+ 2325 0002 1023     		movs	r3, #16
+ 2326 0004 024A     		ldr	r2, .L189
+ 2327 0006 0021     		movs	r1, #0
+ 2328 0008 0846     		mov	r0, r1
+ 2329 000a FFF7FEFF 		bl	OLED_ShowString
+ 2330              	.LVL91:
+ 404:BUTTON/Src/button.c ****        
+ 405:BUTTON/Src/button.c ****     }
+ 2331              		.loc 1 405 5 is_stmt 0 view .LVU477
+ 2332 000e 08BD     		pop	{r3, pc}
+ 2333              	.L190:
+ 2334              		.align	2
+ 2335              	.L189:
+ 2336 0010 00000000 		.word	.LC7
+ 2337              		.cfi_endproc
+ 2338              	.LFE274:
+ 2340              		.section	.rodata.BR4_BC3.str1.4,"aMS",%progbits,1
+ 2341              		.align	2
+ 2342              	.LC8:
+ 2343 0000 4252345F 		.ascii	"BR4_BC3\000"
+ 2343      42433300 
+ 2344              		.section	.text.BR4_BC3,"ax",%progbits
+ 2345              		.align	1
+ 2346              		.global	BR4_BC3
+ 2347              		.syntax unified
+ 2348              		.thumb
+ 2349              		.thumb_func
+ 2351              	BR4_BC3:
+ 2352              	.LFB275:
+ 406:BUTTON/Src/button.c **** 
+ 407:BUTTON/Src/button.c ****     void BR4_BC3(void)
+ 408:BUTTON/Src/button.c ****     {
+ 2353              		.loc 1 408 5 is_stmt 1 view -0
+ 2354              		.cfi_startproc
+ 2355              		@ args = 0, pretend = 0, frame = 0
+ 2356              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2357 0000 08B5     		push	{r3, lr}
+ 2358              	.LCFI14:
+ 2359              		.cfi_def_cfa_offset 8
+ 2360              		.cfi_offset 3, -8
+ 2361              		.cfi_offset 14, -4
+ 409:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR4_BC3",16);
+ 2362              		.loc 1 409 9 view .LVU479
+ 2363 0002 1023     		movs	r3, #16
+ 2364 0004 024A     		ldr	r2, .L193
+ 2365 0006 0021     		movs	r1, #0
+ 2366 0008 0846     		mov	r0, r1
+ 2367 000a FFF7FEFF 		bl	OLED_ShowString
+ 2368              	.LVL92:
+ 410:BUTTON/Src/button.c ****          
+ 411:BUTTON/Src/button.c ****     }
+ 2369              		.loc 1 411 5 is_stmt 0 view .LVU480
+ 2370 000e 08BD     		pop	{r3, pc}
+ 2371              	.L194:
+ 2372              		.align	2
+ 2373              	.L193:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 49
+
+
+ 2374 0010 00000000 		.word	.LC8
+ 2375              		.cfi_endproc
+ 2376              	.LFE275:
+ 2378              		.section	.rodata.BR4_BC4.str1.4,"aMS",%progbits,1
+ 2379              		.align	2
+ 2380              	.LC9:
+ 2381 0000 4252345F 		.ascii	"BR4_BC4\000"
+ 2381      42433400 
+ 2382              		.section	.text.BR4_BC4,"ax",%progbits
+ 2383              		.align	1
+ 2384              		.global	BR4_BC4
+ 2385              		.syntax unified
+ 2386              		.thumb
+ 2387              		.thumb_func
+ 2389              	BR4_BC4:
+ 2390              	.LFB276:
+ 412:BUTTON/Src/button.c **** 
+ 413:BUTTON/Src/button.c ****     void BR4_BC4(void)
+ 414:BUTTON/Src/button.c ****     {
+ 2391              		.loc 1 414 5 is_stmt 1 view -0
+ 2392              		.cfi_startproc
+ 2393              		@ args = 0, pretend = 0, frame = 0
+ 2394              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2395 0000 08B5     		push	{r3, lr}
+ 2396              	.LCFI15:
+ 2397              		.cfi_def_cfa_offset 8
+ 2398              		.cfi_offset 3, -8
+ 2399              		.cfi_offset 14, -4
+ 415:BUTTON/Src/button.c ****         OLED_ShowString(0,0,"BR4_BC4",16);        
+ 2400              		.loc 1 415 9 view .LVU482
+ 2401 0002 1023     		movs	r3, #16
+ 2402 0004 024A     		ldr	r2, .L197
+ 2403 0006 0021     		movs	r1, #0
+ 2404 0008 0846     		mov	r0, r1
+ 2405 000a FFF7FEFF 		bl	OLED_ShowString
+ 2406              	.LVL93:
+ 416:BUTTON/Src/button.c ****     }
+ 2407              		.loc 1 416 5 is_stmt 0 view .LVU483
+ 2408 000e 08BD     		pop	{r3, pc}
+ 2409              	.L198:
+ 2410              		.align	2
+ 2411              	.L197:
+ 2412 0010 00000000 		.word	.LC9
+ 2413              		.cfi_endproc
+ 2414              	.LFE276:
+ 2416              		.section	.text.READ_BUTTON_B_R1,"ax",%progbits
+ 2417              		.align	1
+ 2418              		.global	READ_BUTTON_B_R1
+ 2419              		.syntax unified
+ 2420              		.thumb
+ 2421              		.thumb_func
+ 2423              	READ_BUTTON_B_R1:
+ 2424              	.LFB277:
+ 417:BUTTON/Src/button.c **** 
+ 418:BUTTON/Src/button.c **** void READ_BUTTON_B_R1(void)
+ 419:BUTTON/Src/button.c **** {
+ 2425              		.loc 1 419 1 is_stmt 1 view -0
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 50
+
+
+ 2426              		.cfi_startproc
+ 2427              		@ args = 0, pretend = 0, frame = 0
+ 2428              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2429 0000 38B5     		push	{r3, r4, r5, lr}
+ 2430              	.LCFI16:
+ 2431              		.cfi_def_cfa_offset 16
+ 2432              		.cfi_offset 3, -16
+ 2433              		.cfi_offset 4, -12
+ 2434              		.cfi_offset 5, -8
+ 2435              		.cfi_offset 14, -4
+ 420:BUTTON/Src/button.c ****     RESET_BR1();
+ 2436              		.loc 1 420 5 view .LVU485
+ 2437 0002 0022     		movs	r2, #0
+ 2438 0004 4FF40051 		mov	r1, #8192
+ 2439 0008 2648     		ldr	r0, .L209
+ 2440 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2441              	.LVL94:
+ 421:BUTTON/Src/button.c ****     temp_state = B_state[0][0];
+ 2442              		.loc 1 421 5 view .LVU486
+ 2443              		.loc 1 421 28 is_stmt 0 view .LVU487
+ 2444 000e 264D     		ldr	r5, .L209+4
+ 2445 0010 2B68     		ldr	r3, [r5]
+ 2446              		.loc 1 421 16 view .LVU488
+ 2447 0012 264C     		ldr	r4, .L209+8
+ 2448 0014 2360     		str	r3, [r4]
+ 422:BUTTON/Src/button.c ****     B_state[0][0] = READ_BC1();
+ 2449              		.loc 1 422 5 is_stmt 1 view .LVU489
+ 2450              		.loc 1 422 21 is_stmt 0 view .LVU490
+ 2451 0016 4FF40071 		mov	r1, #512
+ 2452 001a 2548     		ldr	r0, .L209+12
+ 2453 001c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2454              	.LVL95:
+ 2455              		.loc 1 422 19 discriminator 1 view .LVU491
+ 2456 0020 2860     		str	r0, [r5]
+ 423:BUTTON/Src/button.c ****     if(B_state[0][0] - temp_state == UP) BR1_BC1();
+ 2457              		.loc 1 423 5 is_stmt 1 view .LVU492
+ 2458              		.loc 1 423 22 is_stmt 0 view .LVU493
+ 2459 0022 2368     		ldr	r3, [r4]
+ 2460 0024 C01A     		subs	r0, r0, r3
+ 2461              		.loc 1 423 7 view .LVU494
+ 2462 0026 0128     		cmp	r0, #1
+ 2463 0028 30D0     		beq	.L205
+ 2464              	.L200:
+ 424:BUTTON/Src/button.c **** 
+ 425:BUTTON/Src/button.c ****     temp_state = B_state[0][1];
+ 2465              		.loc 1 425 5 is_stmt 1 view .LVU495
+ 2466              		.loc 1 425 28 is_stmt 0 view .LVU496
+ 2467 002a 1F4D     		ldr	r5, .L209+4
+ 2468 002c 6B68     		ldr	r3, [r5, #4]
+ 2469              		.loc 1 425 16 view .LVU497
+ 2470 002e 1F4C     		ldr	r4, .L209+8
+ 2471 0030 2360     		str	r3, [r4]
+ 426:BUTTON/Src/button.c ****     B_state[0][1] = READ_BC2();
+ 2472              		.loc 1 426 5 is_stmt 1 view .LVU498
+ 2473              		.loc 1 426 21 is_stmt 0 view .LVU499
+ 2474 0032 4FF40061 		mov	r1, #2048
+ 2475 0036 1E48     		ldr	r0, .L209+12
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 51
+
+
+ 2476 0038 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2477              	.LVL96:
+ 2478              		.loc 1 426 19 discriminator 1 view .LVU500
+ 2479 003c 6860     		str	r0, [r5, #4]
+ 427:BUTTON/Src/button.c ****     if(B_state[0][1] - temp_state == UP) BR1_BC2();
+ 2480              		.loc 1 427 5 is_stmt 1 view .LVU501
+ 2481              		.loc 1 427 22 is_stmt 0 view .LVU502
+ 2482 003e 2368     		ldr	r3, [r4]
+ 2483 0040 C01A     		subs	r0, r0, r3
+ 2484              		.loc 1 427 7 view .LVU503
+ 2485 0042 0128     		cmp	r0, #1
+ 2486 0044 25D0     		beq	.L206
+ 2487              	.L201:
+ 428:BUTTON/Src/button.c **** 
+ 429:BUTTON/Src/button.c ****     temp_state = B_state[0][2];
+ 2488              		.loc 1 429 5 is_stmt 1 view .LVU504
+ 2489              		.loc 1 429 28 is_stmt 0 view .LVU505
+ 2490 0046 184D     		ldr	r5, .L209+4
+ 2491 0048 AB68     		ldr	r3, [r5, #8]
+ 2492              		.loc 1 429 16 view .LVU506
+ 2493 004a 184C     		ldr	r4, .L209+8
+ 2494 004c 2360     		str	r3, [r4]
+ 430:BUTTON/Src/button.c ****     B_state[0][2] = READ_BC3();
+ 2495              		.loc 1 430 5 is_stmt 1 view .LVU507
+ 2496              		.loc 1 430 21 is_stmt 0 view .LVU508
+ 2497 004e 4FF40041 		mov	r1, #32768
+ 2498 0052 1748     		ldr	r0, .L209+12
+ 2499 0054 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2500              	.LVL97:
+ 2501              		.loc 1 430 19 discriminator 1 view .LVU509
+ 2502 0058 A860     		str	r0, [r5, #8]
+ 431:BUTTON/Src/button.c ****     if(B_state[0][2] - temp_state == UP) BR1_BC3();
+ 2503              		.loc 1 431 5 is_stmt 1 view .LVU510
+ 2504              		.loc 1 431 22 is_stmt 0 view .LVU511
+ 2505 005a 2368     		ldr	r3, [r4]
+ 2506 005c C01A     		subs	r0, r0, r3
+ 2507              		.loc 1 431 7 view .LVU512
+ 2508 005e 0128     		cmp	r0, #1
+ 2509 0060 1AD0     		beq	.L207
+ 2510              	.L202:
+ 432:BUTTON/Src/button.c **** 
+ 433:BUTTON/Src/button.c ****     temp_state = B_state[0][3];
+ 2511              		.loc 1 433 5 is_stmt 1 view .LVU513
+ 2512              		.loc 1 433 28 is_stmt 0 view .LVU514
+ 2513 0062 114D     		ldr	r5, .L209+4
+ 2514 0064 EB68     		ldr	r3, [r5, #12]
+ 2515              		.loc 1 433 16 view .LVU515
+ 2516 0066 114C     		ldr	r4, .L209+8
+ 2517 0068 2360     		str	r3, [r4]
+ 434:BUTTON/Src/button.c ****     B_state[0][3] = READ_BC4();
+ 2518              		.loc 1 434 5 is_stmt 1 view .LVU516
+ 2519              		.loc 1 434 21 is_stmt 0 view .LVU517
+ 2520 006a 4FF40061 		mov	r1, #2048
+ 2521 006e 1148     		ldr	r0, .L209+16
+ 2522 0070 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2523              	.LVL98:
+ 2524              		.loc 1 434 19 discriminator 1 view .LVU518
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 52
+
+
+ 2525 0074 E860     		str	r0, [r5, #12]
+ 435:BUTTON/Src/button.c ****     if(B_state[0][3] - temp_state == UP) BR1_BC4();
+ 2526              		.loc 1 435 5 is_stmt 1 view .LVU519
+ 2527              		.loc 1 435 22 is_stmt 0 view .LVU520
+ 2528 0076 2368     		ldr	r3, [r4]
+ 2529 0078 C01A     		subs	r0, r0, r3
+ 2530              		.loc 1 435 7 view .LVU521
+ 2531 007a 0128     		cmp	r0, #1
+ 2532 007c 0FD0     		beq	.L208
+ 2533              	.L203:
+ 436:BUTTON/Src/button.c ****     SET_BR1();
+ 2534              		.loc 1 436 5 is_stmt 1 view .LVU522
+ 2535 007e 0122     		movs	r2, #1
+ 2536 0080 4FF40051 		mov	r1, #8192
+ 2537 0084 0748     		ldr	r0, .L209
+ 2538 0086 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2539              	.LVL99:
+ 437:BUTTON/Src/button.c **** 
+ 438:BUTTON/Src/button.c **** 
+ 439:BUTTON/Src/button.c **** }
+ 2540              		.loc 1 439 1 is_stmt 0 view .LVU523
+ 2541 008a 38BD     		pop	{r3, r4, r5, pc}
+ 2542              	.L205:
+ 423:BUTTON/Src/button.c **** 
+ 2543              		.loc 1 423 42 is_stmt 1 discriminator 1 view .LVU524
+ 2544 008c FFF7FEFF 		bl	BR1_BC1
+ 2545              	.LVL100:
+ 2546 0090 CBE7     		b	.L200
+ 2547              	.L206:
+ 427:BUTTON/Src/button.c **** 
+ 2548              		.loc 1 427 42 discriminator 1 view .LVU525
+ 2549 0092 FFF7FEFF 		bl	BR1_BC2
+ 2550              	.LVL101:
+ 2551 0096 D6E7     		b	.L201
+ 2552              	.L207:
+ 431:BUTTON/Src/button.c **** 
+ 2553              		.loc 1 431 42 discriminator 1 view .LVU526
+ 2554 0098 FFF7FEFF 		bl	BR1_BC3
+ 2555              	.LVL102:
+ 2556 009c E1E7     		b	.L202
+ 2557              	.L208:
+ 435:BUTTON/Src/button.c ****     SET_BR1();
+ 2558              		.loc 1 435 42 discriminator 1 view .LVU527
+ 2559 009e FFF7FEFF 		bl	BR1_BC4
+ 2560              	.LVL103:
+ 2561 00a2 ECE7     		b	.L203
+ 2562              	.L210:
+ 2563              		.align	2
+ 2564              	.L209:
+ 2565 00a4 000C0240 		.word	1073875968
+ 2566 00a8 00000000 		.word	B_state
+ 2567 00ac 00000000 		.word	temp_state
+ 2568 00b0 00000240 		.word	1073872896
+ 2569 00b4 00080240 		.word	1073874944
+ 2570              		.cfi_endproc
+ 2571              	.LFE277:
+ 2573              		.section	.text.READ_BUTTON_B_R2,"ax",%progbits
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 53
+
+
+ 2574              		.align	1
+ 2575              		.global	READ_BUTTON_B_R2
+ 2576              		.syntax unified
+ 2577              		.thumb
+ 2578              		.thumb_func
+ 2580              	READ_BUTTON_B_R2:
+ 2581              	.LFB278:
+ 440:BUTTON/Src/button.c **** 
+ 441:BUTTON/Src/button.c **** void READ_BUTTON_B_R2(void)
+ 442:BUTTON/Src/button.c **** {
+ 2582              		.loc 1 442 1 view -0
+ 2583              		.cfi_startproc
+ 2584              		@ args = 0, pretend = 0, frame = 0
+ 2585              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2586 0000 38B5     		push	{r3, r4, r5, lr}
+ 2587              	.LCFI17:
+ 2588              		.cfi_def_cfa_offset 16
+ 2589              		.cfi_offset 3, -16
+ 2590              		.cfi_offset 4, -12
+ 2591              		.cfi_offset 5, -8
+ 2592              		.cfi_offset 14, -4
+ 443:BUTTON/Src/button.c ****     RESET_BR2();
+ 2593              		.loc 1 443 5 view .LVU529
+ 2594 0002 0022     		movs	r2, #0
+ 2595 0004 4FF40041 		mov	r1, #32768
+ 2596 0008 2648     		ldr	r0, .L221
+ 2597 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2598              	.LVL104:
+ 444:BUTTON/Src/button.c ****     temp_state = B_state[1][0];
+ 2599              		.loc 1 444 5 view .LVU530
+ 2600              		.loc 1 444 28 is_stmt 0 view .LVU531
+ 2601 000e 264D     		ldr	r5, .L221+4
+ 2602 0010 2B69     		ldr	r3, [r5, #16]
+ 2603              		.loc 1 444 16 view .LVU532
+ 2604 0012 264C     		ldr	r4, .L221+8
+ 2605 0014 2360     		str	r3, [r4]
+ 445:BUTTON/Src/button.c ****     B_state[1][0] = READ_BC1();
+ 2606              		.loc 1 445 5 is_stmt 1 view .LVU533
+ 2607              		.loc 1 445 21 is_stmt 0 view .LVU534
+ 2608 0016 4FF40071 		mov	r1, #512
+ 2609 001a 2548     		ldr	r0, .L221+12
+ 2610 001c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2611              	.LVL105:
+ 2612              		.loc 1 445 19 discriminator 1 view .LVU535
+ 2613 0020 2861     		str	r0, [r5, #16]
+ 446:BUTTON/Src/button.c ****     if(B_state[1][0] - temp_state == UP) BR2_BC1();
+ 2614              		.loc 1 446 5 is_stmt 1 view .LVU536
+ 2615              		.loc 1 446 22 is_stmt 0 view .LVU537
+ 2616 0022 2368     		ldr	r3, [r4]
+ 2617 0024 C01A     		subs	r0, r0, r3
+ 2618              		.loc 1 446 7 view .LVU538
+ 2619 0026 0128     		cmp	r0, #1
+ 2620 0028 30D0     		beq	.L217
+ 2621              	.L212:
+ 447:BUTTON/Src/button.c **** 
+ 448:BUTTON/Src/button.c ****     temp_state = B_state[1][1];
+ 2622              		.loc 1 448 5 is_stmt 1 view .LVU539
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 54
+
+
+ 2623              		.loc 1 448 28 is_stmt 0 view .LVU540
+ 2624 002a 1F4D     		ldr	r5, .L221+4
+ 2625 002c 6B69     		ldr	r3, [r5, #20]
+ 2626              		.loc 1 448 16 view .LVU541
+ 2627 002e 1F4C     		ldr	r4, .L221+8
+ 2628 0030 2360     		str	r3, [r4]
+ 449:BUTTON/Src/button.c ****     B_state[1][1] = READ_BC2();
+ 2629              		.loc 1 449 5 is_stmt 1 view .LVU542
+ 2630              		.loc 1 449 21 is_stmt 0 view .LVU543
+ 2631 0032 4FF40061 		mov	r1, #2048
+ 2632 0036 1E48     		ldr	r0, .L221+12
+ 2633 0038 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2634              	.LVL106:
+ 2635              		.loc 1 449 19 discriminator 1 view .LVU544
+ 2636 003c 6861     		str	r0, [r5, #20]
+ 450:BUTTON/Src/button.c ****     if(B_state[1][1] - temp_state == UP) BR2_BC2();
+ 2637              		.loc 1 450 5 is_stmt 1 view .LVU545
+ 2638              		.loc 1 450 22 is_stmt 0 view .LVU546
+ 2639 003e 2368     		ldr	r3, [r4]
+ 2640 0040 C01A     		subs	r0, r0, r3
+ 2641              		.loc 1 450 7 view .LVU547
+ 2642 0042 0128     		cmp	r0, #1
+ 2643 0044 25D0     		beq	.L218
+ 2644              	.L213:
+ 451:BUTTON/Src/button.c **** 
+ 452:BUTTON/Src/button.c ****     temp_state = B_state[1][2];
+ 2645              		.loc 1 452 5 is_stmt 1 view .LVU548
+ 2646              		.loc 1 452 28 is_stmt 0 view .LVU549
+ 2647 0046 184D     		ldr	r5, .L221+4
+ 2648 0048 AB69     		ldr	r3, [r5, #24]
+ 2649              		.loc 1 452 16 view .LVU550
+ 2650 004a 184C     		ldr	r4, .L221+8
+ 2651 004c 2360     		str	r3, [r4]
+ 453:BUTTON/Src/button.c ****     B_state[1][2] = READ_BC3();
+ 2652              		.loc 1 453 5 is_stmt 1 view .LVU551
+ 2653              		.loc 1 453 21 is_stmt 0 view .LVU552
+ 2654 004e 4FF40041 		mov	r1, #32768
+ 2655 0052 1748     		ldr	r0, .L221+12
+ 2656 0054 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2657              	.LVL107:
+ 2658              		.loc 1 453 19 discriminator 1 view .LVU553
+ 2659 0058 A861     		str	r0, [r5, #24]
+ 454:BUTTON/Src/button.c ****     if(B_state[1][2] - temp_state == UP) BR2_BC3();
+ 2660              		.loc 1 454 5 is_stmt 1 view .LVU554
+ 2661              		.loc 1 454 22 is_stmt 0 view .LVU555
+ 2662 005a 2368     		ldr	r3, [r4]
+ 2663 005c C01A     		subs	r0, r0, r3
+ 2664              		.loc 1 454 7 view .LVU556
+ 2665 005e 0128     		cmp	r0, #1
+ 2666 0060 1AD0     		beq	.L219
+ 2667              	.L214:
+ 455:BUTTON/Src/button.c **** 
+ 456:BUTTON/Src/button.c ****     temp_state = B_state[1][3];
+ 2668              		.loc 1 456 5 is_stmt 1 view .LVU557
+ 2669              		.loc 1 456 28 is_stmt 0 view .LVU558
+ 2670 0062 114D     		ldr	r5, .L221+4
+ 2671 0064 EB69     		ldr	r3, [r5, #28]
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 55
+
+
+ 2672              		.loc 1 456 16 view .LVU559
+ 2673 0066 114C     		ldr	r4, .L221+8
+ 2674 0068 2360     		str	r3, [r4]
+ 457:BUTTON/Src/button.c ****     B_state[1][3] = READ_BC4();
+ 2675              		.loc 1 457 5 is_stmt 1 view .LVU560
+ 2676              		.loc 1 457 21 is_stmt 0 view .LVU561
+ 2677 006a 4FF40061 		mov	r1, #2048
+ 2678 006e 1148     		ldr	r0, .L221+16
+ 2679 0070 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2680              	.LVL108:
+ 2681              		.loc 1 457 19 discriminator 1 view .LVU562
+ 2682 0074 E861     		str	r0, [r5, #28]
+ 458:BUTTON/Src/button.c ****     if(B_state[1][3] - temp_state == UP) BR2_BC4();
+ 2683              		.loc 1 458 5 is_stmt 1 view .LVU563
+ 2684              		.loc 1 458 22 is_stmt 0 view .LVU564
+ 2685 0076 2368     		ldr	r3, [r4]
+ 2686 0078 C01A     		subs	r0, r0, r3
+ 2687              		.loc 1 458 7 view .LVU565
+ 2688 007a 0128     		cmp	r0, #1
+ 2689 007c 0FD0     		beq	.L220
+ 2690              	.L215:
+ 459:BUTTON/Src/button.c ****     SET_BR2();
+ 2691              		.loc 1 459 5 is_stmt 1 view .LVU566
+ 2692 007e 0122     		movs	r2, #1
+ 2693 0080 4FF40041 		mov	r1, #32768
+ 2694 0084 0748     		ldr	r0, .L221
+ 2695 0086 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2696              	.LVL109:
+ 460:BUTTON/Src/button.c **** }
+ 2697              		.loc 1 460 1 is_stmt 0 view .LVU567
+ 2698 008a 38BD     		pop	{r3, r4, r5, pc}
+ 2699              	.L217:
+ 446:BUTTON/Src/button.c **** 
+ 2700              		.loc 1 446 42 is_stmt 1 discriminator 1 view .LVU568
+ 2701 008c FFF7FEFF 		bl	BR2_BC1
+ 2702              	.LVL110:
+ 2703 0090 CBE7     		b	.L212
+ 2704              	.L218:
+ 450:BUTTON/Src/button.c **** 
+ 2705              		.loc 1 450 42 discriminator 1 view .LVU569
+ 2706 0092 FFF7FEFF 		bl	BR2_BC2
+ 2707              	.LVL111:
+ 2708 0096 D6E7     		b	.L213
+ 2709              	.L219:
+ 454:BUTTON/Src/button.c **** 
+ 2710              		.loc 1 454 42 discriminator 1 view .LVU570
+ 2711 0098 FFF7FEFF 		bl	BR2_BC3
+ 2712              	.LVL112:
+ 2713 009c E1E7     		b	.L214
+ 2714              	.L220:
+ 458:BUTTON/Src/button.c ****     SET_BR2();
+ 2715              		.loc 1 458 42 discriminator 1 view .LVU571
+ 2716 009e FFF7FEFF 		bl	BR2_BC4
+ 2717              	.LVL113:
+ 2718 00a2 ECE7     		b	.L215
+ 2719              	.L222:
+ 2720              		.align	2
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 56
+
+
+ 2721              	.L221:
+ 2722 00a4 000C0240 		.word	1073875968
+ 2723 00a8 00000000 		.word	B_state
+ 2724 00ac 00000000 		.word	temp_state
+ 2725 00b0 00000240 		.word	1073872896
+ 2726 00b4 00080240 		.word	1073874944
+ 2727              		.cfi_endproc
+ 2728              	.LFE278:
+ 2730              		.section	.text.READ_BUTTON_B_R3,"ax",%progbits
+ 2731              		.align	1
+ 2732              		.global	READ_BUTTON_B_R3
+ 2733              		.syntax unified
+ 2734              		.thumb
+ 2735              		.thumb_func
+ 2737              	READ_BUTTON_B_R3:
+ 2738              	.LFB279:
+ 461:BUTTON/Src/button.c **** 
+ 462:BUTTON/Src/button.c **** void READ_BUTTON_B_R3(void)
+ 463:BUTTON/Src/button.c **** {
+ 2739              		.loc 1 463 1 view -0
+ 2740              		.cfi_startproc
+ 2741              		@ args = 0, pretend = 0, frame = 0
+ 2742              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2743 0000 38B5     		push	{r3, r4, r5, lr}
+ 2744              	.LCFI18:
+ 2745              		.cfi_def_cfa_offset 16
+ 2746              		.cfi_offset 3, -16
+ 2747              		.cfi_offset 4, -12
+ 2748              		.cfi_offset 5, -8
+ 2749              		.cfi_offset 14, -4
+ 464:BUTTON/Src/button.c ****     RESET_BR3();
+ 2750              		.loc 1 464 5 view .LVU573
+ 2751 0002 0022     		movs	r2, #0
+ 2752 0004 8021     		movs	r1, #128
+ 2753 0006 2648     		ldr	r0, .L233
+ 2754 0008 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2755              	.LVL114:
+ 465:BUTTON/Src/button.c ****     temp_state = B_state[2][0];
+ 2756              		.loc 1 465 5 view .LVU574
+ 2757              		.loc 1 465 28 is_stmt 0 view .LVU575
+ 2758 000c 254D     		ldr	r5, .L233+4
+ 2759 000e 2B6A     		ldr	r3, [r5, #32]
+ 2760              		.loc 1 465 16 view .LVU576
+ 2761 0010 254C     		ldr	r4, .L233+8
+ 2762 0012 2360     		str	r3, [r4]
+ 466:BUTTON/Src/button.c ****     B_state[2][0] = READ_BC1();
+ 2763              		.loc 1 466 5 is_stmt 1 view .LVU577
+ 2764              		.loc 1 466 21 is_stmt 0 view .LVU578
+ 2765 0014 4FF40071 		mov	r1, #512
+ 2766 0018 2448     		ldr	r0, .L233+12
+ 2767 001a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2768              	.LVL115:
+ 2769              		.loc 1 466 19 discriminator 1 view .LVU579
+ 2770 001e 2862     		str	r0, [r5, #32]
+ 467:BUTTON/Src/button.c ****     if(B_state[2][0] - temp_state == UP) BR3_BC1();
+ 2771              		.loc 1 467 5 is_stmt 1 view .LVU580
+ 2772              		.loc 1 467 22 is_stmt 0 view .LVU581
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 57
+
+
+ 2773 0020 2368     		ldr	r3, [r4]
+ 2774 0022 C01A     		subs	r0, r0, r3
+ 2775              		.loc 1 467 7 view .LVU582
+ 2776 0024 0128     		cmp	r0, #1
+ 2777 0026 2FD0     		beq	.L229
+ 2778              	.L224:
+ 468:BUTTON/Src/button.c **** 
+ 469:BUTTON/Src/button.c ****     temp_state = B_state[2][1];
+ 2779              		.loc 1 469 5 is_stmt 1 view .LVU583
+ 2780              		.loc 1 469 28 is_stmt 0 view .LVU584
+ 2781 0028 1E4D     		ldr	r5, .L233+4
+ 2782 002a 6B6A     		ldr	r3, [r5, #36]
+ 2783              		.loc 1 469 16 view .LVU585
+ 2784 002c 1E4C     		ldr	r4, .L233+8
+ 2785 002e 2360     		str	r3, [r4]
+ 470:BUTTON/Src/button.c ****     B_state[2][1] = READ_BC2();
+ 2786              		.loc 1 470 5 is_stmt 1 view .LVU586
+ 2787              		.loc 1 470 21 is_stmt 0 view .LVU587
+ 2788 0030 4FF40061 		mov	r1, #2048
+ 2789 0034 1D48     		ldr	r0, .L233+12
+ 2790 0036 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2791              	.LVL116:
+ 2792              		.loc 1 470 19 discriminator 1 view .LVU588
+ 2793 003a 6862     		str	r0, [r5, #36]
+ 471:BUTTON/Src/button.c ****     if(B_state[2][1] - temp_state == UP) BR3_BC2();
+ 2794              		.loc 1 471 5 is_stmt 1 view .LVU589
+ 2795              		.loc 1 471 22 is_stmt 0 view .LVU590
+ 2796 003c 2368     		ldr	r3, [r4]
+ 2797 003e C01A     		subs	r0, r0, r3
+ 2798              		.loc 1 471 7 view .LVU591
+ 2799 0040 0128     		cmp	r0, #1
+ 2800 0042 24D0     		beq	.L230
+ 2801              	.L225:
+ 472:BUTTON/Src/button.c **** 
+ 473:BUTTON/Src/button.c ****     temp_state = B_state[2][2];
+ 2802              		.loc 1 473 5 is_stmt 1 view .LVU592
+ 2803              		.loc 1 473 28 is_stmt 0 view .LVU593
+ 2804 0044 174D     		ldr	r5, .L233+4
+ 2805 0046 AB6A     		ldr	r3, [r5, #40]
+ 2806              		.loc 1 473 16 view .LVU594
+ 2807 0048 174C     		ldr	r4, .L233+8
+ 2808 004a 2360     		str	r3, [r4]
+ 474:BUTTON/Src/button.c ****     B_state[2][2] = READ_BC3();
+ 2809              		.loc 1 474 5 is_stmt 1 view .LVU595
+ 2810              		.loc 1 474 21 is_stmt 0 view .LVU596
+ 2811 004c 4FF40041 		mov	r1, #32768
+ 2812 0050 1648     		ldr	r0, .L233+12
+ 2813 0052 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2814              	.LVL117:
+ 2815              		.loc 1 474 19 discriminator 1 view .LVU597
+ 2816 0056 A862     		str	r0, [r5, #40]
+ 475:BUTTON/Src/button.c ****     if(B_state[2][2] - temp_state == UP) BR3_BC3();
+ 2817              		.loc 1 475 5 is_stmt 1 view .LVU598
+ 2818              		.loc 1 475 22 is_stmt 0 view .LVU599
+ 2819 0058 2368     		ldr	r3, [r4]
+ 2820 005a C01A     		subs	r0, r0, r3
+ 2821              		.loc 1 475 7 view .LVU600
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 58
+
+
+ 2822 005c 0128     		cmp	r0, #1
+ 2823 005e 19D0     		beq	.L231
+ 2824              	.L226:
+ 476:BUTTON/Src/button.c **** 
+ 477:BUTTON/Src/button.c ****     temp_state = B_state[2][3];
+ 2825              		.loc 1 477 5 is_stmt 1 view .LVU601
+ 2826              		.loc 1 477 28 is_stmt 0 view .LVU602
+ 2827 0060 104D     		ldr	r5, .L233+4
+ 2828 0062 EB6A     		ldr	r3, [r5, #44]
+ 2829              		.loc 1 477 16 view .LVU603
+ 2830 0064 104C     		ldr	r4, .L233+8
+ 2831 0066 2360     		str	r3, [r4]
+ 478:BUTTON/Src/button.c ****     B_state[2][3] = READ_BC4();
+ 2832              		.loc 1 478 5 is_stmt 1 view .LVU604
+ 2833              		.loc 1 478 21 is_stmt 0 view .LVU605
+ 2834 0068 4FF40061 		mov	r1, #2048
+ 2835 006c 0C48     		ldr	r0, .L233
+ 2836 006e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2837              	.LVL118:
+ 2838              		.loc 1 478 19 discriminator 1 view .LVU606
+ 2839 0072 E862     		str	r0, [r5, #44]
+ 479:BUTTON/Src/button.c ****     if(B_state[2][3] - temp_state == UP) BR3_BC4();
+ 2840              		.loc 1 479 5 is_stmt 1 view .LVU607
+ 2841              		.loc 1 479 22 is_stmt 0 view .LVU608
+ 2842 0074 2368     		ldr	r3, [r4]
+ 2843 0076 C01A     		subs	r0, r0, r3
+ 2844              		.loc 1 479 7 view .LVU609
+ 2845 0078 0128     		cmp	r0, #1
+ 2846 007a 0ED0     		beq	.L232
+ 2847              	.L227:
+ 480:BUTTON/Src/button.c ****     SET_BR3();
+ 2848              		.loc 1 480 5 is_stmt 1 view .LVU610
+ 2849 007c 0122     		movs	r2, #1
+ 2850 007e 8021     		movs	r1, #128
+ 2851 0080 0748     		ldr	r0, .L233
+ 2852 0082 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2853              	.LVL119:
+ 481:BUTTON/Src/button.c **** }
+ 2854              		.loc 1 481 1 is_stmt 0 view .LVU611
+ 2855 0086 38BD     		pop	{r3, r4, r5, pc}
+ 2856              	.L229:
+ 467:BUTTON/Src/button.c **** 
+ 2857              		.loc 1 467 42 is_stmt 1 discriminator 1 view .LVU612
+ 2858 0088 FFF7FEFF 		bl	BR3_BC1
+ 2859              	.LVL120:
+ 2860 008c CCE7     		b	.L224
+ 2861              	.L230:
+ 471:BUTTON/Src/button.c **** 
+ 2862              		.loc 1 471 42 discriminator 1 view .LVU613
+ 2863 008e FFF7FEFF 		bl	BR3_BC2
+ 2864              	.LVL121:
+ 2865 0092 D7E7     		b	.L225
+ 2866              	.L231:
+ 475:BUTTON/Src/button.c **** 
+ 2867              		.loc 1 475 42 discriminator 1 view .LVU614
+ 2868 0094 FFF7FEFF 		bl	BR3_BC3
+ 2869              	.LVL122:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 59
+
+
+ 2870 0098 E2E7     		b	.L226
+ 2871              	.L232:
+ 479:BUTTON/Src/button.c ****     SET_BR3();
+ 2872              		.loc 1 479 42 discriminator 1 view .LVU615
+ 2873 009a FFF7FEFF 		bl	BR3_BC4
+ 2874              	.LVL123:
+ 2875 009e EDE7     		b	.L227
+ 2876              	.L234:
+ 2877              		.align	2
+ 2878              	.L233:
+ 2879 00a0 00080240 		.word	1073874944
+ 2880 00a4 00000000 		.word	B_state
+ 2881 00a8 00000000 		.word	temp_state
+ 2882 00ac 00000240 		.word	1073872896
+ 2883              		.cfi_endproc
+ 2884              	.LFE279:
+ 2886              		.section	.text.READ_BUTTON_B_R4,"ax",%progbits
+ 2887              		.align	1
+ 2888              		.global	READ_BUTTON_B_R4
+ 2889              		.syntax unified
+ 2890              		.thumb
+ 2891              		.thumb_func
+ 2893              	READ_BUTTON_B_R4:
+ 2894              	.LFB280:
+ 482:BUTTON/Src/button.c **** 
+ 483:BUTTON/Src/button.c **** void READ_BUTTON_B_R4(void)
+ 484:BUTTON/Src/button.c **** {
+ 2895              		.loc 1 484 1 view -0
+ 2896              		.cfi_startproc
+ 2897              		@ args = 0, pretend = 0, frame = 0
+ 2898              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2899 0000 38B5     		push	{r3, r4, r5, lr}
+ 2900              	.LCFI19:
+ 2901              		.cfi_def_cfa_offset 16
+ 2902              		.cfi_offset 3, -16
+ 2903              		.cfi_offset 4, -12
+ 2904              		.cfi_offset 5, -8
+ 2905              		.cfi_offset 14, -4
+ 485:BUTTON/Src/button.c ****     RESET_BR4();
+ 2906              		.loc 1 485 5 view .LVU617
+ 2907 0002 0022     		movs	r2, #0
+ 2908 0004 4FF40071 		mov	r1, #512
+ 2909 0008 2648     		ldr	r0, .L245
+ 2910 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 2911              	.LVL124:
+ 486:BUTTON/Src/button.c ****     temp_state = B_state[3][0];
+ 2912              		.loc 1 486 5 view .LVU618
+ 2913              		.loc 1 486 28 is_stmt 0 view .LVU619
+ 2914 000e 264D     		ldr	r5, .L245+4
+ 2915 0010 2B6B     		ldr	r3, [r5, #48]
+ 2916              		.loc 1 486 16 view .LVU620
+ 2917 0012 264C     		ldr	r4, .L245+8
+ 2918 0014 2360     		str	r3, [r4]
+ 487:BUTTON/Src/button.c ****     B_state[3][0] = READ_BC1();
+ 2919              		.loc 1 487 5 is_stmt 1 view .LVU621
+ 2920              		.loc 1 487 21 is_stmt 0 view .LVU622
+ 2921 0016 4FF40071 		mov	r1, #512
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 60
+
+
+ 2922 001a 2548     		ldr	r0, .L245+12
+ 2923 001c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2924              	.LVL125:
+ 2925              		.loc 1 487 19 discriminator 1 view .LVU623
+ 2926 0020 2863     		str	r0, [r5, #48]
+ 488:BUTTON/Src/button.c ****     if(B_state[3][0] - temp_state == UP) BR4_BC1();
+ 2927              		.loc 1 488 5 is_stmt 1 view .LVU624
+ 2928              		.loc 1 488 22 is_stmt 0 view .LVU625
+ 2929 0022 2368     		ldr	r3, [r4]
+ 2930 0024 C01A     		subs	r0, r0, r3
+ 2931              		.loc 1 488 7 view .LVU626
+ 2932 0026 0128     		cmp	r0, #1
+ 2933 0028 30D0     		beq	.L241
+ 2934              	.L236:
+ 489:BUTTON/Src/button.c **** 
+ 490:BUTTON/Src/button.c ****     temp_state = B_state[3][1];
+ 2935              		.loc 1 490 5 is_stmt 1 view .LVU627
+ 2936              		.loc 1 490 28 is_stmt 0 view .LVU628
+ 2937 002a 1F4D     		ldr	r5, .L245+4
+ 2938 002c 6B6B     		ldr	r3, [r5, #52]
+ 2939              		.loc 1 490 16 view .LVU629
+ 2940 002e 1F4C     		ldr	r4, .L245+8
+ 2941 0030 2360     		str	r3, [r4]
+ 491:BUTTON/Src/button.c ****     B_state[3][1] = READ_BC2();
+ 2942              		.loc 1 491 5 is_stmt 1 view .LVU630
+ 2943              		.loc 1 491 21 is_stmt 0 view .LVU631
+ 2944 0032 4FF40061 		mov	r1, #2048
+ 2945 0036 1E48     		ldr	r0, .L245+12
+ 2946 0038 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2947              	.LVL126:
+ 2948              		.loc 1 491 19 discriminator 1 view .LVU632
+ 2949 003c 6863     		str	r0, [r5, #52]
+ 492:BUTTON/Src/button.c ****     if(B_state[3][1] - temp_state == UP) BR4_BC2();
+ 2950              		.loc 1 492 5 is_stmt 1 view .LVU633
+ 2951              		.loc 1 492 22 is_stmt 0 view .LVU634
+ 2952 003e 2368     		ldr	r3, [r4]
+ 2953 0040 C01A     		subs	r0, r0, r3
+ 2954              		.loc 1 492 7 view .LVU635
+ 2955 0042 0128     		cmp	r0, #1
+ 2956 0044 25D0     		beq	.L242
+ 2957              	.L237:
+ 493:BUTTON/Src/button.c **** 
+ 494:BUTTON/Src/button.c ****     temp_state = B_state[3][2];
+ 2958              		.loc 1 494 5 is_stmt 1 view .LVU636
+ 2959              		.loc 1 494 28 is_stmt 0 view .LVU637
+ 2960 0046 184D     		ldr	r5, .L245+4
+ 2961 0048 AB6B     		ldr	r3, [r5, #56]
+ 2962              		.loc 1 494 16 view .LVU638
+ 2963 004a 184C     		ldr	r4, .L245+8
+ 2964 004c 2360     		str	r3, [r4]
+ 495:BUTTON/Src/button.c ****     B_state[3][2] = READ_BC3();
+ 2965              		.loc 1 495 5 is_stmt 1 view .LVU639
+ 2966              		.loc 1 495 21 is_stmt 0 view .LVU640
+ 2967 004e 4FF40041 		mov	r1, #32768
+ 2968 0052 1748     		ldr	r0, .L245+12
+ 2969 0054 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2970              	.LVL127:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 61
+
+
+ 2971              		.loc 1 495 19 discriminator 1 view .LVU641
+ 2972 0058 A863     		str	r0, [r5, #56]
+ 496:BUTTON/Src/button.c ****     if(B_state[3][2] - temp_state == UP) BR4_BC3();
+ 2973              		.loc 1 496 5 is_stmt 1 view .LVU642
+ 2974              		.loc 1 496 22 is_stmt 0 view .LVU643
+ 2975 005a 2368     		ldr	r3, [r4]
+ 2976 005c C01A     		subs	r0, r0, r3
+ 2977              		.loc 1 496 7 view .LVU644
+ 2978 005e 0128     		cmp	r0, #1
+ 2979 0060 1AD0     		beq	.L243
+ 2980              	.L238:
+ 497:BUTTON/Src/button.c **** 
+ 498:BUTTON/Src/button.c ****     temp_state = B_state[3][3];
+ 2981              		.loc 1 498 5 is_stmt 1 view .LVU645
+ 2982              		.loc 1 498 28 is_stmt 0 view .LVU646
+ 2983 0062 114D     		ldr	r5, .L245+4
+ 2984 0064 EB6B     		ldr	r3, [r5, #60]
+ 2985              		.loc 1 498 16 view .LVU647
+ 2986 0066 114C     		ldr	r4, .L245+8
+ 2987 0068 2360     		str	r3, [r4]
+ 499:BUTTON/Src/button.c ****     B_state[3][3] = READ_BC4();
+ 2988              		.loc 1 499 5 is_stmt 1 view .LVU648
+ 2989              		.loc 1 499 21 is_stmt 0 view .LVU649
+ 2990 006a 4FF40061 		mov	r1, #2048
+ 2991 006e 0D48     		ldr	r0, .L245
+ 2992 0070 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 2993              	.LVL128:
+ 2994              		.loc 1 499 19 discriminator 1 view .LVU650
+ 2995 0074 E863     		str	r0, [r5, #60]
+ 500:BUTTON/Src/button.c ****     if(B_state[3][3] - temp_state == UP) BR4_BC4();
+ 2996              		.loc 1 500 5 is_stmt 1 view .LVU651
+ 2997              		.loc 1 500 22 is_stmt 0 view .LVU652
+ 2998 0076 2368     		ldr	r3, [r4]
+ 2999 0078 C01A     		subs	r0, r0, r3
+ 3000              		.loc 1 500 7 view .LVU653
+ 3001 007a 0128     		cmp	r0, #1
+ 3002 007c 0FD0     		beq	.L244
+ 3003              	.L239:
+ 501:BUTTON/Src/button.c ****     SET_BR4();
+ 3004              		.loc 1 501 5 is_stmt 1 view .LVU654
+ 3005 007e 0122     		movs	r2, #1
+ 3006 0080 4FF40071 		mov	r1, #512
+ 3007 0084 0748     		ldr	r0, .L245
+ 3008 0086 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 3009              	.LVL129:
+ 502:BUTTON/Src/button.c **** }
+ 3010              		.loc 1 502 1 is_stmt 0 view .LVU655
+ 3011 008a 38BD     		pop	{r3, r4, r5, pc}
+ 3012              	.L241:
+ 488:BUTTON/Src/button.c **** 
+ 3013              		.loc 1 488 42 is_stmt 1 discriminator 1 view .LVU656
+ 3014 008c FFF7FEFF 		bl	BR4_BC1
+ 3015              	.LVL130:
+ 3016 0090 CBE7     		b	.L236
+ 3017              	.L242:
+ 492:BUTTON/Src/button.c **** 
+ 3018              		.loc 1 492 42 discriminator 1 view .LVU657
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 62
+
+
+ 3019 0092 FFF7FEFF 		bl	BR4_BC2
+ 3020              	.LVL131:
+ 3021 0096 D6E7     		b	.L237
+ 3022              	.L243:
+ 496:BUTTON/Src/button.c **** 
+ 3023              		.loc 1 496 42 discriminator 1 view .LVU658
+ 3024 0098 FFF7FEFF 		bl	BR4_BC3
+ 3025              	.LVL132:
+ 3026 009c E1E7     		b	.L238
+ 3027              	.L244:
+ 500:BUTTON/Src/button.c ****     SET_BR4();
+ 3028              		.loc 1 500 42 discriminator 1 view .LVU659
+ 3029 009e FFF7FEFF 		bl	BR4_BC4
+ 3030              	.LVL133:
+ 3031 00a2 ECE7     		b	.L239
+ 3032              	.L246:
+ 3033              		.align	2
+ 3034              	.L245:
+ 3035 00a4 00080240 		.word	1073874944
+ 3036 00a8 00000000 		.word	B_state
+ 3037 00ac 00000000 		.word	temp_state
+ 3038 00b0 00000240 		.word	1073872896
+ 3039              		.cfi_endproc
+ 3040              	.LFE280:
+ 3042              		.section	.text.READ_BUTTON_B,"ax",%progbits
+ 3043              		.align	1
+ 3044              		.global	READ_BUTTON_B
+ 3045              		.syntax unified
+ 3046              		.thumb
+ 3047              		.thumb_func
+ 3049              	READ_BUTTON_B:
+ 3050              	.LFB281:
+ 503:BUTTON/Src/button.c **** 
+ 504:BUTTON/Src/button.c **** void READ_BUTTON_B(void)
+ 505:BUTTON/Src/button.c **** {
+ 3051              		.loc 1 505 1 view -0
+ 3052              		.cfi_startproc
+ 3053              		@ args = 0, pretend = 0, frame = 0
+ 3054              		@ frame_needed = 0, uses_anonymous_args = 0
+ 3055 0000 08B5     		push	{r3, lr}
+ 3056              	.LCFI20:
+ 3057              		.cfi_def_cfa_offset 8
+ 3058              		.cfi_offset 3, -8
+ 3059              		.cfi_offset 14, -4
+ 506:BUTTON/Src/button.c ****     READ_BUTTON_B_R1();
+ 3060              		.loc 1 506 5 view .LVU661
+ 3061 0002 FFF7FEFF 		bl	READ_BUTTON_B_R1
+ 3062              	.LVL134:
+ 507:BUTTON/Src/button.c ****     READ_BUTTON_B_R2();
+ 3063              		.loc 1 507 5 view .LVU662
+ 3064 0006 FFF7FEFF 		bl	READ_BUTTON_B_R2
+ 3065              	.LVL135:
+ 508:BUTTON/Src/button.c ****     READ_BUTTON_B_R3();
+ 3066              		.loc 1 508 5 view .LVU663
+ 3067 000a FFF7FEFF 		bl	READ_BUTTON_B_R3
+ 3068              	.LVL136:
+ 509:BUTTON/Src/button.c ****     READ_BUTTON_B_R4();
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 63
+
+
+ 3069              		.loc 1 509 5 view .LVU664
+ 3070 000e FFF7FEFF 		bl	READ_BUTTON_B_R4
+ 3071              	.LVL137:
+ 510:BUTTON/Src/button.c **** }
+ 3072              		.loc 1 510 1 is_stmt 0 view .LVU665
+ 3073 0012 08BD     		pop	{r3, pc}
+ 3074              		.cfi_endproc
+ 3075              	.LFE281:
+ 3077              		.global	kd_4
+ 3078              		.section	.bss.kd_4,"aw",%nobits
+ 3079              		.align	2
+ 3082              	kd_4:
+ 3083 0000 00000000 		.space	4
+ 3084              		.global	ki_4
+ 3085              		.section	.bss.ki_4,"aw",%nobits
+ 3086              		.align	2
+ 3089              	ki_4:
+ 3090 0000 00000000 		.space	4
+ 3091              		.global	kp_4
+ 3092              		.section	.bss.kp_4,"aw",%nobits
+ 3093              		.align	2
+ 3096              	kp_4:
+ 3097 0000 00000000 		.space	4
+ 3098              		.global	kd_3
+ 3099              		.section	.bss.kd_3,"aw",%nobits
+ 3100              		.align	2
+ 3103              	kd_3:
+ 3104 0000 00000000 		.space	4
+ 3105              		.global	ki_3
+ 3106              		.section	.bss.ki_3,"aw",%nobits
+ 3107              		.align	2
+ 3110              	ki_3:
+ 3111 0000 00000000 		.space	4
+ 3112              		.global	kp_3
+ 3113              		.section	.bss.kp_3,"aw",%nobits
+ 3114              		.align	2
+ 3117              	kp_3:
+ 3118 0000 00000000 		.space	4
+ 3119              		.global	kd_2
+ 3120              		.section	.bss.kd_2,"aw",%nobits
+ 3121              		.align	2
+ 3124              	kd_2:
+ 3125 0000 00000000 		.space	4
+ 3126              		.global	ki_2
+ 3127              		.section	.bss.ki_2,"aw",%nobits
+ 3128              		.align	2
+ 3131              	ki_2:
+ 3132 0000 00000000 		.space	4
+ 3133              		.global	kp_2
+ 3134              		.section	.bss.kp_2,"aw",%nobits
+ 3135              		.align	2
+ 3138              	kp_2:
+ 3139 0000 00000000 		.space	4
+ 3140              		.global	kd_1
+ 3141              		.section	.bss.kd_1,"aw",%nobits
+ 3142              		.align	2
+ 3145              	kd_1:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 64
+
+
+ 3146 0000 00000000 		.space	4
+ 3147              		.global	ki_1
+ 3148              		.section	.bss.ki_1,"aw",%nobits
+ 3149              		.align	2
+ 3152              	ki_1:
+ 3153 0000 00000000 		.space	4
+ 3154              		.global	kp_1
+ 3155              		.section	.bss.kp_1,"aw",%nobits
+ 3156              		.align	2
+ 3159              	kp_1:
+ 3160 0000 00000000 		.space	4
+ 3161              		.global	chip_b_mode
+ 3162              		.section	.bss.chip_b_mode,"aw",%nobits
+ 3163              		.align	2
+ 3166              	chip_b_mode:
+ 3167 0000 00000000 		.space	4
+ 3168              		.global	chip_select
+ 3169              		.section	.bss.chip_select,"aw",%nobits
+ 3170              		.align	2
+ 3173              	chip_select:
+ 3174 0000 00000000 		.space	4
+ 3175              		.global	rato_num
+ 3176              		.section	.data.rato_num,"aw"
+ 3177              		.align	2
+ 3180              	rato_num:
+ 3181 0000 01000000 		.word	1
+ 3182 0004 00000000 		.word	0
+ 3183 0008 00000000 		.word	0
+ 3184              		.global	rato_num_select
+ 3185              		.section	.bss.rato_num_select,"aw",%nobits
+ 3186              		.align	2
+ 3189              	rato_num_select:
+ 3190 0000 00000000 		.space	4
+ 3191              		.global	current_num
+ 3192              		.section	.data.current_num,"aw"
+ 3193              		.align	2
+ 3196              	current_num:
+ 3197 0000 02000000 		.word	2
+ 3198 0004 00000000 		.word	0
+ 3199 0008 00000000 		.word	0
+ 3200 000c 00000000 		.word	0
+ 3201 0010 00000000 		.word	0
+ 3202              		.global	current_num_select
+ 3203              		.section	.bss.current_num_select,"aw",%nobits
+ 3204              		.align	2
+ 3207              	current_num_select:
+ 3208 0000 00000000 		.space	4
+ 3209              		.global	mode_select
+ 3210              		.section	.data.mode_select,"aw"
+ 3211              		.align	2
+ 3214              	mode_select:
+ 3215 0000 02000000 		.word	2
+ 3216              		.global	ctrl_display
+ 3217              		.section	.data.ctrl_display,"aw"
+ 3218              		.align	2
+ 3221              	ctrl_display:
+ 3222 0000 03000000 		.word	3
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 65
+
+
+ 3223              		.global	ctrl_num
+ 3224              		.section	.bss.ctrl_num,"aw",%nobits
+ 3225              		.align	2
+ 3228              	ctrl_num:
+ 3229 0000 00000000 		.space	6
+ 3229      0000
+ 3230              		.global	ctrl_pid
+ 3231              		.section	.bss.ctrl_pid,"aw",%nobits
+ 3232              		.align	2
+ 3235              	ctrl_pid:
+ 3236 0000 00000000 		.space	6
+ 3236      0000
+ 3237              		.global	pid_6
+ 3238              		.section	.bss.pid_6,"aw",%nobits
+ 3239              		.align	2
+ 3242              	pid_6:
+ 3243 0000 00000000 		.space	60
+ 3243      00000000 
+ 3243      00000000 
+ 3243      00000000 
+ 3243      00000000 
+ 3244              		.global	pid_5
+ 3245              		.section	.bss.pid_5,"aw",%nobits
+ 3246              		.align	2
+ 3249              	pid_5:
+ 3250 0000 00000000 		.space	60
+ 3250      00000000 
+ 3250      00000000 
+ 3250      00000000 
+ 3250      00000000 
+ 3251              		.global	pid_4
+ 3252              		.section	.bss.pid_4,"aw",%nobits
+ 3253              		.align	2
+ 3256              	pid_4:
+ 3257 0000 00000000 		.space	60
+ 3257      00000000 
+ 3257      00000000 
+ 3257      00000000 
+ 3257      00000000 
+ 3258              		.global	pid_3
+ 3259              		.section	.bss.pid_3,"aw",%nobits
+ 3260              		.align	2
+ 3263              	pid_3:
+ 3264 0000 00000000 		.space	60
+ 3264      00000000 
+ 3264      00000000 
+ 3264      00000000 
+ 3264      00000000 
+ 3265              		.global	pid_2
+ 3266              		.section	.bss.pid_2,"aw",%nobits
+ 3267              		.align	2
+ 3270              	pid_2:
+ 3271 0000 00000000 		.space	60
+ 3271      00000000 
+ 3271      00000000 
+ 3271      00000000 
+ 3271      00000000 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 66
+
+
+ 3272              		.global	pid_1
+ 3273              		.section	.bss.pid_1,"aw",%nobits
+ 3274              		.align	2
+ 3277              	pid_1:
+ 3278 0000 00000000 		.space	60
+ 3278      00000000 
+ 3278      00000000 
+ 3278      00000000 
+ 3278      00000000 
+ 3279              		.global	B_state
+ 3280              		.section	.data.B_state,"aw"
+ 3281              		.align	2
+ 3284              	B_state:
+ 3285 0000 01000000 		.word	1
+ 3286 0004 01000000 		.word	1
+ 3287 0008 01000000 		.word	1
+ 3288 000c 01000000 		.word	1
+ 3289 0010 01000000 		.word	1
+ 3290 0014 01000000 		.word	1
+ 3291 0018 01000000 		.word	1
+ 3292 001c 01000000 		.word	1
+ 3293 0020 01000000 		.word	1
+ 3294 0024 01000000 		.word	1
+ 3295 0028 01000000 		.word	1
+ 3296 002c 01000000 		.word	1
+ 3297 0030 01000000 		.word	1
+ 3298 0034 01000000 		.word	1
+ 3299 0038 01000000 		.word	1
+ 3300 003c 01000000 		.word	1
+ 3301              		.global	A_state
+ 3302              		.section	.data.A_state,"aw"
+ 3303              		.align	2
+ 3306              	A_state:
+ 3307 0000 01000000 		.word	1
+ 3308 0004 01000000 		.word	1
+ 3309 0008 01000000 		.word	1
+ 3310 000c 01000000 		.word	1
+ 3311 0010 01000000 		.word	1
+ 3312 0014 01000000 		.word	1
+ 3313 0018 01000000 		.word	1
+ 3314 001c 01000000 		.word	1
+ 3315 0020 01000000 		.word	1
+ 3316 0024 01000000 		.word	1
+ 3317 0028 01000000 		.word	1
+ 3318 002c 01000000 		.word	1
+ 3319 0030 01000000 		.word	1
+ 3320 0034 01000000 		.word	1
+ 3321 0038 01000000 		.word	1
+ 3322 003c 01000000 		.word	1
+ 3323              		.global	temp_state
+ 3324              		.section	.bss.temp_state,"aw",%nobits
+ 3325              		.align	2
+ 3328              	temp_state:
+ 3329 0000 00000000 		.space	4
+ 3330              		.text
+ 3331              	.Letext0:
+ 3332              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 67
+
+
+ 3333              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 3334              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 3335              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 3336              		.file 6 "OLED/Inc/oled.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 68
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 button.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:25     .text.PID_CONVERT:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:31     .text.PID_CONVERT:00000000 PID_CONVERT
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:264    .text.PID_CONVERT:00000170 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:276    .text.AR1_AC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:282    .text.AR1_AC1:00000000 AR1_AC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:308    .text.AR1_AC1:00000014 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3221   .data.ctrl_display:00000000 ctrl_display
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3235   .bss.ctrl_pid:00000000 ctrl_pid
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:314    .text.AR1_AC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:320    .text.AR1_AC2:00000000 AR1_AC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:347    .text.AR1_AC2:00000014 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3228   .bss.ctrl_num:00000000 ctrl_num
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:353    .text.AR1_AC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:359    .text.AR1_AC3:00000000 AR1_AC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:373    .text.AR1_AC3:0000000c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:379    .text.AR1_AC3:00000012 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:523    .text.AR1_AC3:000000f8 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3277   .bss.pid_1:00000000 pid_1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3270   .bss.pid_2:00000000 pid_2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3263   .bss.pid_3:00000000 pid_3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3256   .bss.pid_4:00000000 pid_4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3249   .bss.pid_5:00000000 pid_5
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3242   .bss.pid_6:00000000 pid_6
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:536    .text.AR1_AC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:542    .text.AR1_AC4:00000000 AR1_AC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:567    .text.AR1_AC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:572    .text.AR2_AC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:578    .text.AR2_AC1:00000000 AR2_AC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:605    .text.AR2_AC1:00000014 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:611    .text.AR2_AC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:617    .text.AR2_AC2:00000000 AR2_AC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:643    .text.AR2_AC2:00000014 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:649    .text.AR2_AC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:655    .text.AR2_AC3:00000000 AR2_AC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:669    .text.AR2_AC3:0000000c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:675    .text.AR2_AC3:00000012 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:816    .text.AR2_AC3:000000f0 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:829    .text.AR2_AC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:835    .text.AR2_AC4:00000000 AR2_AC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:859    .text.AR2_AC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:864    .text.AR3_AC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:870    .text.AR3_AC1:00000000 AR3_AC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:895    .text.AR3_AC1:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3214   .data.mode_select:00000000 mode_select
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:900    .text.AR3_AC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:906    .text.AR3_AC2:00000000 AR3_AC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:931    .text.AR3_AC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3207   .bss.current_num_select:00000000 current_num_select
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:936    .text.AR3_AC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:942    .text.AR3_AC3:00000000 AR3_AC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:969    .text.AR3_AC3:00000018 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3196   .data.current_num:00000000 current_num
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:975    .text.AR3_AC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:981    .text.AR3_AC4:00000000 AR3_AC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1006   .text.AR3_AC4:00000010 $d
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 69
+
+
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3189   .bss.rato_num_select:00000000 rato_num_select
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1011   .text.AR4_AC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1017   .text.AR4_AC1:00000000 AR4_AC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1041   .text.AR4_AC1:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1046   .text.AR4_AC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1052   .text.AR4_AC2:00000000 AR4_AC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1076   .text.AR4_AC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1081   .text.AR4_AC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1087   .text.AR4_AC3:00000000 AR4_AC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1113   .text.AR4_AC3:00000018 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1119   .text.AR4_AC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1125   .text.AR4_AC4:00000000 AR4_AC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1150   .text.AR4_AC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1155   .text.READ_BUTTON_A_R1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1161   .text.READ_BUTTON_A_R1:00000000 READ_BUTTON_A_R1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1303   .text.READ_BUTTON_A_R1:0000009c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3306   .data.A_state:00000000 A_state
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3328   .bss.temp_state:00000000 temp_state
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1312   .text.READ_BUTTON_A_R2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1318   .text.READ_BUTTON_A_R2:00000000 READ_BUTTON_A_R2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1460   .text.READ_BUTTON_A_R2:0000009c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1469   .text.READ_BUTTON_A_R3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1475   .text.READ_BUTTON_A_R3:00000000 READ_BUTTON_A_R3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1617   .text.READ_BUTTON_A_R3:0000009c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1626   .text.READ_BUTTON_A_R4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1632   .text.READ_BUTTON_A_R4:00000000 READ_BUTTON_A_R4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1774   .text.READ_BUTTON_A_R4:0000009c $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1783   .text.READ_BUTTON_A:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1789   .text.READ_BUTTON_A:00000000 READ_BUTTON_A
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1818   .text.BR1_BC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1824   .text.BR1_BC1:00000000 BR1_BC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1851   .text.BR1_BC1:00000018 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3180   .data.rato_num:00000000 rato_num
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1857   .text.BR1_BC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1863   .text.BR1_BC2:00000000 BR1_BC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1888   .text.BR1_BC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3173   .bss.chip_select:00000000 chip_select
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1893   .text.BR1_BC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1899   .text.BR1_BC3:00000000 BR1_BC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1924   .text.BR1_BC3:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3166   .bss.chip_b_mode:00000000 chip_b_mode
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1929   .rodata.BR1_BC4.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1933   .text.BR1_BC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1939   .text.BR1_BC4:00000000 BR1_BC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1962   .text.BR1_BC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1967   .text.BR2_BC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1973   .text.BR2_BC1:00000000 BR2_BC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:1999   .text.BR2_BC1:00000018 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2005   .text.BR2_BC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2011   .text.BR2_BC2:00000000 BR2_BC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2035   .text.BR2_BC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2040   .text.BR2_BC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2046   .text.BR2_BC3:00000000 BR2_BC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2070   .text.BR2_BC3:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2075   .rodata.BR2_BC4.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2079   .text.BR2_BC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2085   .text.BR2_BC4:00000000 BR2_BC4
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 70
+
+
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2108   .text.BR2_BC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2113   .rodata.BR3_BC1.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2117   .text.BR3_BC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2123   .text.BR3_BC1:00000000 BR3_BC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2146   .text.BR3_BC1:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2151   .rodata.BR3_BC2.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2155   .text.BR3_BC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2161   .text.BR3_BC2:00000000 BR3_BC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2184   .text.BR3_BC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2189   .rodata.BR3_BC3.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2193   .text.BR3_BC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2199   .text.BR3_BC3:00000000 BR3_BC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2222   .text.BR3_BC3:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2227   .rodata.BR3_BC4.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2231   .text.BR3_BC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2237   .text.BR3_BC4:00000000 BR3_BC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2260   .text.BR3_BC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2265   .rodata.BR4_BC1.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2269   .text.BR4_BC1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2275   .text.BR4_BC1:00000000 BR4_BC1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2298   .text.BR4_BC1:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2303   .rodata.BR4_BC2.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2307   .text.BR4_BC2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2313   .text.BR4_BC2:00000000 BR4_BC2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2336   .text.BR4_BC2:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2341   .rodata.BR4_BC3.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2345   .text.BR4_BC3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2351   .text.BR4_BC3:00000000 BR4_BC3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2374   .text.BR4_BC3:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2379   .rodata.BR4_BC4.str1.4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2383   .text.BR4_BC4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2389   .text.BR4_BC4:00000000 BR4_BC4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2412   .text.BR4_BC4:00000010 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2417   .text.READ_BUTTON_B_R1:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2423   .text.READ_BUTTON_B_R1:00000000 READ_BUTTON_B_R1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2565   .text.READ_BUTTON_B_R1:000000a4 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3284   .data.B_state:00000000 B_state
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2574   .text.READ_BUTTON_B_R2:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2580   .text.READ_BUTTON_B_R2:00000000 READ_BUTTON_B_R2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2722   .text.READ_BUTTON_B_R2:000000a4 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2731   .text.READ_BUTTON_B_R3:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2737   .text.READ_BUTTON_B_R3:00000000 READ_BUTTON_B_R3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2879   .text.READ_BUTTON_B_R3:000000a0 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2887   .text.READ_BUTTON_B_R4:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:2893   .text.READ_BUTTON_B_R4:00000000 READ_BUTTON_B_R4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3035   .text.READ_BUTTON_B_R4:000000a4 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3043   .text.READ_BUTTON_B:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3049   .text.READ_BUTTON_B:00000000 READ_BUTTON_B
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3082   .bss.kd_4:00000000 kd_4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3079   .bss.kd_4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3089   .bss.ki_4:00000000 ki_4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3086   .bss.ki_4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3096   .bss.kp_4:00000000 kp_4
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3093   .bss.kp_4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3103   .bss.kd_3:00000000 kd_3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3100   .bss.kd_3:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3110   .bss.ki_3:00000000 ki_3
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s 			page 71
+
+
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3107   .bss.ki_3:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3117   .bss.kp_3:00000000 kp_3
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3114   .bss.kp_3:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3124   .bss.kd_2:00000000 kd_2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3121   .bss.kd_2:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3131   .bss.ki_2:00000000 ki_2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3128   .bss.ki_2:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3138   .bss.kp_2:00000000 kp_2
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3135   .bss.kp_2:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3145   .bss.kd_1:00000000 kd_1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3142   .bss.kd_1:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3152   .bss.ki_1:00000000 ki_1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3149   .bss.ki_1:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3159   .bss.kp_1:00000000 kp_1
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3156   .bss.kp_1:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3163   .bss.chip_b_mode:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3170   .bss.chip_select:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3177   .data.rato_num:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3186   .bss.rato_num_select:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3193   .data.current_num:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3204   .bss.current_num_select:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3211   .data.mode_select:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3218   .data.ctrl_display:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3225   .bss.ctrl_num:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3232   .bss.ctrl_pid:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3239   .bss.pid_6:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3246   .bss.pid_5:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3253   .bss.pid_4:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3260   .bss.pid_3:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3267   .bss.pid_2:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3274   .bss.pid_1:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3281   .data.B_state:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3303   .data.A_state:00000000 $d
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cckD8L7S.s:3325   .bss.temp_state:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_dadd
+__aeabi_d2f
+HAL_GPIO_WritePin
+HAL_GPIO_ReadPin
+OLED_ShowString

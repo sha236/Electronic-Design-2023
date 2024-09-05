@@ -1,0 +1,639 @@
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_float_to_q15.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "DSP/Source/SupportFunctions/arm_float_to_q15.c"
+  20              		.section	.text.arm_float_to_q15,"ax",%progbits
+  21              		.align	1
+  22              		.global	arm_float_to_q15
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	arm_float_to_q15:
+  28              	.LVL0:
+  29              	.LFB139:
+   1:DSP/Source/SupportFunctions/arm_float_to_q15.c **** /* ----------------------------------------------------------------------
+   2:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Project:      CMSIS DSP Library
+   3:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Title:        arm_float_to_q15.c
+   4:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Description:  Converts the elements of the floating-point vector to Q15 vector
+   5:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+   6:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * $Date:        27. January 2017
+   7:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * $Revision:    V.1.5.1
+   8:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+   9:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Target Processor: Cortex-M cores
+  10:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * -------------------------------------------------------------------- */
+  11:DSP/Source/SupportFunctions/arm_float_to_q15.c **** /*
+  12:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  14:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  16:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * not use this file except in compliance with the License.
+  18:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * You may obtain a copy of the License at
+  19:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  20:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  22:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * See the License for the specific language governing permissions and
+  26:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * limitations under the License.
+  27:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  */
+  28:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  29:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #include "arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 2
+
+
+  30:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  31:DSP/Source/SupportFunctions/arm_float_to_q15.c **** /**
+  32:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @ingroup groupSupport
+  33:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  */
+  34:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  35:DSP/Source/SupportFunctions/arm_float_to_q15.c **** /**
+  36:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @addtogroup float_to_x
+  37:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @{
+  38:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  */
+  39:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  40:DSP/Source/SupportFunctions/arm_float_to_q15.c **** /**
+  41:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @brief Converts the elements of the floating-point vector to Q15 vector.
+  42:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @param[in]       *pSrc points to the floating-point input vector
+  43:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @param[out]      *pDst points to the Q15 output vector
+  44:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @param[in]       blockSize length of the input vector
+  45:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * @return none.
+  46:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  47:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * \par Description:
+  48:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * \par
+  49:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * The equation used for the conversion process is:
+  50:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * <pre>
+  51:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * 	pDst[n] = (q15_t)(pSrc[n] * 32768);   0 <= n < blockSize.
+  52:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * </pre>
+  53:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * \par Scaling and Overflow Behavior:
+  54:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * \par
+  55:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * The function uses saturating arithmetic.
+  56:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * Results outside of the allowable Q15 range [0x8000 0x7FFF] will be saturated.
+  57:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * \note
+  58:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * In order to apply rounding, the library should be rebuilt with the ROUNDING macro
+  59:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  * defined in the preprocessor section of project options.
+  60:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  *
+  61:DSP/Source/SupportFunctions/arm_float_to_q15.c ****  */
+  62:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  63:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  64:DSP/Source/SupportFunctions/arm_float_to_q15.c **** void arm_float_to_q15(
+  65:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   float32_t * pSrc,
+  66:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   q15_t * pDst,
+  67:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   uint32_t blockSize)
+  68:DSP/Source/SupportFunctions/arm_float_to_q15.c **** {
+  30              		.loc 1 68 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              		.loc 1 68 1 is_stmt 0 view .LVU1
+  36 0000 10B4     		push	{r4}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 4
+  39              		.cfi_offset 4, -4
+  69:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   float32_t *pIn = pSrc;                         /* Src pointer */
+  40              		.loc 1 69 3 is_stmt 1 view .LVU2
+  41              	.LVL1:
+  70:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   uint32_t blkCnt;                               /* loop counter */
+  42              		.loc 1 70 3 view .LVU3
+  71:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  72:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #ifdef ARM_MATH_ROUNDING
+  73:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 3
+
+
+  74:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   float32_t in;
+  43              		.loc 1 74 3 view .LVU4
+  75:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  76:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #endif /*      #ifdef ARM_MATH_ROUNDING        */
+  77:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  78:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #if defined (ARM_MATH_DSP)
+  79:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  80:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+  81:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  82:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /*loop Unrolling */
+  83:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   blkCnt = blockSize >> 2U;
+  44              		.loc 1 83 3 view .LVU5
+  45              		.loc 1 83 10 is_stmt 0 view .LVU6
+  46 0002 9408     		lsrs	r4, r2, #2
+  47              	.LVL2:
+  84:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  85:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+  86:DSP/Source/SupportFunctions/arm_float_to_q15.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+  87:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   while (blkCnt > 0U)
+  48              		.loc 1 87 3 is_stmt 1 view .LVU7
+  49              		.loc 1 87 9 is_stmt 0 view .LVU8
+  50 0004 16E0     		b	.L2
+  51              	.LVL3:
+  52              	.L26:
+  88:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   {
+  89:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  90:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #ifdef ARM_MATH_ROUNDING
+  91:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+  92:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+  93:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+  94:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+  95:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+  53              		.loc 1 95 28 discriminator 2 view .LVU9
+  54 0006 FEEE007A 		vmov.f32	s15, #-5.0e-1
+  55 000a 22E0     		b	.L3
+  56              	.LVL4:
+  57              	.L27:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+  97:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+  98:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+  99:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 100:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+  58              		.loc 1 100 28 discriminator 2 view .LVU10
+  59 000c FEEE007A 		vmov.f32	s15, #-5.0e-1
+  60 0010 35E0     		b	.L5
+  61              	.LVL5:
+  62              	.L28:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 102:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 103:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+ 104:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 105:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+  63              		.loc 1 105 28 discriminator 2 view .LVU11
+  64 0012 FEEE007A 		vmov.f32	s15, #-5.0e-1
+  65 0016 48E0     		b	.L7
+  66              	.LVL6:
+  67              	.L29:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 4
+
+
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 107:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 108:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+ 109:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 110:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+  68              		.loc 1 110 28 discriminator 2 view .LVU12
+  69 0018 FEEE007A 		vmov.f32	s15, #-5.0e-1
+  70              	.L9:
+  71              		.loc 1 110 8 discriminator 4 view .LVU13
+  72 001c 77EE877A 		vadd.f32	s15, s15, s14
+  73              	.LVL7:
+ 111:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+  74              		.loc 1 111 5 is_stmt 1 view .LVU14
+  75              	.LBB2:
+  76              		.loc 1 111 24 view .LVU15
+  77 0020 FDEEE77A 		vcvt.s32.f32	s15, s15
+  78              	.LVL8:
+  79              		.loc 1 111 24 is_stmt 0 view .LVU16
+  80 0024 17EE903A 		vmov	r3, s15	@ int
+  81              	.LVL9:
+  82              		.loc 1 111 24 is_stmt 1 view .LVU17
+  83              		.syntax unified
+  84              	@ 111 "DSP/Source/SupportFunctions/arm_float_to_q15.c" 1
+  85 0028 03F30F03 		ssat r3, #16, r3
+  86              	@ 0 "" 2
+  87              	.LVL10:
+  88              		.loc 1 111 24 view .LVU18
+  89              		.loc 1 111 24 is_stmt 0 view .LVU19
+  90              		.thumb
+  91              		.syntax unified
+  92              	.LBE2:
+  93              		.loc 1 111 13 view .LVU20
+  94 002c CB80     		strh	r3, [r1, #6]	@ movhi
+ 112:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 113:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #else
+ 114:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 115:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+ 116:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+ 117:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 118:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 119:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 120:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 121:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 122:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #endif /*      #ifdef ARM_MATH_ROUNDING        */
+ 123:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 124:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* Decrement the loop counter */
+ 125:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     blkCnt--;
+  95              		.loc 1 125 5 is_stmt 1 view .LVU21
+  96              		.loc 1 125 11 is_stmt 0 view .LVU22
+  97 002e 013C     		subs	r4, r4, #1
+  98              	.LVL11:
+ 108:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+  99              		.loc 1 108 14 view .LVU23
+ 100 0030 6046     		mov	r0, ip
+ 111:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 101              		.loc 1 111 10 view .LVU24
+ 102 0032 0831     		adds	r1, r1, #8
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 5
+
+
+ 103              	.LVL12:
+ 104              	.L2:
+  87:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   {
+ 105              		.loc 1 87 17 is_stmt 1 view .LVU25
+ 106 0034 002C     		cmp	r4, #0
+ 107 0036 51D0     		beq	.L32
+  93:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 108              		.loc 1 93 5 view .LVU26
+ 109              	.LVL13:
+  93:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 110              		.loc 1 93 8 is_stmt 0 view .LVU27
+ 111 0038 90ED007A 		vldr.32	s14, [r0]
+ 112              	.LVL14:
+  94:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 113              		.loc 1 94 5 is_stmt 1 view .LVU28
+  94:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 114              		.loc 1 94 8 is_stmt 0 view .LVU29
+ 115 003c DFED387A 		vldr.32	s15, .L34
+ 116 0040 27EE277A 		vmul.f32	s14, s14, s15
+ 117              	.LVL15:
+  95:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 118              		.loc 1 95 5 is_stmt 1 view .LVU30
+  95:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 119              		.loc 1 95 28 is_stmt 0 view .LVU31
+ 120 0044 B5EEC07A 		vcmpe.f32	s14, #0
+ 121 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 122 004c DBDD     		ble	.L26
+  95:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 123              		.loc 1 95 28 discriminator 1 view .LVU32
+ 124 004e F6EE007A 		vmov.f32	s15, #5.0e-1
+ 125              	.L3:
+  95:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 126              		.loc 1 95 8 discriminator 4 view .LVU33
+ 127 0052 77EE877A 		vadd.f32	s15, s15, s14
+ 128              	.LVL16:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 129              		.loc 1 96 5 is_stmt 1 view .LVU34
+ 130              	.LBB3:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 131              		.loc 1 96 24 view .LVU35
+ 132 0056 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 133              	.LVL17:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 134              		.loc 1 96 24 is_stmt 0 view .LVU36
+ 135 005a 17EE903A 		vmov	r3, s15	@ int
+ 136              	.LVL18:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 137              		.loc 1 96 24 is_stmt 1 view .LVU37
+ 138              		.syntax unified
+ 139              	@ 96 "DSP/Source/SupportFunctions/arm_float_to_q15.c" 1
+ 140 005e 03F30F03 		ssat r3, #16, r3
+ 141              	@ 0 "" 2
+ 142              	.LVL19:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 143              		.loc 1 96 24 view .LVU38
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 144              		.loc 1 96 24 is_stmt 0 view .LVU39
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 6
+
+
+ 145              		.thumb
+ 146              		.syntax unified
+ 147              	.LBE3:
+  96:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 148              		.loc 1 96 13 view .LVU40
+ 149 0062 0B80     		strh	r3, [r1]	@ movhi
+  98:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 150              		.loc 1 98 5 is_stmt 1 view .LVU41
+ 151              	.LVL20:
+  98:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 152              		.loc 1 98 8 is_stmt 0 view .LVU42
+ 153 0064 90ED017A 		vldr.32	s14, [r0, #4]
+ 154              	.LVL21:
+  99:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 155              		.loc 1 99 5 is_stmt 1 view .LVU43
+  99:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 156              		.loc 1 99 8 is_stmt 0 view .LVU44
+ 157 0068 DFED2D7A 		vldr.32	s15, .L34
+ 158              	.LVL22:
+  99:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 159              		.loc 1 99 8 view .LVU45
+ 160 006c 27EE277A 		vmul.f32	s14, s14, s15
+ 161              	.LVL23:
+ 100:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 162              		.loc 1 100 5 is_stmt 1 view .LVU46
+ 100:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 163              		.loc 1 100 28 is_stmt 0 view .LVU47
+ 164 0070 B5EEC07A 		vcmpe.f32	s14, #0
+ 165 0074 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 166 0078 C8DD     		ble	.L27
+ 100:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 167              		.loc 1 100 28 discriminator 1 view .LVU48
+ 168 007a F6EE007A 		vmov.f32	s15, #5.0e-1
+ 169              	.L5:
+ 100:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 170              		.loc 1 100 8 discriminator 4 view .LVU49
+ 171 007e 77EE877A 		vadd.f32	s15, s15, s14
+ 172              	.LVL24:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 173              		.loc 1 101 5 is_stmt 1 view .LVU50
+ 174              	.LBB4:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 175              		.loc 1 101 24 view .LVU51
+ 176 0082 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 177              	.LVL25:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 178              		.loc 1 101 24 is_stmt 0 view .LVU52
+ 179 0086 17EE903A 		vmov	r3, s15	@ int
+ 180              	.LVL26:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 181              		.loc 1 101 24 is_stmt 1 view .LVU53
+ 182              		.syntax unified
+ 183              	@ 101 "DSP/Source/SupportFunctions/arm_float_to_q15.c" 1
+ 184 008a 03F30F03 		ssat r3, #16, r3
+ 185              	@ 0 "" 2
+ 186              	.LVL27:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 7
+
+
+ 187              		.loc 1 101 24 view .LVU54
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 188              		.loc 1 101 24 is_stmt 0 view .LVU55
+ 189              		.thumb
+ 190              		.syntax unified
+ 191              	.LBE4:
+ 101:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 192              		.loc 1 101 13 view .LVU56
+ 193 008e 4B80     		strh	r3, [r1, #2]	@ movhi
+ 103:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 194              		.loc 1 103 5 is_stmt 1 view .LVU57
+ 195              	.LVL28:
+ 103:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 196              		.loc 1 103 8 is_stmt 0 view .LVU58
+ 197 0090 90ED027A 		vldr.32	s14, [r0, #8]
+ 198              	.LVL29:
+ 104:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 199              		.loc 1 104 5 is_stmt 1 view .LVU59
+ 104:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 200              		.loc 1 104 8 is_stmt 0 view .LVU60
+ 201 0094 DFED227A 		vldr.32	s15, .L34
+ 202              	.LVL30:
+ 104:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 203              		.loc 1 104 8 view .LVU61
+ 204 0098 27EE277A 		vmul.f32	s14, s14, s15
+ 205              	.LVL31:
+ 105:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 206              		.loc 1 105 5 is_stmt 1 view .LVU62
+ 105:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 207              		.loc 1 105 28 is_stmt 0 view .LVU63
+ 208 009c B5EEC07A 		vcmpe.f32	s14, #0
+ 209 00a0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 210 00a4 B5DD     		ble	.L28
+ 105:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 211              		.loc 1 105 28 discriminator 1 view .LVU64
+ 212 00a6 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 213              	.L7:
+ 105:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 214              		.loc 1 105 8 discriminator 4 view .LVU65
+ 215 00aa 77EE877A 		vadd.f32	s15, s15, s14
+ 216              	.LVL32:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 217              		.loc 1 106 5 is_stmt 1 view .LVU66
+ 218              	.LBB5:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 219              		.loc 1 106 24 view .LVU67
+ 220 00ae FDEEE77A 		vcvt.s32.f32	s15, s15
+ 221              	.LVL33:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 222              		.loc 1 106 24 is_stmt 0 view .LVU68
+ 223 00b2 17EE903A 		vmov	r3, s15	@ int
+ 224              	.LVL34:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 225              		.loc 1 106 24 is_stmt 1 view .LVU69
+ 226              		.syntax unified
+ 227              	@ 106 "DSP/Source/SupportFunctions/arm_float_to_q15.c" 1
+ 228 00b6 03F30F03 		ssat r3, #16, r3
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 8
+
+
+ 229              	@ 0 "" 2
+ 230              	.LVL35:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 231              		.loc 1 106 24 view .LVU70
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 232              		.loc 1 106 24 is_stmt 0 view .LVU71
+ 233              		.thumb
+ 234              		.syntax unified
+ 235              	.LBE5:
+ 106:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 236              		.loc 1 106 13 view .LVU72
+ 237 00ba 8B80     		strh	r3, [r1, #4]	@ movhi
+ 108:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 238              		.loc 1 108 5 is_stmt 1 view .LVU73
+ 108:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 239              		.loc 1 108 14 is_stmt 0 view .LVU74
+ 240 00bc 00F1100C 		add	ip, r0, #16
+ 241              	.LVL36:
+ 108:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 242              		.loc 1 108 8 view .LVU75
+ 243 00c0 90ED037A 		vldr.32	s14, [r0, #12]
+ 244              	.LVL37:
+ 109:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 245              		.loc 1 109 5 is_stmt 1 view .LVU76
+ 109:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 246              		.loc 1 109 8 is_stmt 0 view .LVU77
+ 247 00c4 DFED167A 		vldr.32	s15, .L34
+ 248              	.LVL38:
+ 109:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 249              		.loc 1 109 8 view .LVU78
+ 250 00c8 27EE277A 		vmul.f32	s14, s14, s15
+ 251              	.LVL39:
+ 110:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 252              		.loc 1 110 5 is_stmt 1 view .LVU79
+ 110:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 253              		.loc 1 110 28 is_stmt 0 view .LVU80
+ 254 00cc B5EEC07A 		vcmpe.f32	s14, #0
+ 255 00d0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 256 00d4 A0DD     		ble	.L29
+ 110:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 257              		.loc 1 110 28 discriminator 1 view .LVU81
+ 258 00d6 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 259 00da 9FE7     		b	.L9
+ 260              	.LVL40:
+ 261              	.L32:
+ 126:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   }
+ 127:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 128:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+ 129:DSP/Source/SupportFunctions/arm_float_to_q15.c ****    ** No loop unrolling is used. */
+ 130:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   blkCnt = blockSize % 0x4U;
+ 262              		.loc 1 130 3 is_stmt 1 view .LVU82
+ 263              		.loc 1 130 10 is_stmt 0 view .LVU83
+ 264 00dc 02F00302 		and	r2, r2, #3
+ 265              	.LVL41:
+ 131:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 132:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   while (blkCnt > 0U)
+ 266              		.loc 1 132 3 is_stmt 1 view .LVU84
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 9
+
+
+ 267              		.loc 1 132 9 is_stmt 0 view .LVU85
+ 268 00e0 0CE0     		b	.L12
+ 269              	.LVL42:
+ 270              	.L30:
+ 133:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   {
+ 134:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 135:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #ifdef ARM_MATH_ROUNDING
+ 136:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+ 137:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+ 138:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+ 139:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 140:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 271              		.loc 1 140 28 discriminator 2 view .LVU86
+ 272 00e2 FEEE007A 		vmov.f32	s15, #-5.0e-1
+ 273              	.L13:
+ 274              		.loc 1 140 8 discriminator 4 view .LVU87
+ 275 00e6 77EE877A 		vadd.f32	s15, s15, s14
+ 276              	.LVL43:
+ 141:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 277              		.loc 1 141 5 is_stmt 1 view .LVU88
+ 278              	.LBB6:
+ 279              		.loc 1 141 24 view .LVU89
+ 280 00ea FDEEE77A 		vcvt.s32.f32	s15, s15
+ 281              	.LVL44:
+ 282              		.loc 1 141 24 is_stmt 0 view .LVU90
+ 283 00ee 17EE903A 		vmov	r3, s15	@ int
+ 284              	.LVL45:
+ 285              		.loc 1 141 24 is_stmt 1 view .LVU91
+ 286              		.syntax unified
+ 287              	@ 141 "DSP/Source/SupportFunctions/arm_float_to_q15.c" 1
+ 288 00f2 03F30F03 		ssat r3, #16, r3
+ 289              	@ 0 "" 2
+ 290              	.LVL46:
+ 291              		.loc 1 141 24 view .LVU92
+ 292              		.loc 1 141 24 is_stmt 0 view .LVU93
+ 293              		.thumb
+ 294              		.syntax unified
+ 295              	.LBE6:
+ 296              		.loc 1 141 13 view .LVU94
+ 297 00f6 21F8023B 		strh	r3, [r1], #2	@ movhi
+ 298              	.LVL47:
+ 142:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 143:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #else
+ 144:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 145:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+ 146:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+ 147:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 148:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 149:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #endif /*      #ifdef ARM_MATH_ROUNDING        */
+ 150:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 151:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* Decrement the loop counter */
+ 152:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     blkCnt--;
+ 299              		.loc 1 152 5 is_stmt 1 view .LVU95
+ 300              		.loc 1 152 11 is_stmt 0 view .LVU96
+ 301 00fa 013A     		subs	r2, r2, #1
+ 302              	.LVL48:
+ 303              	.L12:
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 10
+
+
+ 132:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   {
+ 304              		.loc 1 132 17 is_stmt 1 view .LVU97
+ 305 00fc 6AB1     		cbz	r2, .L33
+ 138:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 306              		.loc 1 138 5 view .LVU98
+ 307              	.LVL49:
+ 138:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 308              		.loc 1 138 8 is_stmt 0 view .LVU99
+ 309 00fe B0EC017A 		vldmia.32	r0!, {s14}
+ 310              	.LVL50:
+ 139:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 311              		.loc 1 139 5 is_stmt 1 view .LVU100
+ 139:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0.0f ? 0.5f : -0.5f;
+ 312              		.loc 1 139 8 is_stmt 0 view .LVU101
+ 313 0102 DFED077A 		vldr.32	s15, .L34
+ 314 0106 27EE277A 		vmul.f32	s14, s14, s15
+ 315              	.LVL51:
+ 140:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 316              		.loc 1 140 5 is_stmt 1 view .LVU102
+ 140:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 317              		.loc 1 140 28 is_stmt 0 view .LVU103
+ 318 010a B5EEC07A 		vcmpe.f32	s14, #0
+ 319 010e F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 320 0112 E6DD     		ble	.L30
+ 140:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 321              		.loc 1 140 28 discriminator 1 view .LVU104
+ 322 0114 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 323 0118 E5E7     		b	.L13
+ 324              	.LVL52:
+ 325              	.L33:
+ 153:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   }
+ 154:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 155:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 156:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #else
+ 157:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 158:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /* Run the below code for Cortex-M0 */
+ 159:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 160:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   /* Loop over blockSize number of values */
+ 161:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   blkCnt = blockSize;
+ 162:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 163:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   while (blkCnt > 0U)
+ 164:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   {
+ 165:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 166:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #ifdef ARM_MATH_ROUNDING
+ 167:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+ 168:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+ 169:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = *pIn++;
+ 170:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in = (in * 32768.0f);
+ 171:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     in += in > 0 ? 0.5f : -0.5f;
+ 172:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) (__SSAT((q31_t) (in), 16));
+ 173:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 174:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #else
+ 175:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 176:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* C = A * 32768 */
+ 177:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* convert from float to q15 and then store the results in the destination buffer */
+ 178:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     *pDst++ = (q15_t) __SSAT((q31_t) (*pIn++ * 32768.0f), 16);
+ 179:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 11
+
+
+ 180:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #endif /*      #ifdef ARM_MATH_ROUNDING        */
+ 181:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 182:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     /* Decrement the loop counter */
+ 183:DSP/Source/SupportFunctions/arm_float_to_q15.c ****     blkCnt--;
+ 184:DSP/Source/SupportFunctions/arm_float_to_q15.c ****   }
+ 185:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 186:DSP/Source/SupportFunctions/arm_float_to_q15.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 187:DSP/Source/SupportFunctions/arm_float_to_q15.c **** 
+ 188:DSP/Source/SupportFunctions/arm_float_to_q15.c **** }
+ 326              		.loc 1 188 1 view .LVU105
+ 327 011a 5DF8044B 		ldr	r4, [sp], #4
+ 328              	.LCFI1:
+ 329              		.cfi_restore 4
+ 330              		.cfi_def_cfa_offset 0
+ 331 011e 7047     		bx	lr
+ 332              	.L35:
+ 333              		.align	2
+ 334              	.L34:
+ 335 0120 00000047 		.word	1191182336
+ 336              		.cfi_endproc
+ 337              	.LFE139:
+ 339              		.text
+ 340              	.Letext0:
+ 341              		.file 2 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 342              		.file 3 "/Users/luban/.local/xPacks/arm-none-eabi-gcc/xpack-arm-none-eabi-gcc-13.2.1-1.1/arm-none-
+ 343              		.file 4 "DSP/Inc/arm_math.h"
+ARM GAS  /var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_float_to_q15.c
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s:21     .text.arm_float_to_q15:00000000 $t
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s:27     .text.arm_float_to_q15:00000000 arm_float_to_q15
+/var/folders/ck/g3dcd5x55xs4107jgdl0snvr0000gn/T//cctcCMot.s:335    .text.arm_float_to_q15:00000120 $d
+
+NO UNDEFINED SYMBOLS
